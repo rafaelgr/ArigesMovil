@@ -22,7 +22,7 @@ namespace AriUsDB
         #region Usuario
         public static Usuario GetUsuario(MySqlDataReader rdr)
         {
-            if (!rdr.IsDBNull(rdr.GetOrdinal("CODUSU"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODUSU"))) return null;
             Usuario u = new Usuario();
             u.CodUsu = rdr.GetInt32("CODUSU");
             u.NomUsu = rdr.GetString("NOMUSU");
@@ -43,9 +43,9 @@ namespace AriUsDB
                     nomusu AS NOMUSU, 
                     login AS LOGIN, 
                     passwordpropio AS PASSWORD_PROPIO
-                    FROM ususario
+                    FROM usuarios
                     WHERE login = '{0}'
-                    AND password = '{1}'";
+                    AND passwordpropio = '{1}'";
                 sql = String.Format(sql, login, password);
                 cmd.CommandText = sql;
                 MySqlDataReader rdr = cmd.ExecuteReader();

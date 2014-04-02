@@ -5,6 +5,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AriUsDB", "AriUsDB\AriUsDB.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AriGesDB", "AriGesDB\AriGesDB.csproj", "{2A3D6485-1EBA-4A16-A5B7-0486AAA9C0D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AriGesWeb", "AriGesWeb\AriGesWeb.csproj", "{91134AF8-E9C7-41B2-A7C8-3A9674EDFF30}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -19,6 +21,10 @@ Global
 		{2A3D6485-1EBA-4A16-A5B7-0486AAA9C0D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A3D6485-1EBA-4A16-A5B7-0486AAA9C0D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A3D6485-1EBA-4A16-A5B7-0486AAA9C0D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{91134AF8-E9C7-41B2-A7C8-3A9674EDFF30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{91134AF8-E9C7-41B2-A7C8-3A9674EDFF30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{91134AF8-E9C7-41B2-A7C8-3A9674EDFF30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{91134AF8-E9C7-41B2-A7C8-3A9674EDFF30}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

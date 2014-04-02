@@ -29,14 +29,16 @@ namespace AriGesDB
             set { login = value; }
         }
 
+        private Agente agente;
         public Agente Agente
         {
             get
             {
-                throw new System.NotImplementedException();
+                return agente;
             }
             set
             {
+                agente = value;
             }
         }
     }

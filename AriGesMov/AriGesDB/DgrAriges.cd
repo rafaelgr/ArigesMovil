@@ -17,5 +17,12 @@
       <FileName>Agente.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="AriGesDB.Cliente">
+    <Position X="8.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IQACUAAIiACAQAAAAUAAEAAIiBGgAAJBAAAIAAAAABE=</HashCode>
+      <FileName>Cliente.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
