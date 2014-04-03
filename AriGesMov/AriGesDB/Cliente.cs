@@ -105,5 +105,20 @@ namespace AriGesDB
             get { return faxClie2; }
             set { faxClie2 = value; }
         }
+
+        private string maiclie1;
+
+        public string Maiclie1
+        {
+            get { return maiclie1; }
+            set { maiclie1 = value; }
+        }
+        private string maiclie2;
+
+        public string Maiclie2
+        {
+            get { return maiclie2; }
+            set { maiclie2 = value; }
+        }
     }
 }

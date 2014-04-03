@@ -47,6 +47,12 @@
     <Compile Include="Agente.cs" />
     <Compile Include="Cliente.cs" />
     <Compile Include="CntAriGes.cs" />
+    <Compile Include="Albaran.cs" />
+    <Compile Include="LinAlbaran.cs" />
+    <Compile Include="LinOferta.cs" />
+    <Compile Include="Oferta.cs" />
+    <Compile Include="LinPedido.cs" />
+    <Compile Include="Pedido.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Trabajador.cs" />
   </ItemGroup>

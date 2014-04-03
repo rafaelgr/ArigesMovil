@@ -39,6 +39,6 @@ public partial class Default : System.Web.UI.Page
         }
         Session["Agente"] = t.Agente;
         Session["Usuario"] = u;
-        Response.Redirect("Inicio.aspx");
+        Response.Redirect("Clientes.aspx");
     }
 }

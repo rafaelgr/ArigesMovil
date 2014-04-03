@@ -76,94 +76,102 @@
                         </div><!--/.nav-collapse -->
                     </div>
                 </div>
-                <div class="container">
-                    MIIOOOO
-                </div>
+
                 <div class="panel-group" id="accordion">
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                                    PROARA PROMOT.ARAGONESES,S.A.
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="collapse1" class="panel-collapse collapse">
-                            <div class="panel-body">
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
                                 <div class="container">
-                                    <div class="col-md-3">
-                                        <strong>NIF:</strong>
-                                        <p>A12333665</p>
-                                    </div>
-                                    <div class="col-md-9">
-                                        <strong>Nombre comercial:</strong>
-                                        <p>Super proara 22</p>
-                                    </div>
-                                </div>
-                                <div class="container">
-                                    <div class="col-md-3">
-                                        <strong>Persona contacto:</strong>
-                                        <p>Juan Alvarez Martinez</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <strong>Teléfono (1):</strong>
-                                        <p>457885586</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <strong>Teléfono (2):</strong>
-                                        <p>4784646</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="btn btn-primary btn-lg text-center" href="Inicio.aspx">Ver detalles</a>
-                                    </div>
-                                </div>
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4>Pedro del Pino y Carretera</h4>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <h4>C:1254666</h4>
+                                        </div>
+                                        <div class="col-md-5">
 
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div id="collapseOne" class="panel-collapse collapse">
+                            <div class="panel-body">
+                                <address>
+                                    <strong>NIF:A4555555 EL palomocojo</strong><br />
+                                    Calle del pato N.33<br />
+                                    45555 Valencia Valencia
+                                </address>
                             </div>
                         </div>
                     </div>
                     <div class="panel panel-default">
                         <div class="panel-heading">
-                            <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                                    FONTOT LA PLANA, S.L.L.
-                                </a>
-                            </h4>
+                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-4">
+                                            <h4>Pedro del Pino y Carretera</h4>
+                                        </div>
+                                        <div class="col-md-1">
+                                            <h4>C:1254666</h4>
+                                        </div>
+                                        <div class="col-md-5">
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
                         </div>
-                        <div id="collapse2" class="panel-collapse collapse">
+                        <div id="collapseTwo" class="panel-collapse collapse">
                             <div class="panel-body">
                                 <div class="container">
-                                    <div class="col-md-3">
-                                        <strong>NIF:</strong>
-                                        <p>B78998999</p>
+                                    <div class="row">
+                                        <div class="col-sm-12">
+                                            <blockquote>
+                                                <strong>A4555555 German S.A.</strong><br />
+                                                Calle del pato N.33<br />
+                                                45555 Valencia Valencia
+                                            </blockquote>
+                                        </div>
                                     </div>
-                                    <div class="col-md-9">
-                                        <strong>Nombre comercial:</strong>
-                                        <p>Manennnn</p>
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <blockquote>
+                                                Contacto (1): <em>Juan palomo</em><br />
+                                                Teléfono:
+                                                <a href="tel:98899">988888</a><br />
+                                                Email:
+                                                <a href="mailto:pepe@gmail.com">pepe@gmail.com</a>
+                                            </blockquote>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <blockquote>
+                                                Contacto (2): <em>Pedro Marmol</em><br />
+                                                Teléfono:
+                                                <a href="tel:98899">988888</a><br />
+                                                EMail:
+                                                <a href="mailto:pepe@gmail.com">pepe@gmail.com</a>
+                                            </blockquote>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <a class='btn btn-primary btn-lg text-center' href='ClientesDetalle.aspx?CodClien={0}'>Ver detalles</a>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="container">
-                                    <div class="col-md-3">
-                                        <strong>Persona contacto:</strong>
-                                        <p>JBnmmmm</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <strong>Teléfono (1):</strong>
-                                        <p>457885586</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <strong>Teléfono (2):</strong>
-                                        <p>4784646</p>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <a class="btn btn-primary btn-lg text-center" href="Inicio.aspx">Ver detalles</a>
-                                    </div>
-                                </div>
-
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
 
+                        </div>
+                    </div>
+                </div>
             </div>
         </form>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

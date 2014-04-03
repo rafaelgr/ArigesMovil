@@ -104,6 +104,11 @@
     <Content Include="App_Data\RadCaptcha\Y.wav" />
     <Content Include="App_Data\RadCaptcha\Z.wav" />
     <Content Include="Clientes.aspx" />
+    <Content Include="ClientesDetalle.aspx" />
+    <Content Include="ClientesPedidos.aspx" />
+    <Content Include="ClientesMapas.aspx" />
+    <Content Include="ClientesOfertas.aspx" />
+    <Content Include="ClientesAlbaranes.aspx" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
@@ -116,6 +121,7 @@
     <Content Include="js\bootbox.js" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
+    <Content Include="Mapas1.html" />
     <Content Include="Test.aspx" />
     <Content Include="Web.config" />
   </ItemGroup>
@@ -126,6 +132,41 @@
     </Compile>
     <Compile Include="Clientes.aspx.designer.cs">
       <DependentUpon>Clientes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesDetalle.aspx.cs">
+      <DependentUpon>ClientesDetalle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesDetalle.aspx.designer.cs">
+      <DependentUpon>ClientesDetalle.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesPedidos.aspx.cs">
+      <DependentUpon>ClientesPedidos.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesPedidos.aspx.designer.cs">
+      <DependentUpon>ClientesPedidos.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesMapas.aspx.cs">
+      <DependentUpon>ClientesMapas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesMapas.aspx.designer.cs">
+      <DependentUpon>ClientesMapas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesOfertas.aspx.cs">
+      <DependentUpon>ClientesOfertas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesOfertas.aspx.designer.cs">
+      <DependentUpon>ClientesOfertas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesAlbaranes.aspx.cs">
+      <DependentUpon>ClientesAlbaranes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesAlbaranes.aspx.designer.cs">
+      <DependentUpon>ClientesAlbaranes.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -199,7 +240,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
