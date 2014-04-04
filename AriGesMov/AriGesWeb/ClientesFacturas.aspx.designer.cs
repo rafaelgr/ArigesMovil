@@ -9,7 +9,7 @@
 
 
 
-public partial class ClientesDetalle {
+public partial class ClientesFacturas {
     
     /// <summary>
     /// Control RadStyleSheetManager1.
@@ -75,20 +75,11 @@ public partial class ClientesDetalle {
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl TabCliente;
     
     /// <summary>
-    /// Control Indicadores.
+    /// Control BodyPedidos.
     /// </summary>
     /// <remarks>
     /// Campo generado automáticamente.
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlGenericControl Indicadores;
-    
-    /// <summary>
-    /// Control CobrosPendientes.
-    /// </summary>
-    /// <remarks>
-    /// Campo generado automáticamente.
-    /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
-    /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlGenericControl CobrosPendientes;
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl BodyPedidos;
 }

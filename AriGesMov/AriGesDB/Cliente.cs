@@ -120,5 +120,12 @@ namespace AriGesDB
             get { return maiclie2; }
             set { maiclie2 = value; }
         }
+        private string codmacta;
+
+        public string Codmacta
+        {
+            get { return codmacta; }
+            set { codmacta = value; }
+        }
     }
 }

@@ -109,6 +109,7 @@
     <Content Include="ClientesMapas.aspx" />
     <Content Include="ClientesOfertas.aspx" />
     <Content Include="ClientesAlbaranes.aspx" />
+    <Content Include="ClientesFacturas.aspx" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
     <Content Include="css\bootstrap.css" />
@@ -121,6 +122,7 @@
     <Content Include="js\bootbox.js" />
     <Content Include="js\bootstrap.js" />
     <Content Include="js\bootstrap.min.js" />
+    <Content Include="js\morris.js" />
     <Content Include="Mapas1.html" />
     <Content Include="Test.aspx" />
     <Content Include="Web.config" />
@@ -167,6 +169,13 @@
     </Compile>
     <Compile Include="ClientesAlbaranes.aspx.designer.cs">
       <DependentUpon>ClientesAlbaranes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesFacturas.aspx.cs">
+      <DependentUpon>ClientesFacturas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesFacturas.aspx.designer.cs">
+      <DependentUpon>ClientesFacturas.aspx</DependentUpon>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
@@ -240,7 +249,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

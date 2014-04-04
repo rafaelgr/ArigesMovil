@@ -31,7 +31,7 @@
       <FileName>Pedido.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.LinPedido">
+  <Class Name="AriGesDB.LinPedido" Collapsed="true">
     <Position X="7" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAYBAEAMQAAACEAQAwgAAAAAAAAAAgEQAwgAAAAAAA=</HashCode>
@@ -41,18 +41,25 @@
       <Property Name="Pedido" />
     </ShowAsAssociation>
   </Class>
-  <Class Name="AriGesDB.Oferta">
-    <Position X="3.5" Y="2.5" Width="1.5" />
+  <Class Name="AriGesDB.Oferta" Collapsed="true">
+    <Position X="2.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAgAAQAAAAABAAAAIAAAACAQAAABCAABAAAAAAAQAAA=</HashCode>
+      <HashCode>AAgAAQAAAAABAAAAIAAAACIQAAADCAABAAAAAAAQAAA=</HashCode>
       <FileName>Oferta.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.LinOferta">
+  <Class Name="AriGesDB.LinOferta" Collapsed="true">
     <Position X="0.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAYBAEAMAABACAAQAQgAAAAAAABCAgEQAwgAAAAAAA=</HashCode>
       <FileName>LinOferta.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AriGesDB.Cobro">
+    <Position X="10.25" Y="0.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEAAAABAAAAAQAIAAAAAAAAAAAAAQBAAAEAQAAAAAgA=</HashCode>
+      <FileName>Cobro.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

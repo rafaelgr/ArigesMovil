@@ -13,7 +13,7 @@ using Telerik.Web.UI;
 using AriGesDB;
 using AriUsDB;
 
-public partial class ClientesDetalle : System.Web.UI.Page 
+public partial class ClientesFacturas : System.Web.UI.Page 
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -47,7 +47,7 @@ public partial class ClientesDetalle : System.Web.UI.Page
     {
         string tabs = @"
         <ul class='nav nav-tabs'>
-            <li class='active'>
+            <li>
                 <a href='ClientesDetalle.aspx?CodClien={0}'><h4>Datos</h4></a>
             </li>
             <li>
@@ -59,7 +59,7 @@ public partial class ClientesDetalle : System.Web.UI.Page
             <li>
                 <a href='ClientesAlbaranes.aspx?CodClien={0}'><h4>Albaranes</h4></a>
             </li>
-            <li>
+            <li class='active'>
                 <a href='ClientesFacturas.aspx?CodClien={0}'><h4>Facturas</h4></a>
             </li>
             <li>
@@ -75,23 +75,7 @@ public partial class ClientesDetalle : System.Web.UI.Page
 
     protected void CargarCuerpo(Cliente cliente)
     {
-        // Estadísticas de facturación anual
-        string jsCmd = @"
-              element: 'grafico-facturas',
-              data: [
-                {0}
-              ],
-              xkey: 'y',
-              ykeys: ['a', 'b'],
-              labels: ['Este cliente', 'Media clientes']
-        ";
-        jsCmd = "{" + String.Format(jsCmd, CntAriGes.GetJSONFacturacionAnual(cliente.CodClien)) + "}";
-        RadAjaxManager1.ResponseScripts.Add(String.Format("Morris.Line({0})", jsCmd));
-        
-        // Cargar cobros pendientes
-        IList<Cobro> cobros = CntAriGes.GetCobros(cliente);
-        CobrosPendientes.InnerHtml = CntAriGes.GetCobrosHtml(cobros);
-        // Indicadores
-        Indicadores.InnerHtml = CntAriGes.GetIndicadoresHtml(cliente);
+        IList<Factura> facturas = CntAriGes.GetFacturas(cliente.CodClien);
+        BodyPedidos.InnerHtml = CntAriGes.GetFacturasHtml(facturas);
     }
 }

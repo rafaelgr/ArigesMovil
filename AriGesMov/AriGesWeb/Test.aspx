@@ -11,6 +11,7 @@
         <title>AriGesMov TEST</title>
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css"/>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -76,103 +77,92 @@
                         </div><!--/.nav-collapse -->
                     </div>
                 </div>
-
-                <div class="panel-group" id="accordion">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h4>Pedro del Pino y Carretera</h4>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h4>C:1254666</h4>
-                                        </div>
-                                        <div class="col-md-5">
-
-                                        </div>
-
-                                    </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">INDICADORES</div>
+                    <div class="panel-body">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-sm-2 text-center">
+                                    <h4>Ofertas</h4>
                                 </div>
-                            </a>
-                        </div>
-                        <div id="collapseOne" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <address>
-                                    <strong>NIF:A4555555 EL palomocojo</strong><br />
-                                    Calle del pato N.33<br />
-                                    45555 Valencia Valencia
-                                </address>
+                                <div class="col-sm-2 text-center">
+                                    <h4>Pedidos</h4>
+                                </div>
+                                <div class="col-sm-2 text-center">
+                                    <h4>Albaranes</h4>
+                                </div>
+                                <div class="col-sm-2 text-center">
+                                    <h4>Saldo pendiente</h4>
+                                </div>
+                                <div class="col-sm-2 text-center">
+                                    <h4>Saldo vencido</h4>
+                                </div>
+                                <div class="col-sm-2">
+
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-md-4">
-                                            <h4>Pedro del Pino y Carretera</h4>
-                                        </div>
-                                        <div class="col-md-1">
-                                            <h4>C:1254666</h4>
-                                        </div>
-                                        <div class="col-md-5">
-
-                                        </div>
-                                    </div>
+                            <div class="row">
+                                <div class="col-sm-2 text-center">
+                                    <h4 class="text-primary">23</h4>
                                 </div>
-                            </a>
-                        </div>
-                        <div id="collapseTwo" class="panel-collapse collapse">
-                            <div class="panel-body">
-                                <div class="container">
-                                    <div class="row">
-                                        <div class="col-sm-12">
-                                            <blockquote>
-                                                <strong>A4555555 German S.A.</strong><br />
-                                                Calle del pato N.33<br />
-                                                45555 Valencia Valencia
-                                            </blockquote>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-sm-4">
-                                            <blockquote>
-                                                Contacto (1): <em>Juan palomo</em><br />
-                                                Teléfono:
-                                                <a href="tel:98899">988888</a><br />
-                                                Email:
-                                                <a href="mailto:pepe@gmail.com">pepe@gmail.com</a>
-                                            </blockquote>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <blockquote>
-                                                Contacto (2): <em>Pedro Marmol</em><br />
-                                                Teléfono:
-                                                <a href="tel:98899">988888</a><br />
-                                                EMail:
-                                                <a href="mailto:pepe@gmail.com">pepe@gmail.com</a>
-                                            </blockquote>
-                                        </div>
-                                        <div class="col-sm-4">
-                                            <a class='btn btn-primary btn-lg text-center' href='ClientesDetalle.aspx?CodClien={0}'>Ver detalles</a>
-                                        </div>
-                                    </div>
+                                <div class="col-sm-2 text-center">
+                                    <h4 class="text-primary">15</h4>
+                                </div>
+                                <div class="col-sm-2 text-center">
+                                    <h4 class="text-primary">16</h4>
+                                </div>
+                                <div class="col-sm-2 text-center">
+                                    <h4 class="text-primary">10</h4>
+                                </div>
+                                <div class="col-sm-2 text-center">
+                                    <h4 class="text-danger">0</h4>
+                                </div>
+                                <div class="col-sm-2">
+
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-
+                <div class="panel panel-default">
+                    <div class="panel-heading">Cobros pendientes</div>
+                    <div class="panel-body">
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <tr>
+                                    <th>Fecha ven.</th>
+                                    <th>Tipo cobro</th>
+                                    <th>Factura</th>
+                                    <th>Fecha fac.</th>
+                                    <th class="text-right">Importe</th>
+                                </tr>
+                                <tr>
+                                    <td>01/02/2014</td>
+                                    <td>Cheque</td>
+                                    <td>A45578</td>
+                                    <td>06/01/2014</td>
+                                    <td class="text-right">1260.32</td>
+                                </tr>
+                                <tr class="danger">
+                                    <td>01/02/2014</td>
+                                    <td>Talon</td>
+                                    <td>A49999</td>
+                                    <td>06/01/2014</td>
+                                    <td class="text-right">510.20</td>
+                                </tr>
+                                <tr>
+                                    <td>01/02/2014</td>
+                                    <td>Cheque</td>
+                                    <td>A45578</td>
+                                    <td>06/01/2014</td>
+                                    <td class="text-right">1260.32</td>
+                                </tr>
+                            </table>
                         </div>
                     </div>
                 </div>
             </div>
+
         </form>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -180,5 +170,8 @@
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Bootbox.js para mostrar mensajes -->
         <script type="text/javascript" src="js/bootbox.js"></script>
+        <!-- Para gráficas -->
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script type="text/javascript" src="js/morris.js"></script>
     </body>
 </html>

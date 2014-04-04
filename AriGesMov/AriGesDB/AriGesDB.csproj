@@ -48,6 +48,9 @@
     <Compile Include="Cliente.cs" />
     <Compile Include="CntAriGes.cs" />
     <Compile Include="Albaran.cs" />
+    <Compile Include="Cobro.cs" />
+    <Compile Include="LinFactura.cs" />
+    <Compile Include="Factura.cs" />
     <Compile Include="LinAlbaran.cs" />
     <Compile Include="LinOferta.cs" />
     <Compile Include="Oferta.cs" />

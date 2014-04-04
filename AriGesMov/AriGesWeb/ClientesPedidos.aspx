@@ -57,7 +57,7 @@
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav">
                                 <li class="active">
-                                    <a href="Incio.aspx">Inicio</a>
+                                    <a href="Inicio.aspx">Inicio</a>
                                 </li>
                                 <li>
                                     <a href="Clientes.aspx">Clientes</a>

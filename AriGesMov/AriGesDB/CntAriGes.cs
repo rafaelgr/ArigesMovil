@@ -19,6 +19,46 @@ namespace AriGesDB
             return conn;
         }
 
+        public static string GetCadenaConexionConta()
+        {
+            string cadena = "Server={0};Database={1};Uid={2};Pwd={3};";
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    serconta AS SERCONTA,
+                    usuconta AS USUCONTA,
+                    pasconta AS PASCONTA,
+                    numconta AS NUMCONTA
+                    FROM spara1;
+                ";
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    string server = rdr.GetString("SERCONTA");
+                    string database = "CONTA" + rdr.GetInt32("NUMCONTA").ToString();
+                    string user = rdr.GetString("USUCONTA");
+                    string password = rdr.GetString("PASCONTA");
+                    cadena = String.Format(cadena, server, database, user, password);
+                }
+                conn.Close();
+            }
+            return cadena;
+        }
+
+        public static MySqlConnection GetConnectionConta()
+        {
+            // leer la cadena de conexion del config
+            var connectionString = GetCadenaConexionConta();
+            // crear la conexion y devolverla.
+            MySqlConnection conn = new MySqlConnection(connectionString);
+            return conn;
+        }
+
         #region Agente
         public static Agente GetAgente(MySqlDataReader rdr)
         {
@@ -156,6 +196,8 @@ namespace AriGesDB
                 c.FaxClie2 = rdr.GetString("MAICLIE1");
             if (!rdr.IsDBNull(rdr.GetOrdinal("MAICLIE2")))
                 c.FaxClie2 = rdr.GetString("MAICLIE2");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("CODMACTA")))
+                c.Codmacta = rdr.GetString("CODMACTA");
             return c;
         }
 
@@ -182,7 +224,8 @@ namespace AriGesDB
                     telclie2 AS TELCLIE2,
                     faxclie2 AS FAXCLIE2,
                     maiclie1 AS MAICLIE1,
-                    maiclie2 AS MAICLIE2
+                    maiclie2 AS MAICLIE2,
+                    codmacta AS CODMACTA
                     FROM sclien
                     WHERE codclien = '{0}'";
                 sql = String.Format(sql, codClien);
@@ -221,7 +264,8 @@ namespace AriGesDB
                     telclie2 AS TELCLIE2,
                     faxclie2 AS FAXCLIE2,
                     maiclie1 AS MAICLIE1,
-                    maiclie2 AS MAICLIE2
+                    maiclie2 AS MAICLIE2,
+                    codmacta AS CODMACTA
                     FROM sclien
                     WHERE nomclien LIKE '%{0}%'
                     ORDER BY nomclien";
@@ -270,7 +314,8 @@ namespace AriGesDB
                     telclie2 AS TELCLIE2,
                     faxclie2 AS FAXCLIE2,
                     maiclie1 AS MAICLIE1,
-                    maiclie2 AS MAICLIE2
+                    maiclie2 AS MAICLIE2,
+                    codmacta AS CODMACTA
                     FROM sclien
                     WHERE codagent = {0} 
                     AND nomclien LIKE '%{1}%'";
@@ -464,7 +509,7 @@ namespace AriGesDB
             <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
-                        <h4>Pedido {0}  de fecha {1:dd/MM/yyyy} por {3:#,###,##0.00 €}</h4>
+                        <h4>Pedido {0:0000000}  de fecha {1:dd/MM/yyyy} # {3:#,###,##0.00 €}</h4>
                     </a>
                 </div>
                 <div id='collapse{0}' class='panel-collapse collapse'>
@@ -624,7 +669,7 @@ namespace AriGesDB
             <div class='panel {5}'>
                 <div class='panel-heading'>
                     <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
-                        <h4>Oferta {0} de {1:dd/MM/yyyy} # {3:#,###,##0.00 €}</h4>
+                        <h4>Oferta {0:0000000} de {1:dd/MM/yyyy} # {3:#,###,##0.00 €}</h4>
                     </a>
                 </div>
                 <div id='collapse{0}' class='panel-collapse collapse'>
@@ -785,7 +830,7 @@ namespace AriGesDB
             <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
-                        <h4>Albaran {2}-{0}  de fecha {1:dd/MM/yyyy} por {3:#,###,##0.00 €}</h4>
+                        <h4>Albaran {2}-{0:0000000} de {1:dd/MM/yyyy} # {3:#,###,##0.00 €}</h4>
                     </a>
                 </div>
                 <div id='collapse{0}' class='panel-collapse collapse'>
@@ -926,7 +971,398 @@ namespace AriGesDB
         }
         #endregion
 
+        #region Factura
+        public static Factura GetFactura(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMFACTU"))) return null;
+            Factura f = new Factura();
+            f.CodTipom = rdr.GetString("CODTIPOM");
+            f.NumFactu = rdr.GetInt32("NUMFACTU");
+            f.FecFactu = rdr.GetDateTime("FECFACTU");
+            f.Bases = rdr.GetDecimal("BASES");
+            f.Cuotas = rdr.GetDecimal("CUOTAS");
+            f.TotalFac = rdr.GetDecimal("TOTALFAC");
+            return f;
+        }
 
+        public static string GetFacturaHtml(Factura f)
+        {
+            string html = "";
+            string plantilla = @"
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}{1}'>
+                        <h4>Factura {0}-{1:0000000} de {2:dd/MM/yyyy} # {3:#,###,##0.00} + {4:#,###,##0.00} = {5:#,###,##0.00 €}</h4>
+                    </a>
+                </div>
+                <div id='collapse{0}{1}' class='panel-collapse collapse'>
+                    <div class='panel-body'>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th>Albaran</th>
+                                <th>Linea</th>
+                                <th>Artículo</th>
+                                <th class='text-right'>Precio</th>
+                                <th class='text-right'>Cantidad</th>
+                                <th class='text-right'>Dto1 (%)</th>
+                                <th class='text-right'>Dto2 (%)</th>
+                                <th class='text-right'>Importe</th>
+                            </tr>
+                            {6}
+                        </table>
+                    </div>
+                </div>
+            </div>             
+            ";
+            string plantillaLinea = @"
+            <tr>
+                <td>{0}-{1:0000000}</td>
+                <td>{2}</td>
+                <td>{3}</td>
+                <td class='text-right'>{4:###,##0.00}</td>
+                <td class='text-right'>{5:##0.00}</td>
+                <td class='text-right'>{6:0.00}</td>
+                <td class='text-right'>{7:0.00}</td>
+                <td class='text-right'>{8:##,###,##0.00}</td>
+            </tr>
+            ";
+            // Cargar las líneas
+            string lineas = "";
+            foreach (LinFactura lf in f.LineasFactura)
+            {
+                lineas += String.Format(plantillaLinea, lf.CodTipoa, lf.NumAlbar,
+                    lf.NumLinea, lf.NomArtic, lf.PrecioAr,lf.Cantidad, lf.DtoLine1, lf.DtoLine2,lf.Importel);
+            }
+            html = String.Format(plantilla, f.CodTipom, f.NumFactu,
+                f.FecFactu,f.Bases,f.Cuotas,f.TotalFac, lineas);
+            return html;
+        }
+
+        public static string GetFacturasHtml(IList<Factura> facturas)
+        {
+            string html = "";
+            if (facturas.Count == 0)
+            {
+                html = "<h3>No hay facturas de este cliente</h3>";
+                return html;
+            }
+            string plantilla = @"
+            <div class='panel-group' id='accordion'>
+                {0}
+            </div>
+            ";
+            string detFacturas = "";
+            foreach (Factura f in facturas)
+            {
+                detFacturas += GetFacturaHtml(f);
+            }
+            html = String.Format(plantilla, detFacturas);
+            return html;
+        }
+
+        public static LinFactura GetLinFactura(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA"))) return null;
+            LinFactura lf = new LinFactura();
+            lf.CodTipoa = rdr.GetString("CODTIPOA");
+            lf.NumAlbar = rdr.GetInt32("NUMALBAR");
+            lf.NumLinea = rdr.GetInt32("NUMLINEA");
+            lf.CodArtic = rdr.GetString("CODARTIC");
+            lf.NomArtic = rdr.GetString("NOMARTIC");
+            lf.PrecioAr = rdr.GetDecimal("PRECIOAR");
+            lf.Cantidad = rdr.GetDecimal("CANTIDAD");
+            lf.DtoLine1 = rdr.GetDecimal("DTOLINE1");
+            lf.DtoLine2 = rdr.GetDecimal("DTOLINE2");
+            lf.Importel = rdr.GetDecimal("IMPORTEL");
+            return lf;
+
+        }
+        public static IList<Factura> GetFacturas(int codClien)
+        {
+            IList<Factura> lf = new List<Factura>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                        SELECT
+                        f.codtipom AS CODTIPOM,
+                        f.numfactu AS NUMFACTU,
+                        f.fecfactu AS FECFACTU,
+                        (COALESCE(f.baseimp1,0) + COALESCE(f.baseimp2,0) + COALESCE(f.baseimp3,0)) AS BASES,
+                        (COALESCE(f.imporiv1,0) + COALESCE(f.imporiv2,0) + COALESCE(f.imporiv3,0)
+                         + COALESCE(f.imporiv1re,0) + COALESCE(f.imporiv2re,0) + COALESCE(f.imporiv3re,0)) AS CUOTAS,
+                        f.totalfac AS TOTALFAC,
+                        lf.codtipoa AS CODTIPOA,
+                        lf.numalbar AS NUMALBAR,
+                        lf.numlinea AS NUMLINEA,
+                        lf.codartic AS CODARTIC,
+                        lf.nomartic AS NOMARTIC,
+                        lf.precioar AS PRECIOAR,
+                        lf.cantidad AS CANTIDAD,
+                        lf.dtoline1 AS DTOLINE1,
+                        lf.dtoline2 AS DTOLINE2,
+                        lf.importel AS IMPORTEL
+                        FROM scafac AS f
+                        LEFT JOIN slifac AS lf ON (lf.codtipom = f.codtipom AND lf.numfactu = f.numfactu AND lf.fecfactu = f.fecfactu)
+                        WHERE f.codclien = {0}
+                        ORDER BY f.fecfactu DESC, f.codtipom, f.numfactu, lf.codtipoa, lf.numalbar, lf.numlinea;
+                ";
+                sql = String.Format(sql, codClien);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    string codTipom = "";
+                    int numFactu = 0;
+                    Factura f = null;
+                    while (rdr.Read())
+                    {
+                        // eliminamos Albarans sin líneas
+                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALFAC"))) continue;
+                        if (rdr.GetString("CODTIPOM") != codTipom && rdr.GetInt32("NUMFACTU") != numFactu)
+                        {
+                            f = GetFactura(rdr);
+                            codTipom = f.CodTipom;
+                            numFactu = f.NumFactu;
+                            f.LineasFactura.Add(GetLinFactura(rdr));
+                            lf.Add(f);
+                        }
+                        else
+                        {
+                            f.LineasFactura.Add(GetLinFactura(rdr));
+                        }
+
+                    }
+                }
+            }
+            return lf;
+        }
+        #endregion
+
+        #region Cobro
+
+        public static Cobro GetCobro(MySqlDataReader rdr)
+        {
+            Cobro c = new Cobro();
+            c.FechaVenci = rdr.GetDateTime("FECHAVENCI");
+            c.FechaFact = rdr.GetDateTime("FECHAFACT");
+            c.NumFact = rdr.GetString("NUMFACT");
+            c.NomForpa = rdr.GetString("NOMFORPA");
+            c.Total = rdr.GetDecimal("TOTAL");
+            return c;
+        }
+
+        public static IList<Cobro> GetCobros(Cliente cliente)
+        {
+            IList<Cobro> lc = new List<Cobro>();
+            using (MySqlConnection conn = GetConnectionConta())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT 
+                    fecvenci AS FECHAVENCI,
+                    CONCAT(numserie,RIGHT(CONCAT('00000000',codfaccl),7)) AS NUMFACT,
+                    fecfaccl AS FECHAFACT,
+                    nomforpa AS NOMFORPA,
+                    impvenci+IF(gastos IS NULL,0,gastos)-IF(impcobro IS NULL,0,impcobro) AS TOTAL 
+                    FROM  scobro 
+                    INNER JOIN sforpa ON scobro.codforpa=sforpa.codforpa  
+                    WHERE scobro.codmacta = '{0}'
+                ";
+                sql = String.Format(sql, cliente.Codmacta);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        lc.Add(GetCobro(rdr));
+                    }
+                }
+                conn.Close();
+            }
+            return lc;
+        }
+
+        public static string GetCobrosHtml(IList<Cobro> cobros)
+        {
+            string html = "";
+            string plantilla = @"
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>Cobros pendientes</div>
+                    <div class='panel-body'>
+                        {0}
+                    </div>
+                </div>
+            ";
+            if (cobros.Count == 0)
+            {
+                html = String.Format(plantilla, "<h4>No hay cobros pendientes para este cliente</h4>");
+            }
+            else
+            {
+                string plantillaTabla = @"
+                    <div class='table-responsive'>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th>Fecha ven.</th>
+                                <th>Tipo cobro</th>
+                                <th>Factura</th>
+                                <th>Fecha fac.</th>
+                                <th class='text-right'>Importe</th>
+                            </tr>
+                            {0}
+                        </table>
+                    </div>
+                ";
+                string plantillaCobro = @"
+                    <tr {0}>
+                        <td>{1:dd/MM/yyyy}</td>
+                        <td>{2}</td>
+                        <td>{3}</td>
+                        <td>{4:dd/MM/yyyy}</td>
+                        <td class='text-right'>{5:###,###,##0.00 €}</td>
+                    </tr>
+                ";
+                string detCobro = "";
+                foreach (Cobro c in cobros)
+                {
+                    string vencido = "";
+                    if (c.FechaVenci < DateTime.Now) vencido = "class='danger'";
+                    detCobro += String.Format(plantillaCobro, vencido, c.FechaVenci, c.NomForpa, c.NumFact, c.FechaFact, c.Total);
+                }
+                string tabla = String.Format(plantillaTabla, detCobro);
+                html = String.Format(plantilla, tabla);
+            }
+            return html;
+        }
+        #endregion
+
+        #region Estadísticas
+        public static string GetJSONFacturacionAnual(int codClien)
+        {
+            string plantilla = "y: '{0}', a: {1}, b:{2}";
+            string JSON = "";
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    (SUM(COALESCE(f.baseimp1,0) + COALESCE(f.baseimp2,0) + COALESCE(f.baseimp3,0)) /
+                    COUNT(DISTINCT(f.codclien))) AS VENTA,
+                    YEAR(f.fecfactu) AS ANO
+                    FROM scafac AS f
+                    GROUP BY ANO;        
+                ";
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        MySqlConnection conn2 = GetConnection();
+                        conn2.Open();
+                        MySqlCommand cmd2 = conn2.CreateCommand();
+                        string sql2 = @"
+                            SELECT
+                            COALESCE(SUM(COALESCE(f.baseimp1,0) + COALESCE(f.baseimp2,0) + COALESCE(f.baseimp3,0)),0) AS TOTAL
+                            FROM scafac AS f
+                            WHERE f.codclien = {0} AND YEAR(f.fecfactu) = '{1}';
+                        ";
+                        sql2 = String.Format(sql2, codClien, rdr.GetInt32("ANO"));
+                        cmd2.CommandText = sql2;
+                        MySqlDataReader rdr2 = cmd2.ExecuteReader();
+                        if (rdr2.HasRows)
+                        {
+                            rdr2.Read();
+                            string total = Math.Round(rdr2.GetDecimal("TOTAL"),2).ToString().Replace(",",".");
+                            string venta = Math.Round(rdr.GetDecimal("VENTA"),2).ToString().Replace(",",".");
+                            JSON += "{" + String.Format(plantilla, rdr.GetInt32("ANO"), total, venta) + "},";
+                        }
+                        conn2.Close();
+                    }
+                }
+                conn.Close();
+            }
+            return JSON;
+        }
+
+        public static string GetIndicadoresHtml(Cliente cliente)
+        {
+            string html = "";
+            string plantilla = @"
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>INDICADORES</div>
+                    <div class='panel-body'>
+                        <div class='container'>
+                            <div class='row'>
+                                <div class='col-sm-2 text-center'>
+                                    <h4>Ofertas</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4>Pedidos</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4>Albaranes</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4>Saldo pendiente</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4>Saldo vencido</h4>
+                                </div>
+                                <div class='col-sm-2'>
+
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-2 text-center'>
+                                    <h4 class='text-primary'>{0}</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4 class='text-primary'>{1}</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4 class='text-primary'>{2}</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4 class='text-primary'>{3:###,###,##0.00 €}</h4>
+                                </div>
+                                <div class='col-sm-2 text-center'>
+                                    <h4 class='text-danger'>{4:###,###,##0.00 €}</h4>
+                                </div>
+                                <div class='col-sm-2'>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            ";
+            int numOfertas = 0;
+            IList<Oferta> ofertas = GetOfertas(cliente.CodClien);
+            numOfertas = ofertas.Count;
+            int numPedidos = 0;
+            IList<Pedido> pedidos = GetPedidos(cliente.CodClien);
+            numPedidos = pedidos.Count;
+            int numAlbaranes = 0;
+            IList<Albaran> albaranes = GetAlbarans(cliente.CodClien);
+            numAlbaranes = albaranes.Count;
+            decimal saldoPendiente = 0;
+            decimal saldoVencido = 0;
+            IList<Cobro> cobros = GetCobros(cliente);
+            foreach (Cobro c in cobros)
+            {
+                saldoPendiente += c.Total;
+                if (c.FechaVenci < DateTime.Now) saldoVencido += c.Total;
+            }
+            html = String.Format(plantilla, numOfertas, numPedidos, numAlbaranes, saldoPendiente, saldoVencido);
+            return html;
+        }
+        #endregion
 
     }
 }  

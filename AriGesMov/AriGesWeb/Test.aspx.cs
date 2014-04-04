@@ -9,6 +9,7 @@ using System.Web.Security;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using Telerik.Web.UI;
+using AriGesDB;
 
 public partial class Test : System.Web.UI.Page 
 {
