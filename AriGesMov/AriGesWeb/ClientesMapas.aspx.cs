@@ -39,9 +39,13 @@ public partial class ClientesMapas : System.Web.UI.Page
         }
         lblNomClien.Text = cliente.NomClien;
         CargarTabs(cliente);
+        //
+        Contacto.InnerHtml = CntAriGes.GetClienteHtml(cliente);
+        //
         string address = String.Format("{0} {1} {2} {3}", cliente.DomClien, cliente.CodPobla, cliente.PobClien, cliente.ProClien);
-        HtmlControl frame = (HtmlControl)this.FindControl("FrmArea");
-        frame.Attributes["src"] = String.Format("Mapas1.html?direccion={0}",address);
+        HtmlControl frame = (HtmlControl)this.FindControl("FrmArea2");
+        //string url = String.Format("Mapas1.html?direccion={0}", address).Replace(" ", "%20");
+        frame.Attributes["src"] = String.Format("Mapas1.html?direccion={0}", address);
     }
 
     protected void CargarTabs(Cliente cliente)
@@ -67,7 +71,7 @@ public partial class ClientesMapas : System.Web.UI.Page
                 <a href='ClientesPrecios.aspx?CodClien={0}'><h4>Precios</h4></a>
             </li>
             <li class='active'>
-                <a href='ClientesMapas.aspx?CodClien={0}'><h4>Mapas</h4></a>
+                <a href='ClientesMapas.aspx?CodClien={0}'><h4>Contacto</h4></a>
             </li>
         </ul>
         ";

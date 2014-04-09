@@ -15,6 +15,12 @@ public partial class Test : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
+        //string jsCmd = "$('#Loader').hide();";
+        //RadAjaxManager1.ResponseScripts.Add(jsCmd);
+    }
+
+    protected void btnBuscar_Click(object sender, EventArgs e)
+    {
 
     }
 }

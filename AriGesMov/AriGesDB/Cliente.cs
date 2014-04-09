@@ -127,5 +127,27 @@ namespace AriGesDB
             get { return codmacta; }
             set { codmacta = value; }
         }
+
+        private int codActiv;
+
+        public int CodActiv
+        {
+            get { return codActiv; }
+            set { codActiv = value; }
+        }
+        private int codTarif;
+
+        public int CodTarif
+        {
+            get { return codTarif; }
+            set { codTarif = value; }
+        }
+        private int promocio;
+
+        public int Promocio
+        {
+            get { return promocio; }
+            set { promocio = value; }
+        }
     }
 }

@@ -89,9 +89,10 @@
 
                 </div>
                 <br />
+                <div id="Contacto" runat="server">
 
-                <iframe id="FrmArea" runat="server" width="100%" height="500px" frameborder="0">
-                </iframe>
+                </div>
+                <iframe id="FrmArea2" runat="server" width="100%" height="500px" frameborder="0"></iframe>
             </div>
         </form>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->

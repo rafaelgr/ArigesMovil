@@ -13,11 +13,13 @@ using Telerik.Web.UI;
 using AriGesDB;
 using AriUsDB;
 
-public partial class ClientesDetalle : System.Web.UI.Page 
+public partial class ClientesPrecios : System.Web.UI.Page 
 {
+    Cliente cliente;
     protected void Page_Load(object sender, EventArgs e)
     {
         int codClien;
+        Loader.Visible = false;
         // controlamos que nadie entre sin hacer login
         if (Session["Usuario"] == null)
         {
@@ -32,7 +34,7 @@ public partial class ClientesDetalle : System.Web.UI.Page
             // que hacer si falla el código pasado
         }
         codClien = int.Parse(Request["CodClien"].ToString());
-        Cliente cliente = CntAriGes.GetCliente(codClien);
+        cliente = CntAriGes.GetCliente(codClien);
         if (cliente == null)
         {
             lblNomClien.Text = string.Format("Cliente con código {0} desconocido", codClien);
@@ -47,7 +49,7 @@ public partial class ClientesDetalle : System.Web.UI.Page
     {
         string tabs = @"
         <ul class='nav nav-tabs'>
-            <li class='active'>
+            <li>
                 <a href='ClientesDetalle.aspx?CodClien={0}'><h4>Datos</h4></a>
             </li>
             <li>
@@ -62,7 +64,7 @@ public partial class ClientesDetalle : System.Web.UI.Page
             <li>
                 <a href='ClientesFacturas.aspx?CodClien={0}'><h4>Facturas</h4></a>
             </li>
-            <li>
+            <li class='active'>
                 <a href='ClientesPrecios.aspx?CodClien={0}'><h4>Precios</h4></a>
             </li>
             <li>
@@ -75,23 +77,16 @@ public partial class ClientesDetalle : System.Web.UI.Page
 
     protected void CargarCuerpo(Cliente cliente)
     {
-        // Estadísticas de facturación anual
-        string jsCmd = @"
-              element: 'grafico-facturas',
-              data: [
-                {0}
-              ],
-              xkey: 'y',
-              ykeys: ['a', 'b'],
-              labels: ['Este cliente', 'Media clientes']
-        ";
-        jsCmd = "{" + String.Format(jsCmd, CntAriGes.GetJSONFacturacionAnual(cliente.CodClien)) + "}";
-        RadAjaxManager1.ResponseScripts.Add(String.Format("Morris.Line({0})", jsCmd));
         
-        // Cargar cobros pendientes
-        IList<Cobro> cobros = CntAriGes.GetCobros(cliente);
-        CobrosPendientes.InnerHtml = CntAriGes.GetCobrosHtml(cobros);
-        // Indicadores
-        Indicadores.InnerHtml = CntAriGes.GetIndicadoresHtml(cliente);
+    }
+
+    protected void btnBuscar_Click(object sender, EventArgs e)
+    {
+        string jsCmd = "$('#Loader').show();";
+        RadAjaxManager1.ResponseScripts.Add(jsCmd);
+        IList<Articulo> articulos = CntAriGes.GetArticulos(txtBuscar.Text, cliente);
+        BodyPrecios.InnerHtml = CntAriGes.GetArticulosHtml(articulos);
+        jsCmd = "$('#Loader').hide();";
+        RadAjaxManager1.ResponseScripts.Add(jsCmd);
     }
 }

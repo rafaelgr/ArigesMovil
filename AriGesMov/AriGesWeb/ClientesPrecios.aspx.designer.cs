@@ -9,7 +9,7 @@
 
 
 
-public partial class Test {
+public partial class ClientesPrecios {
     
     /// <summary>
     /// Control RadStyleSheetManager1.
@@ -57,6 +57,24 @@ public partial class Test {
     protected global::System.Web.UI.WebControls.Label lblUsuario;
     
     /// <summary>
+    /// Control lblNomClien.
+    /// </summary>
+    /// <remarks>
+    /// Campo generado automáticamente.
+    /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    /// </remarks>
+    protected global::System.Web.UI.WebControls.Label lblNomClien;
+    
+    /// <summary>
+    /// Control TabCliente.
+    /// </summary>
+    /// <remarks>
+    /// Campo generado automáticamente.
+    /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl TabCliente;
+    
+    /// <summary>
     /// Control txtBuscar.
     /// </summary>
     /// <remarks>
@@ -73,4 +91,22 @@ public partial class Test {
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
     protected global::System.Web.UI.WebControls.Button btnBuscar;
+    
+    /// <summary>
+    /// Control Loader.
+    /// </summary>
+    /// <remarks>
+    /// Campo generado automáticamente.
+    /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl Loader;
+    
+    /// <summary>
+    /// Control BodyPrecios.
+    /// </summary>
+    /// <remarks>
+    /// Campo generado automáticamente.
+    /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl BodyPrecios;
 }

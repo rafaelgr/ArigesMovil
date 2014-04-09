@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Test.aspx.cs" Inherits="Test" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientesPrecios.aspx.cs" Inherits="ClientesPrecios" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -11,7 +11,6 @@
         <title>AriGesMov TEST</title>
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css"/>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -20,11 +19,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         <telerik:RadStyleSheetManager id="RadStyleSheetManager1" runat="server" />
-        <script type="text/javascript">
-            function showLoader() {
-                $('#Loader').hide();
-            }
-        </script>
     </head>
     <body>
         <form id="form1" runat="server">
@@ -63,10 +57,10 @@
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav">
                                 <li class="active">
-                                    <a href="#">Inicio</a>
+                                    <a href="Inicio.aspx">Inicio</a>
                                 </li>
                                 <li>
-                                    <a href="#about">Clientes</a>
+                                    <a href="Clientes.aspx">Clientes</a>
                                 </li>
                                 <li>
                                     <a href="Default.aspx">Salir</a>
@@ -85,8 +79,21 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
+                            <h2 class="text-primary">
+                                <asp:Label ID="lblNomClien" runat="server"></asp:Label>
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+                <div id="TabCliente" runat="server">
+
+                </div>
+                <br />
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-12">
                             <h3>Precios de artículos</h3>
-                            <p>Para buscar el artúclo a consultar introduzca su nombre o parte de él y pulse 'BUSCAR'</p>
+                            <p>Para buscar el artículo a consultar introduzca su nombre o parte de él y pulse 'BUSCAR'</p>
                         </div>
                     </div>
                     <div class="row">
@@ -97,74 +104,19 @@
                             &nbsp;
                         </div>
                         <div class="col-md-2">
-                            <asp:Button ID="btnBuscar" runat="server" CssClass="btn btn-primary btn-block btn-lg" Text="Buscar" OnClick="btnBuscar_Click" OnClientClick="showLoader" />
+                            <asp:Button ID="btnBuscar" runat="server" CssClass="btn btn-primary btn-block btn-lg" Text="Buscar" OnClick="btnBuscar_Click" />
                         </div>
                     </div>
                 </div>
+                <br />
+                <div id="Loader" runat="server" class="text-center">
+                    <img src="img/ajax-loader.gif" alt="Cargando..." />
+                </div>
+                <div id="BodyPrecios" runat="server">
+                        
 
-                <div class='panel-group' id='accordion'>
-                    <div class='panel panel-default' runat='server'>
-                        <div class='panel-heading'>
-                            <a data-toggle='collapse' data-parent='#accordion' href='#collapse1'>
-                                Articulo # 1180.32
-                            </a>
-                        </div>
-                        <div id='collapse1' class='panel-collapse collapse'>
-                            <div class='panel-body'>
-                                <div class='table-responsive'>
-                                    <table class='table table-bordered'>
-                                        <tr>
-                                            <th class='text-right'>PVP</th>
-                                            <th class='text-right'>Descuento 1.</th>
-                                            <th class='text-right'>Descuento 2.</th>
-                                            <th class='text-right'>Importe</th>
-                                        </tr>
-                                        <tr>
-                                            <td colspan="4">
-                                                Linea continua
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <td class='text-right'>1260.32</td>
-                                            <td class='text-right'>10.25</td>
-                                            <td class='text-right'>0.00</td>
-                                            <td class='text-right'>1180.32</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class='panel panel-default' runat='server'>
-                        <div class='panel-heading'>
-                            <a data-toggle='collapse' data-parent='#accordion' href='#collapse2'>
-                                Articulo # 100.32
-                            </a>
-                        </div>
-                        <div id='collapse2' class='panel-collapse collapse'>
-                            <div class='panel-body'>
-                                <div class='table-responsive'>
-                                    <table class='table table-bordered'>
-                                        <tr>
-                                            <th class='text-right'>PVP</th>
-                                            <th class='text-right'>Descuento 1.</th>
-                                            <th class='text-right'>Descuento 2.</th>
-                                            <th class='text-right'>Importe</th>
-                                        </tr>
-                                        <tr>
-                                            <td class='text-right'>1260.32</td>
-                                            <td class='text-right'>10.25</td>
-                                            <td class='text-right'>0.00</td>
-                                            <td class='text-right'>1180.32</td>
-                                        </tr>
-                                    </table>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
-
         </form>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -172,8 +124,5 @@
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Bootbox.js para mostrar mensajes -->
         <script type="text/javascript" src="js/bootbox.js"></script>
-        <!-- Para gráficas -->
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-        <script type="text/javascript" src="js/morris.js"></script>
     </body>
 </html>

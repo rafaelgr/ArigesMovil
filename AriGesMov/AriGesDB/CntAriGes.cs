@@ -71,7 +71,7 @@ namespace AriGesDB
 
         public static Agente GetAgente(int codAgent)
         {
-            Agente u = null;
+            Agente a = null;
             using (MySqlConnection conn = GetConnection())
             {
                 conn.Open();
@@ -87,11 +87,11 @@ namespace AriGesDB
                 if (rdr.HasRows)
                 {
                     rdr.Read();
-                    u = GetAgente(rdr);
+                    a = GetAgente(rdr);
                 }
                 conn.Close();
             }
-            return u;
+            return a;
         }
         #endregion 
 
@@ -193,11 +193,14 @@ namespace AriGesDB
             if (!rdr.IsDBNull(rdr.GetOrdinal("FAXCLIE2")))
                 c.FaxClie2 = rdr.GetString("FAXCLIE2");
             if (!rdr.IsDBNull(rdr.GetOrdinal("MAICLIE1")))
-                c.FaxClie2 = rdr.GetString("MAICLIE1");
+                c.Maiclie1 = rdr.GetString("MAICLIE1");
             if (!rdr.IsDBNull(rdr.GetOrdinal("MAICLIE2")))
-                c.FaxClie2 = rdr.GetString("MAICLIE2");
+                c.Maiclie2 = rdr.GetString("MAICLIE2");
             if (!rdr.IsDBNull(rdr.GetOrdinal("CODMACTA")))
                 c.Codmacta = rdr.GetString("CODMACTA");
+            c.CodActiv = rdr.GetInt32("CODACTIV");
+            c.CodTarif = rdr.GetInt32("CODTARIF");
+            c.Promocio = rdr.GetInt32("PROMOCIO");
             return c;
         }
 
@@ -225,7 +228,10 @@ namespace AriGesDB
                     faxclie2 AS FAXCLIE2,
                     maiclie1 AS MAICLIE1,
                     maiclie2 AS MAICLIE2,
-                    codmacta AS CODMACTA
+                    codmacta AS CODMACTA,
+                    codactiv AS CODACTIV,
+                    codtarif AS CODTARIF,
+                    promocio AS PROMOCIO
                     FROM sclien
                     WHERE codclien = '{0}'";
                 sql = String.Format(sql, codClien);
@@ -265,7 +271,10 @@ namespace AriGesDB
                     faxclie2 AS FAXCLIE2,
                     maiclie1 AS MAICLIE1,
                     maiclie2 AS MAICLIE2,
-                    codmacta AS CODMACTA
+                    codmacta AS CODMACTA,
+                    codactiv AS CODACTIV,
+                    codtarif AS CODTARIF,
+                    promocio AS PROMOCIO
                     FROM sclien
                     WHERE nomclien LIKE '%{0}%'
                     ORDER BY nomclien";
@@ -315,7 +324,10 @@ namespace AriGesDB
                     faxclie2 AS FAXCLIE2,
                     maiclie1 AS MAICLIE1,
                     maiclie2 AS MAICLIE2,
-                    codmacta AS CODMACTA
+                    codmacta AS CODMACTA,
+                    codactiv AS CODACTIV,
+                    codtarif AS CODTARIF,
+                    promocio AS PROMOCIO
                     FROM sclien
                     WHERE codagent = {0} 
                     AND nomclien LIKE '%{1}%'";
@@ -353,13 +365,13 @@ namespace AriGesDB
                             <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
                                 <div class='container'>
                                     <div class='row'>
-                                        <div class='col-md-4'>
+                                        <div class='col-md-8'>
                                             <h4>{1}</h4>
                                         </div>
                                         <div class='col-md-1'>
                                             <h4>C:{0}</h4>
                                         </div>
-                                        <div class='col-md-5'>
+                                        <div class='col-md-3'>
 
                                         </div>
                                     </div>
@@ -370,35 +382,37 @@ namespace AriGesDB
                             <div class='panel-body'>
                                 <div class='container'>
                                     <div class='row'>
-                                        <div class='col-sm-12'>
+                                        <div class='col-sm-8'>
                                             <blockquote>
                                                 <strong>{2} {3}</strong><br />
                                                 {4}<br />
                                                 {5} {6} {7}
                                             </blockquote>
                                         </div>
+                                        <div class='col-sm-4'>
+                                            <a class='btn btn-primary btn-lg text-center' href='ClientesDetalle.aspx?CodClien={0}'>Ver detalles</a>
+                                        </div>
                                     </div>
                                     <div class='row'>
-                                        <div class='col-sm-4'>
+                                        <div class='col-sm-6'>
                                             <blockquote>
-                                                Contacto (1): <em>{8}</em><br />
+                                                <strong>Administración</strong><br/>
+                                                <em>{8}</em><br />
                                                 Teléfono:
                                                 <a href='tel:{9}'>{9}</a><br />
                                                 Email:
                                                 <a href='mailto:{10}'>{10}</a>
                                             </blockquote>
                                         </div>
-                                        <div class='col-sm-4'>
+                                        <div class='col-sm-6'>
                                             <blockquote>
-                                                Contacto (2): <em>{11}</em><br />
+                                                <strong>Comercial</strong><br/>
+                                                <em>{11}</em><br />
                                                 Teléfono:
                                                 <a href='tel:{12}'>{12}</a><br />
                                                 EMail:
                                                 <a href='mailto:{13}'>{13}</a>
                                             </blockquote>
-                                        </div>
-                                        <div class='col-sm-4'>
-                                            <a class='btn btn-primary btn-lg text-center' href='ClientesDetalle.aspx?CodClien={0}'>Ver detalles</a>
                                         </div>
                                     </div>
                                 </div>
@@ -416,76 +430,50 @@ namespace AriGesDB
             return html;
         }
 
-        public static string GetClienteHtml(Cliente cliente)
+        public static string GetClienteHtml(Cliente c)
         {
             string html = "";
-            if (cliente == null) return html;
+            if (c == null) return html;
             string plantilla = @"
-                <div class='container'>
-                    <div class='row'>
-                        <div class='col-md-2'>
-                            <strong>NIF</strong>
-                            <p>{0}</p>
-                        </div>
-                        <div class='col-md-10'>
-                            <strong>Nombre comercial</strong>
-                            <p>{1}</p>
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class='col-md-12'>
-                            <strong>Domicilio</strong>
-                            <p>{2}</p>
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class='col-md-2'>
-                            <strong>Cod. Postal</strong>
-                            <p>{3}</p>
-                        </div>
-                        <div class='col-md-5'>
-                            <strong>Población</strong>
-                            <p>{4}</p>
-                        </div>
-                        <div class='col-md-5'>
-                            <strong>Provincia</strong>
-                            <p>{5}</p>
-                        </div>
-                    </div>
-                    <div class='row'>
-                        <div class='col-md-6'>
-                            <div class='panel panel-default'>
-                                <div class='panel-heading'>Datos de contacto (1)</div>
-                                <div class='panel-body'>
-                                    <strong>Persona contacto</strong>
-                                    <p>{6}</p>
-                                    <strong>Telefono:</strong>
-                                    <a href='tel:{7}'>{7}</a>
-                                    <strong>Correo:</strong>
-                                    <a href='mailto:{8}'>{8}</a>
-                                </div>
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col-sm-12'>
+                                <blockquote>
+                                    <strong>{2} {3}</strong><br />
+                                    {4}<br />
+                                    {5} {6} {7}
+                                </blockquote>
                             </div>
                         </div>
-                        <div class='col-md-6'>
-                            <div class='panel panel-default'>
-                                <div class='panel-heading'>Datos de contacto (2)</div>
-                                <div class='panel-body'>
-                                    <strong>Persona contacto</strong>
-                                    <p>{9}</p>
-                                    <strong>Telefono:</strong>
-                                    <a href='tel:{10}'>{10}</a>
-                                    <strong>Correo:</strong>
-                                    <a href='mailto:{11}'>{11}</a>
-                                </div>
+                        <div class='row'>
+                            <div class='col-sm-6'>
+                                <blockquote>
+                                    <strong>Administración</strong><br/>
+                                    <em>{8}</em><br />
+                                    Teléfono:
+                                    <a href='tel:{9}'>{9}</a><br />
+                                    Email:
+                                    <a href='mailto:{10}'>{10}</a>
+                                </blockquote>
+                            </div>
+                            <div class='col-sm-6'>
+                                <blockquote>
+                                    <strong>Comercial</strong><br/>
+                                    <em>{11}</em><br />
+                                    Teléfono:
+                                    <a href='tel:{12}'>{12}</a><br />
+                                    EMail:
+                                    <a href='mailto:{13}'>{13}</a>
+                                </blockquote>
                             </div>
                         </div>
                     </div>
-                </div>
             ";
-            html = String.Format(plantilla, cliente.NifClien, cliente.NomComer,
-                cliente.DomClien, cliente.CodPobla, cliente.PobClien, cliente.ProClien,
-                cliente.PerClie1, cliente.TelClie1, cliente.Maiclie1,
-                cliente.PerClie2, cliente.TelClie2, cliente.Maiclie2);
+            html = String.Format(plantilla, c.CodClien, c.NomClien,
+                    c.NifClien, c.NomComer,
+                    c.DomClien, c.CodPobla, c.PobClien, c.ProClien,
+                    c.PerClie1, c.TelClie1, c.Maiclie1,
+                    c.PerClie2, c.TelClie2, c.Maiclie2);
             return html;
         }
         #endregion
@@ -515,11 +503,11 @@ namespace AriGesDB
                 <div id='collapse{0}' class='panel-collapse collapse'>
                     <div class='panel-body'>
                         <table class='table table-bordered'>
-                            <tr>
+                            <tr class='info'>
                                 <th>Linea</th>
                                 <th>Artículo</th>
-                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Cantidad</th>
+                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Dto1 (%)</th>
                                 <th class='text-right'>Dto2 (%)</th>
                                 <th class='text-right'>Importe</th>
@@ -534,8 +522,8 @@ namespace AriGesDB
             <tr>
                 <td>{0}</td>
                 <td>{1}</td>
-                <td class='text-right'>{2:###,##0.00}</td>
                 <td class='text-right'>{3:##0.00}</td>
+                <td class='text-right'>{2:###,##0.00}</td>
                 <td class='text-right'>{4:0.00}</td>
                 <td class='text-right'>{5:0.00}</td>
                 <td class='text-right'>{6:##,###,##0.00}</td>
@@ -675,11 +663,11 @@ namespace AriGesDB
                 <div id='collapse{0}' class='panel-collapse collapse'>
                     <div class='panel-body'>
                         <table class='table table-bordered'>
-                            <tr>
+                            <tr class='info'>
                                 <th>Linea</th>
                                 <th>Artículo</th>
-                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Cantidad</th>
+                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Dto1 (%)</th>
                                 <th class='text-right'>Dto2 (%)</th>
                                 <th class='text-right'>Importe</th>
@@ -694,8 +682,8 @@ namespace AriGesDB
             <tr>
                 <td>{0}</td>
                 <td>{1}</td>
-                <td class='text-right'>{2:###,##0.00}</td>
                 <td class='text-right'>{3:##0.00}</td>
+                <td class='text-right'>{2:###,##0.00}</td>
                 <td class='text-right'>{4:0.00}</td>
                 <td class='text-right'>{5:0.00}</td>
                 <td class='text-right'>{6:##,###,##0.00}</td>
@@ -830,17 +818,17 @@ namespace AriGesDB
             <div class='panel panel-default'>
                 <div class='panel-heading'>
                     <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
-                        <h4>Albaran {2}-{0:0000000} de {1:dd/MM/yyyy} # {3:#,###,##0.00 €}</h4>
+                        <h4>Albaran {5} de {1:dd/MM/yyyy} # {3:#,###,##0.00 €}</h4>
                     </a>
                 </div>
                 <div id='collapse{0}' class='panel-collapse collapse'>
                     <div class='panel-body'>
                         <table class='table table-bordered'>
-                            <tr>
+                            <tr class='info'>
                                 <th>Linea</th>
                                 <th>Artículo</th>
-                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Cantidad</th>
+                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Dto1 (%)</th>
                                 <th class='text-right'>Dto2 (%)</th>
                                 <th class='text-right'>Importe</th>
@@ -855,8 +843,8 @@ namespace AriGesDB
             <tr>
                 <td>{0}</td>
                 <td>{1}</td>
-                <td class='text-right'>{2:###,##0.00}</td>
                 <td class='text-right'>{3:##0.00}</td>
+                <td class='text-right'>{2:###,##0.00}</td>
                 <td class='text-right'>{4:0.00}</td>
                 <td class='text-right'>{5:0.00}</td>
                 <td class='text-right'>{6:##,###,##0.00}</td>
@@ -868,7 +856,9 @@ namespace AriGesDB
             {
                 lineas += String.Format(plantillaLinea, lp.NumLinea, lp.NomArtic, lp.PrecioAr, lp.Cantidad, lp.DtoLine1, lp.DtoLine2, lp.Importel);
             }
-            html = String.Format(plantilla, a.NumAlbar, a.FechaAlb, a.CodTipom, a.TotalAlb, lineas);
+            string codAlbar = String.Format("{0}-{1:0000000}", a.CodTipom, a.NumAlbar);
+            if (codAlbar == "-0000000") codAlbar = "";
+            html = String.Format(plantilla, a.NumAlbar, a.FechaAlb, a.CodTipom, a.TotalAlb, lineas,codAlbar);
             return html;
         }
 
@@ -998,12 +988,11 @@ namespace AriGesDB
                 <div id='collapse{0}{1}' class='panel-collapse collapse'>
                     <div class='panel-body'>
                         <table class='table table-bordered'>
-                            <tr>
-                                <th>Albaran</th>
+                            <tr class='info'>
                                 <th>Linea</th>
                                 <th>Artículo</th>
-                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Cantidad</th>
+                                <th class='text-right'>Precio</th>
                                 <th class='text-right'>Dto1 (%)</th>
                                 <th class='text-right'>Dto2 (%)</th>
                                 <th class='text-right'>Importe</th>
@@ -1016,22 +1005,37 @@ namespace AriGesDB
             ";
             string plantillaLinea = @"
             <tr>
-                <td>{0}-{1:0000000}</td>
                 <td>{2}</td>
                 <td>{3}</td>
-                <td class='text-right'>{4:###,##0.00}</td>
                 <td class='text-right'>{5:##0.00}</td>
+                <td class='text-right'>{4:###,##0.00}</td>
                 <td class='text-right'>{6:0.00}</td>
                 <td class='text-right'>{7:0.00}</td>
                 <td class='text-right'>{8:##,###,##0.00}</td>
             </tr>
             ";
+            string plantillaAlb = @"
+            <tr>
+                <td colspan='7'>
+                    <strong>Albaran: </strong>{0}
+                </td>
+            </tr>
+            ";
             // Cargar las líneas
             string lineas = "";
+            string codAlbar = "";
+            string codAlbarOld = "";
             foreach (LinFactura lf in f.LineasFactura)
             {
+                codAlbar = String.Format("{0}-{1:0000000}", lf.CodTipoa, lf.NumAlbar);
+                if (codAlbar != codAlbarOld)
+                {
+                    codAlbarOld = codAlbar;
+                    if (codAlbar == "-0000000") codAlbar = "";
+                    lineas += String.Format(plantillaAlb, codAlbar);
+                }
                 lineas += String.Format(plantillaLinea, lf.CodTipoa, lf.NumAlbar,
-                    lf.NumLinea, lf.NomArtic, lf.PrecioAr,lf.Cantidad, lf.DtoLine1, lf.DtoLine2,lf.Importel);
+                    lf.NumLinea, lf.NomArtic, lf.PrecioAr,lf.Cantidad, lf.DtoLine1, lf.DtoLine2,lf.Importel, codAlbar);
             }
             html = String.Format(plantilla, f.CodTipom, f.NumFactu,
                 f.FecFactu,f.Bases,f.Cuotas,f.TotalFac, lineas);
@@ -1077,6 +1081,7 @@ namespace AriGesDB
             return lf;
 
         }
+
         public static IList<Factura> GetFacturas(int codClien)
         {
             IList<Factura> lf = new List<Factura>();
@@ -1120,7 +1125,7 @@ namespace AriGesDB
                     {
                         // eliminamos Albarans sin líneas
                         if (rdr.IsDBNull(rdr.GetOrdinal("TOTALFAC"))) continue;
-                        if (rdr.GetString("CODTIPOM") != codTipom && rdr.GetInt32("NUMFACTU") != numFactu)
+                        if (rdr.GetString("CODTIPOM") != codTipom || rdr.GetInt32("NUMFACTU") != numFactu)
                         {
                             f = GetFactura(rdr);
                             codTipom = f.CodTipom;
@@ -1170,6 +1175,7 @@ namespace AriGesDB
                     FROM  scobro 
                     INNER JOIN sforpa ON scobro.codforpa=sforpa.codforpa  
                     WHERE scobro.codmacta = '{0}'
+                    AND impvenci+IF(gastos IS NULL,0,gastos)-IF(impcobro IS NULL,0,impcobro) <> 0
                 ";
                 sql = String.Format(sql, cliente.Codmacta);
                 cmd.CommandText = sql;
@@ -1240,6 +1246,173 @@ namespace AriGesDB
         }
         #endregion
 
+        #region Articulo
+
+        public static decimal GetStock(string codArtic)
+        {
+            decimal stock = 0;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    SUM(canstock) AS STOCK
+                    FROM salmac
+                    WHERE codartic = '{0}';
+                ";
+                sql = String.Format(sql, codArtic);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    stock = rdr.GetDecimal("STOCK");
+                }
+                conn.Close();
+            }
+            return stock;
+        }
+
+
+        public static Articulo GetArticulo(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODARTIC"))) return null;
+            Articulo a = new Articulo();
+            a.CodArtic = rdr.GetString("CODARTIC");
+            a.NomArtic = rdr.GetString("NOMARTIC");
+            a.Preciove = rdr.GetDecimal("PRECIOVE");
+            a.CodFamia = rdr.GetInt32("CODFAMIA");
+            a.CodMarca = rdr.GetInt32("CODMARCA");
+            return a;
+        }
+
+        public static Articulo GetArticulo(string codArtic)
+        {
+            Articulo a = null;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    codartic AS CODARTIC, 
+                    nomartic AS NOMARTIC, 
+                    preciove AS PRECIOVE,
+                    codfamia AS CODFAMIA,
+                    codmarca AS CODMARCA
+                    FROM sartic
+                    WHERE codartic = '{0}'";
+                sql = String.Format(sql, codArtic);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    a = GetArticulo(rdr);
+                }
+                conn.Close();
+            }
+            a.Stock = GetStock(a.CodArtic);
+            return a;
+        }
+
+        public static IList<Articulo> GetArticulos(string parNom, Cliente cliente)
+        {
+            IList<Articulo> la = new List<Articulo>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    codartic AS CODARTIC, 
+                    nomartic AS NOMARTIC, 
+                    preciove AS PRECIOVE,
+                    codfamia AS CODFAMIA,
+                    codmarca AS CODMARCA
+                    FROM sartic
+                    WHERE nomartic LIKE '%{0}%'
+                    ORDER BY nomartic";
+                sql = String.Format(sql, parNom);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        Articulo a = new Articulo();
+                        a = GetArticulo(rdr);
+                        if (a != null)
+                        {
+                            a.Precio = GetPrecio(a, cliente);
+                            a.Stock = GetStock(a.CodArtic);
+                            la.Add(a);
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return la;
+        }
+
+        public static string GetArticuloHtml(Articulo a)
+        {
+            string html = "";
+            string plantilla = @"
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
+                        <h4>{1} C:{0} # {5:#,###,##0.00 €} # Stock: {7:###,##0.00}</h4>
+                    </a>
+                </div>
+                <div id='collapse{0}' class='panel-collapse collapse'>
+                    <div class='panel-body'>
+                        <table class='table table-bordered'>
+                            <tr class='info'>
+                                <th>Origen</th>
+                                <th class='text-right'>Precio</th>
+                                <th class='text-right'>Dto1 (%)</th>
+                                <th class='text-right'>Dto2 (%)</th>
+                                <th class='text-right'>Importe</th>
+                            </tr>
+                            <tr>
+                                <td>{6}</td>
+                                <td class='text-right'>{2:#,###,##0.00}</td>
+                                <td class='text-right'>{3:0.00}</td>
+                                <td class='text-right'>{4:0.00}</td>
+                                <td class='text-right'>{5:#,###,##0.00}</td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>             
+            ";
+            html = String.Format(plantilla, a.CodArtic, a.NomArtic, a.Precio.Pvp, a.Precio.Dto1, a.Precio.Dto2, a.Precio.Importe, a.Precio.Origen, a.Stock);
+            return html;
+        }
+
+        public static string GetArticulosHtml(IList<Articulo> articulos)
+        {
+            string html = "";
+            if (articulos.Count == 0)
+            {
+                html = "<h4>No se han encontrado artículos</h4>";
+                return html;
+            }
+            string plantilla = @"
+            <div class='panel-group' id='accordion'>
+                {0}
+            </div>
+            ";
+            string detArticulos = "";
+            foreach (Articulo a in articulos)
+            {
+                detArticulos += GetArticuloHtml(a);
+            }
+            html = String.Format(plantilla, detArticulos);
+            return html;
+        }
+
+        #endregion 
+
         #region Estadísticas
         public static string GetJSONFacturacionAnual(int codClien)
         {
@@ -1297,48 +1470,22 @@ namespace AriGesDB
                 <div class='panel panel-default'>
                     <div class='panel-heading'>INDICADORES</div>
                     <div class='panel-body'>
-                        <div class='container'>
-                            <div class='row'>
-                                <div class='col-sm-2 text-center'>
-                                    <h4>Ofertas</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4>Pedidos</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4>Albaranes</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4>Saldo pendiente</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4>Saldo vencido</h4>
-                                </div>
-                                <div class='col-sm-2'>
-
-                                </div>
-                            </div>
-                            <div class='row'>
-                                <div class='col-sm-2 text-center'>
-                                    <h4 class='text-primary'>{0}</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4 class='text-primary'>{1}</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4 class='text-primary'>{2}</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4 class='text-primary'>{3:###,###,##0.00 €}</h4>
-                                </div>
-                                <div class='col-sm-2 text-center'>
-                                    <h4 class='text-danger'>{4:###,###,##0.00 €}</h4>
-                                </div>
-                                <div class='col-sm-2'>
-
-                                </div>
-                            </div>
-                        </div>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th class='text-center info'>Ofertas</th>
+                                <th class='text-center info'>Pedidos</th>
+                                <th class='text-center info'>Albaranes</th>
+                                <th class='text-right success'>Saldo pendiente</th>
+                                <th class='text-right danger'>Saldo vencido</th>
+                            </tr>
+                            <tr>
+                                <td class='text-center'>{0}</td>
+                                <td class='text-center'>{1}</td>
+                                <td class='text-center'>{2}</td>
+                                <td class='text-right'>{3:###,###,##0.00 €}</td>
+                                <td class='text-right'>{4:###,###,##0.00 €}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             ";
@@ -1363,6 +1510,491 @@ namespace AriGesDB
             return html;
         }
         #endregion
+
+        #region Cálculo de precios
+
+        public static Precio GetPrecio(Articulo a, Cliente c)
+        {
+            Precio precio = new Precio();
+            bool precioMinimo = GetPrecioMinimo();
+            if (!precioMinimo)
+            {
+                precio = GetPrecioPromocion(a, c);
+                if (precio.Pvp != 0) return precio;
+                precio = GetPrecioEspeciales(a, c);
+                if (precio.Pvp != 0) return precio;
+                precio = GetPrecioTarifas(a, c);
+                if (precio.Pvp != 0) return precio;
+                precio = GetPrecioArticulo(a, c);
+            }
+            else
+            {
+                Precio pAux = new Precio();
+                pAux.Pvp = 9999999;
+                pAux.Origen = "ERROR";
+                precio = GetPrecioPromocion(a, c);
+                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                precio = GetPrecioEspeciales(a, c);
+                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                precio = GetPrecioTarifas(a, c);
+                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                precio = GetPrecioArticulo(a, c);
+                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                precio = pAux;
+            }
+            return precio;
+        }
+
+        public static bool GetPrecioMinimo()
+        {
+            bool precioMinimo = false;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    preciominimo AS PRECIOMINIMO
+                    FROM spara1";
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    precioMinimo = rdr.GetBoolean("PRECIOMINIMO");
+                }
+                conn.Close();
+            }
+            return precioMinimo;
+        }
+
+        public static bool GetSobreResto()
+        {
+            bool sobreResto = false;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    tipodtos AS TIPODTOS
+                    FROM spara1";
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    sobreResto = rdr.GetBoolean("TIPODTOS");
+                }
+                conn.Close();
+            }
+            return sobreResto;
+        }
+
+        public static Precio GetPrecioPromocion(Articulo a, Cliente c)
+        {
+            Precio precio = new Precio();
+            bool dtoPermi = false;
+            precio.Origen = "PROMOCION";
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    dtopermi AS DTOPERMI,
+                    precioac AS PRECIOAC
+                    FROM spromo
+                    WHERE codartic = '{0}'
+                    AND codlista = {1}
+                    AND (fechaini <= '{2:yyyy-MM-dd}' AND fechafin >= '{2:yyyy-MM-dd}');
+                ";
+                sql = String.Format(sql, a.CodArtic, c.CodTarif, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    precio.Pvp = rdr.GetDecimal("PRECIOAC");
+                    dtoPermi = rdr.GetBoolean("DTOPERMI");
+                }
+                conn.Close();
+            }
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    dtopermi AS DTOPERMI,
+                    precion1 AS PRECIONU
+                    FROM spromo
+                    WHERE codartic = '{0}'
+                    AND codlista = {1}
+                    AND (fechain1 >= '{2:yyyy-MM-dd}' AND fechafi1 <= '{2:yyyy-MM-dd}');
+                ";
+                sql = String.Format(sql, a.CodArtic, c.CodTarif, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    precio.Pvp = rdr.GetDecimal("PRECIONU");
+                    dtoPermi = rdr.GetBoolean("DTOPERMI");
+                }
+                conn.Close();
+            }
+            if (precio.Pvp != 0 && dtoPermi)
+            {
+                // calcular los descuentos
+                precio = GetDescuento(a, c, precio);
+            }
+            precio = CalcularDescuento(precio);
+            return precio;
+        }
+
+        public static Precio GetPrecioEspeciales(Articulo a, Cliente c)
+        {
+            Precio precio = new Precio();
+            bool dtoPermi = false;
+            precio.Origen = "ESPECIAL";
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    dtopermi AS DTOPERMI,
+                    precioa1 AS PRECIOAC,
+                    dtoespec AS DTOESPEC
+                    FROM sprees
+                    WHERE codclien = {0}
+                    AND codartic = '{1}';
+                ";
+                sql = String.Format(sql, c.CodClien, a.CodArtic);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    precio.Pvp = rdr.GetDecimal("PRECIOAC");
+                    dtoPermi = rdr.GetBoolean("DTOPERMI");
+                    if (!rdr.IsDBNull(rdr.GetOrdinal("DTOESPEC")))
+                        precio.Dto1 = rdr.GetDecimal("DTOESPEC");
+                }
+                conn.Close();
+            }
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    dtopermi AS DTOPERMI,
+                    precionu AS PRECIONU,
+                    dtoespe1 AS DTOESPE1
+                    FROM sprees
+                    WHERE codclien = {0}
+                    AND codartic = '{1}'
+                    AND (fechanue <= '{2:yyyy-MM-dd}');
+                ";
+                sql = String.Format(sql, c.CodClien, a.CodArtic, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    precio.Pvp = rdr.GetDecimal("PRECIONU");
+                    dtoPermi = rdr.GetBoolean("DTOPERMI");
+                    if (!rdr.IsDBNull(rdr.GetOrdinal("DTOESPE1")))
+                        precio.Dto1 = rdr.GetDecimal("DTOESPE1");
+                }
+                conn.Close();
+            }
+            if (precio.Pvp != 0 && dtoPermi && precio.Dto1 == 0)
+            {
+                // calcular los descuentos
+                precio = GetDescuento(a, c, precio);
+            }
+            precio = CalcularDescuento(precio);
+            return precio;
+        }
+
+        public static Precio GetPrecioTarifas(Articulo a, Cliente c)
+        {
+            Precio precio = new Precio();
+            bool dtoPermi = false;
+            precio.Origen = "TARIFAS";
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    dtopermi AS DTOPERMI,
+                    precioac AS PRECIOAC
+                    FROM slista
+                    WHERE codlista = {0}
+                    AND codartic = '{1}';
+                ";
+                sql = String.Format(sql, c.CodTarif, a.CodArtic);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    precio.Pvp = rdr.GetDecimal("PRECIOAC");
+                    dtoPermi = rdr.GetBoolean("DTOPERMI");
+                }
+                conn.Close();
+            }
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT 
+                    dtopermi AS DTOPERMI,
+                    precionu AS PRECIONU
+                    FROM slista
+                    WHERE codlista = {0}
+                    AND codartic = '{1}'
+                    AND (fechanue <= '{2:yyyy-MM-dd}');
+                ";
+                sql = String.Format(sql, c.CodTarif, a.CodArtic, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    precio.Pvp = rdr.GetDecimal("PRECIONU");
+                    dtoPermi = rdr.GetBoolean("DTOPERMI");
+                }
+                conn.Close();
+            }
+            if (precio.Pvp != 0 && dtoPermi)
+            {
+                // calcular los descuentos
+                precio = GetDescuento(a, c, precio);
+            }
+            precio = CalcularDescuento(precio);
+            return precio;
+        }
+
+        public static Precio GetPrecioArticulo(Articulo a, Cliente c)
+        {
+            Precio precio = new Precio();
+            precio.Origen = "ARTICULO";
+            precio.Pvp = a.Preciove;
+            //precio = GetDescuento(a, c, precio);
+            precio = CalcularDescuento(precio);
+            return precio;
+        }
+
+
+        public static Precio CalcularDescuento(Precio p)
+        {
+            bool sobreResto = GetSobreResto();
+            if (sobreResto)
+            {
+                p.Importe = p.Pvp - ((p.Pvp * p.Dto1) / 100M);
+                p.Importe = p.Importe - ((p.Importe * p.Dto2) / 100M);
+            }
+            else
+            {
+                p.Importe = p.Pvp - ((p.Pvp * (p.Dto1+ p.Dto2)) / 100M);
+            }
+            return p;
+        }
+
+        public static Precio GetDescuento(Articulo a, Cliente c, Precio p)
+        {
+            // segun cliente
+            p = GetDescuentoCFM(a, c, p);
+            if (p.Dto1 > 0) return p;
+            p = GetDescuentoCF(a, c, p);
+            if (p.Dto1 > 0) return p;
+            p = GetDescuentoCM(a, c, p);
+            if (p.Dto1 > 0) return p;
+            // segun actividad
+            p = GetDescuentoAFM(a, c, p);
+            if (p.Dto1 > 0) return p;
+            p = GetDescuentoAF(a, c, p);
+            if (p.Dto1 > 0) return p;
+            p = GetDescuentoAM(a, c, p);
+            if (p.Dto1 > 0) return p;
+            return p;
+        }
+
+        public static Precio GetDescuentoCFM(Articulo a, Cliente c, Precio p)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    dtoline1 AS DTOLINE1,
+                    dtoline2 AS DTOLINE2
+                    FROM sdtofm
+                    WHERE codclien = {0}
+                    AND codfamia = {1}
+                    AND codmarca = {2}
+                    AND fechadto <= '{3:yyyy-MM-dd}';
+                ";
+                sql = String.Format(sql, c.CodClien, a.CodFamia, a.CodMarca, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    p.Dto1 = rdr.GetDecimal("DTOLINE1");
+                    p.Dto2 = rdr.GetDecimal("DTOLINE2");
+                }
+                conn.Close();
+            }
+            return p;
+        }
+
+        public static Precio GetDescuentoCF(Articulo a, Cliente c, Precio p)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    dtoline1 AS DTOLINE1,
+                    dtoline2 AS DTOLINE2
+                    FROM sdtofm
+                    WHERE codclien = {0}
+                    AND codfamia = {1}
+                    AND fechadto <= '{2:yyyy-MM-dd}';
+                ";
+                sql = String.Format(sql, c.CodClien, a.CodFamia, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    p.Dto1 = rdr.GetDecimal("DTOLINE1");
+                    p.Dto2 = rdr.GetDecimal("DTOLINE2");
+                }
+                conn.Close();
+            }
+            return p;
+        }
+
+        public static Precio GetDescuentoCM(Articulo a, Cliente c, Precio p)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    dtoline1 AS DTOLINE1,
+                    dtoline2 AS DTOLINE2
+                    FROM sdtofm
+                    WHERE codclien = {0}
+                    AND codmarca = {1}
+                    AND fechadto <= '{2:yyyy-MM-dd}';
+                ";
+                sql = String.Format(sql, c.CodClien, a.CodMarca, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    p.Dto1 = rdr.GetDecimal("DTOLINE1");
+                    p.Dto2 = rdr.GetDecimal("DTOLINE2");
+                }
+                conn.Close();
+            }
+            return p;
+        }
+
+        public static Precio GetDescuentoAFM(Articulo a, Cliente c, Precio p)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    dtoline1 AS DTOLINE1,
+                    dtoline2 AS DTOLINE2
+                    FROM sdtofm
+                    WHERE codactiv = {0}
+                    AND codfamia = {1}
+                    AND codmarca = {2}
+                    AND fechadto <= '{3:yyyy-MM-dd}';
+                ";
+                sql = String.Format(sql, c.CodActiv, a.CodFamia, a.CodMarca, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    p.Dto1 = rdr.GetDecimal("DTOLINE1");
+                    p.Dto2 = rdr.GetDecimal("DTOLINE2");
+                }
+                conn.Close();
+            }
+            return p;
+        }
+        
+        public static Precio GetDescuentoAF(Articulo a, Cliente c, Precio p)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    dtoline1 AS DTOLINE1,
+                    dtoline2 AS DTOLINE2
+                    FROM sdtofm
+                    WHERE codactiv = {0}
+                    AND codfamia = {1}
+                    AND fechadto <= '{2:yyyy-MM-dd}';
+                ";
+                sql = String.Format(sql, c.CodActiv, a.CodFamia, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    p.Dto1 = rdr.GetDecimal("DTOLINE1");
+                    p.Dto2 = rdr.GetDecimal("DTOLINE2");
+                }
+                conn.Close();
+            }
+            return p;
+        }
+
+        public static Precio GetDescuentoAM(Articulo a, Cliente c, Precio p)
+        {
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    dtoline1 AS DTOLINE1,
+                    dtoline2 AS DTOLINE2
+                    FROM sdtofm
+                    WHERE codactiv = {0}
+                    AND codmarca = {1}
+                    AND fechadto <= '{2:yyyy-MM-dd}';
+                ";
+                sql = String.Format(sql, c.CodActiv, a.CodMarca, DateTime.Now);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    p.Dto1 = rdr.GetDecimal("DTOLINE1");
+                    p.Dto2 = rdr.GetDecimal("DTOLINE2");
+                }
+                conn.Close();
+            }
+            return p;
+        }
+
+        #endregion 
 
     }
 }  

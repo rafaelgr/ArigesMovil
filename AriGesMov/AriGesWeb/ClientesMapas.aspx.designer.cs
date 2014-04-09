@@ -75,11 +75,20 @@ public partial class ClientesMapas {
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl TabCliente;
     
     /// <summary>
-    /// Control FrmArea.
+    /// Control Contacto.
     /// </summary>
     /// <remarks>
     /// Campo generado automáticamente.
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlIframe FrmArea;
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl Contacto;
+    
+    /// <summary>
+    /// Control FrmArea2.
+    /// </summary>
+    /// <remarks>
+    /// Campo generado automáticamente.
+    /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
+    /// </remarks>
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl FrmArea2;
 }

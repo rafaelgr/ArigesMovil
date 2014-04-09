@@ -66,7 +66,7 @@ public partial class ClientesFacturas : System.Web.UI.Page
                 <a href='ClientesPrecios.aspx?CodClien={0}'><h4>Precios</h4></a>
             </li>
             <li>
-                <a href='ClientesMapas.aspx?CodClien={0}'><h4>Mapas</h4></a>
+                <a href='ClientesMapas.aspx?CodClien={0}'><h4>Contacto</h4></a>
             </li>
         </ul>
         ";

@@ -56,7 +56,10 @@
                             </form>
                         </div>
                         <div class="modal-footer">
-                            <div class="col-md-12">
+                            <div class="col-md-6">
+                               <span class="pull-left" ><img src="img/ariadna_logo.png" alt="Ariadna S.L." /></span>
+                            </div>
+                            <div class="col-md-6">
                                 <span class="pull-right"><small>(c) Ariadna Software S.L. 902 888 878</small></span>
                             </div>
                         </div>

@@ -102,6 +102,9 @@
                 <div id="Indicadores" runat="server">
 
                 </div>
+                <div id="CobrosPendientes" runat="server">
+
+                </div>
                 <div class="panel panel-default">
                     <div class="panel-heading">Facturación anual</div>
                     <div class="panel-body">
@@ -109,9 +112,6 @@
 
                         </div>
                     </div>
-                </div>
-                <div id="CobrosPendientes" runat="server">
-
                 </div>
 
             </div>
