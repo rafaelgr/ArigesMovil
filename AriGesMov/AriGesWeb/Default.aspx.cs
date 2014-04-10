@@ -16,7 +16,8 @@ public partial class Default : System.Web.UI.Page
 {
     protected void Page_Load(object sender, EventArgs e)
     {
-
+        String strVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version.ToString();
+        lblVersion.Text = String.Format("VRS {0}", strVersion);
     }
 
     protected void btnEntrar_Click(object sender, EventArgs e)

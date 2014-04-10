@@ -39,8 +39,12 @@
                 <div class="modal-dialog">
                     <div class="modal-content">
                         <div class="modal-header">
-                            <img src="img/company_logo.png" class="text-right" />
-                            <h1 class="text-right text-primary">AriGes Móvil</h1>
+                            <img src="img/company_logo.png" />
+                            <span class="pull-right">
+                                <h1 class="text-primary">
+                                    AriGes Móvil
+                                </h1>
+                            </span>
                         </div>
                         <div class="modal-body">
                             <form id="form2" class="form col-md-12 center-block">
@@ -57,7 +61,8 @@
                         </div>
                         <div class="modal-footer">
                             <div class="col-md-6">
-                               <span class="pull-left" ><img src="img/ariadna_logo.png" alt="Ariadna S.L." /></span>
+                                <span class="pull-left" > <img src="img/ariadna_logo.png" alt="Ariadna S.L." /> <br />
+                                    <small><asp:Label runat="server" ID="lblVersion"></asp:Label></small></span>
                             </div>
                             <div class="col-md-6">
                                 <span class="pull-right"><small>(c) Ariadna Software S.L. 902 888 878</small></span>

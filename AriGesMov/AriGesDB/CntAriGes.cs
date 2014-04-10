@@ -989,6 +989,7 @@ namespace AriGesDB
                     <div class='panel-body'>
                         <table class='table table-bordered'>
                             <tr class='info'>
+                                <th>Albaran</th>
                                 <th>Linea</th>
                                 <th>Artículo</th>
                                 <th class='text-right'>Cantidad</th>
@@ -1005,6 +1006,7 @@ namespace AriGesDB
             ";
             string plantillaLinea = @"
             <tr>
+                <td>{10}</td>
                 <td>{2}</td>
                 <td>{3}</td>
                 <td class='text-right'>{5:##0.00}</td>
@@ -1025,17 +1027,22 @@ namespace AriGesDB
             string lineas = "";
             string codAlbar = "";
             string codAlbarOld = "";
+            string showAlbar;
             foreach (LinFactura lf in f.LineasFactura)
             {
                 codAlbar = String.Format("{0}-{1:0000000}", lf.CodTipoa, lf.NumAlbar);
                 if (codAlbar != codAlbarOld)
                 {
+                    showAlbar = codAlbar;
+                    if (codAlbar == "-0000000") showAlbar = "";
                     codAlbarOld = codAlbar;
-                    if (codAlbar == "-0000000") codAlbar = "";
-                    lineas += String.Format(plantillaAlb, codAlbar);
+                }
+                else
+                {
+                    showAlbar = "";
                 }
                 lineas += String.Format(plantillaLinea, lf.CodTipoa, lf.NumAlbar,
-                    lf.NumLinea, lf.NomArtic, lf.PrecioAr,lf.Cantidad, lf.DtoLine1, lf.DtoLine2,lf.Importel, codAlbar);
+                    lf.NumLinea, lf.NomArtic, lf.PrecioAr,lf.Cantidad, lf.DtoLine1, lf.DtoLine2,lf.Importel, codAlbar, showAlbar);
             }
             html = String.Format(plantilla, f.CodTipom, f.NumFactu,
                 f.FecFactu,f.Bases,f.Cuotas,f.TotalFac, lineas);
@@ -1359,11 +1366,11 @@ namespace AriGesDB
             string plantilla = @"
             <div class='panel panel-default'>
                 <div class='panel-heading'>
-                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
+                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse{8}'>
                         <h4>{1} C:{0} # {5:#,###,##0.00 €} # Stock: {7:###,##0.00}</h4>
                     </a>
                 </div>
-                <div id='collapse{0}' class='panel-collapse collapse'>
+                <div id='collapse{8}' class='panel-collapse collapse'>
                     <div class='panel-body'>
                         <table class='table table-bordered'>
                             <tr class='info'>
@@ -1385,7 +1392,8 @@ namespace AriGesDB
                 </div>
             </div>             
             ";
-            html = String.Format(plantilla, a.CodArtic, a.NomArtic, a.Precio.Pvp, a.Precio.Dto1, a.Precio.Dto2, a.Precio.Importe, a.Precio.Origen, a.Stock);
+            string cod = a.CodArtic.Replace(" ", "_");
+            html = String.Format(plantilla, a.CodArtic, a.NomArtic, a.Precio.Pvp, a.Precio.Dto1, a.Precio.Dto2, a.Precio.Importe, a.Precio.Origen, a.Stock, cod);
             return html;
         }
 
