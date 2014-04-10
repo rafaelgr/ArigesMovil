@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace AriGesDB
 {
@@ -1392,7 +1393,9 @@ namespace AriGesDB
                 </div>
             </div>             
             ";
-            string cod = a.CodArtic.Replace(" ", "_");
+            string pattern = "[^0-9a-zA-z_\\-:]";
+            Regex rgx = new Regex(pattern);
+            string cod = rgx.Replace(a.CodArtic, "");
             html = String.Format(plantilla, a.CodArtic, a.NomArtic, a.Precio.Pvp, a.Precio.Dto1, a.Precio.Dto2, a.Precio.Importe, a.Precio.Origen, a.Stock, cod);
             return html;
         }
