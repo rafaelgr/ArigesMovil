@@ -17,10 +17,10 @@
       <FileName>Agente.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.Cliente" Collapsed="true">
-    <Position X="5.75" Y="0.5" Width="1.5" />
+  <Class Name="AriGesDB.Cliente">
+    <Position X="13" Y="1.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>IQACUAAIiBCQQAAQEUAAEACIqBGggKNBAAAJAAAAABE=</HashCode>
+      <HashCode>IQAScAAKmBCQQAAQEUAAEACIqBGggKNBAAIJAAAAADE=</HashCode>
       <FileName>Cliente.cs</FileName>
     </TypeIdentifier>
   </Class>
@@ -65,7 +65,7 @@
   <Class Name="AriGesDB.Articulo" Collapsed="true">
     <Position X="10.5" Y="1.25" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIgACACIAQgAAAQAABAEAAAQAQAAAAAAAA=</HashCode>
+      <HashCode>AAAAAAAAAAIgACACIAQgAAAQgABAEIAAQAQAAAAAAAA=</HashCode>
       <FileName>Articulo.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

@@ -149,5 +149,27 @@ namespace AriGesDB
             get { return promocio; }
             set { promocio = value; }
         }
+
+        private string situacion;
+
+        public string Situacion
+        {
+            get { return situacion; }
+            set { situacion = value; }
+        }
+        private decimal limiteCredito;
+
+        public decimal LimiteCredito
+        {
+            get { return limiteCredito; }
+            set { limiteCredito = value; }
+        }
+        private string tipoCredito;
+
+        public string TipoCredito
+        {
+            get { return tipoCredito; }
+            set { tipoCredito = value; }
+        }
     }
 }

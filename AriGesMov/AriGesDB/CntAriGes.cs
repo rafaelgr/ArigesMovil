@@ -202,6 +202,12 @@ namespace AriGesDB
             c.CodActiv = rdr.GetInt32("CODACTIV");
             c.CodTarif = rdr.GetInt32("CODTARIF");
             c.Promocio = rdr.GetInt32("PROMOCIO");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("SITUACION")))
+                c.Situacion = rdr.GetString("SITUACION");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("LIMITE_CREDITO")))
+                c.LimiteCredito = rdr.GetDecimal("LIMITE_CREDITO");
+            int tcred = rdr.GetInt32("CREDITO_PRIVADO");
+            if (tcred == 1) c.TipoCredito = "PRIVADO";
             return c;
         }
 
@@ -213,28 +219,32 @@ namespace AriGesDB
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
                 string sql = @"SELECT
-                    codclien AS CODCLIEN,
-                    nomclien AS NOMCLIEN,
-                    nomcomer AS NOMCOMER,
-                    domclien AS DOMCLIEN,
-                    codpobla AS CODPOBLA,
-                    pobclien AS POBCLIEN,
-                    proclien AS PROCLIEN,
-                    nifclien AS NIFCLIEN,
-                    perclie1 AS PERCLIE1,
-                    telclie1 AS TELCLIE1,
-                    faxclie1 AS FAXCLIE1,
-                    perclie2 AS PERCLIE2,
-                    telclie2 AS TELCLIE2,
-                    faxclie2 AS FAXCLIE2,
-                    maiclie1 AS MAICLIE1,
-                    maiclie2 AS MAICLIE2,
-                    codmacta AS CODMACTA,
-                    codactiv AS CODACTIV,
-                    codtarif AS CODTARIF,
-                    promocio AS PROMOCIO
-                    FROM sclien
-                    WHERE codclien = '{0}'";
+                    c.codclien AS CODCLIEN,
+                    c.nomclien AS NOMCLIEN,
+                    c.nomcomer AS NOMCOMER,
+                    c.domclien AS DOMCLIEN,
+                    c.codpobla AS CODPOBLA,
+                    c.pobclien AS POBCLIEN,
+                    c.proclien AS PROCLIEN,
+                    c.nifclien AS NIFCLIEN,
+                    c.perclie1 AS PERCLIE1,
+                    c.telclie1 AS TELCLIE1,
+                    c.faxclie1 AS FAXCLIE1,
+                    c.perclie2 AS PERCLIE2,
+                    c.telclie2 AS TELCLIE2,
+                    c.faxclie2 AS FAXCLIE2,
+                    c.maiclie1 AS MAICLIE1,
+                    c.maiclie2 AS MAICLIE2,
+                    c.codmacta AS CODMACTA,
+                    c.codactiv AS CODACTIV,
+                    c.codtarif AS CODTARIF,
+                    c.promocio AS PROMOCIO,
+                    s.nomsitua AS SITUACION,
+                    c.limcredi AS LIMITE_CREDITO,
+                    c.credipriv AS CREDITO_PRIVADO
+                    FROM sclien AS c
+                    LEFT JOIN ssitua AS s ON s.codsitua = c.codsitua
+                    WHERE c.codclien = '{0}'";
                 sql = String.Format(sql, codClien);
                 cmd.CommandText = sql;
                 MySqlDataReader rdr = cmd.ExecuteReader();
@@ -256,27 +266,31 @@ namespace AriGesDB
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
                 string sql = @"SELECT
-                    codclien AS CODCLIEN,
-                    nomclien AS NOMCLIEN,
-                    nomcomer AS NOMCOMER,
-                    domclien AS DOMCLIEN,
-                    codpobla AS CODPOBLA,
-                    pobclien AS POBCLIEN,
-                    proclien AS PROCLIEN,
-                    nifclien AS NIFCLIEN,
-                    perclie1 AS PERCLIE1,
-                    telclie1 AS TELCLIE1,
-                    faxclie1 AS FAXCLIE1,
-                    perclie2 AS PERCLIE2,
-                    telclie2 AS TELCLIE2,
-                    faxclie2 AS FAXCLIE2,
-                    maiclie1 AS MAICLIE1,
-                    maiclie2 AS MAICLIE2,
-                    codmacta AS CODMACTA,
-                    codactiv AS CODACTIV,
-                    codtarif AS CODTARIF,
-                    promocio AS PROMOCIO
-                    FROM sclien
+                    c.codclien AS CODCLIEN,
+                    c.nomclien AS NOMCLIEN,
+                    c.nomcomer AS NOMCOMER,
+                    c.domclien AS DOMCLIEN,
+                    c.codpobla AS CODPOBLA,
+                    c.pobclien AS POBCLIEN,
+                    c.proclien AS PROCLIEN,
+                    c.nifclien AS NIFCLIEN,
+                    c.perclie1 AS PERCLIE1,
+                    c.telclie1 AS TELCLIE1,
+                    c.faxclie1 AS FAXCLIE1,
+                    c.perclie2 AS PERCLIE2,
+                    c.telclie2 AS TELCLIE2,
+                    c.faxclie2 AS FAXCLIE2,
+                    c.maiclie1 AS MAICLIE1,
+                    c.maiclie2 AS MAICLIE2,
+                    c.codmacta AS CODMACTA,
+                    c.codactiv AS CODACTIV,
+                    c.codtarif AS CODTARIF,
+                    c.promocio AS PROMOCIO,
+                    s.nomsitua AS SITUACION,
+                    c.limcredi AS LIMITE_CREDITO,
+                    c.credipriv AS CREDITO_PRIVADO
+                    FROM sclien AS c
+                    LEFT JOIN ssitua AS s ON s.codsitua = c.codsitua
                     WHERE nomclien LIKE '%{0}%'
                     ORDER BY nomclien";
                 sql = String.Format(sql, parNom);
@@ -309,27 +323,31 @@ namespace AriGesDB
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
                 string sql = @"SELECT
-                    codclien AS CODCLIEN,
-                    nomclien AS NOMCLIEN,
-                    nomcomer AS NOMCOMER,
-                    domclien AS DOMCLIEN,
-                    codpobla AS CODPOBLA,
-                    pobclien AS POBCLIEN,
-                    proclien AS PROCLIEN,
-                    nifclien AS NIFCLIEN,
-                    perclie1 AS PERCLIE1,
-                    telclie1 AS TELCLIE1,
-                    faxclie1 AS FAXCLIE1,
-                    perclie2 AS PERCLIE2,
-                    telclie2 AS TELCLIE2,
-                    faxclie2 AS FAXCLIE2,
-                    maiclie1 AS MAICLIE1,
-                    maiclie2 AS MAICLIE2,
-                    codmacta AS CODMACTA,
-                    codactiv AS CODACTIV,
-                    codtarif AS CODTARIF,
-                    promocio AS PROMOCIO
-                    FROM sclien
+                    c.codclien AS CODCLIEN,
+                    c.nomclien AS NOMCLIEN,
+                    c.nomcomer AS NOMCOMER,
+                    c.domclien AS DOMCLIEN,
+                    c.codpobla AS CODPOBLA,
+                    c.pobclien AS POBCLIEN,
+                    c.proclien AS PROCLIEN,
+                    c.nifclien AS NIFCLIEN,
+                    c.perclie1 AS PERCLIE1,
+                    c.telclie1 AS TELCLIE1,
+                    c.faxclie1 AS FAXCLIE1,
+                    c.perclie2 AS PERCLIE2,
+                    c.telclie2 AS TELCLIE2,
+                    c.faxclie2 AS FAXCLIE2,
+                    c.maiclie1 AS MAICLIE1,
+                    c.maiclie2 AS MAICLIE2,
+                    c.codmacta AS CODMACTA,
+                    c.codactiv AS CODACTIV,
+                    c.codtarif AS CODTARIF,
+                    c.promocio AS PROMOCIO,
+                    s.nomsitua AS SITUACION,
+                    c.limcredi AS LIMITE_CREDITO,
+                    c.credipriv AS CREDITO_PRIVADO
+                    FROM sclien AS c
+                    LEFT JOIN ssitua AS s ON s.codsitua = c.codsitua
                     WHERE codagent = {0} 
                     AND nomclien LIKE '%{1}%'";
                 sql = String.Format(sql, agente.CodAgent, parNom);
@@ -365,7 +383,7 @@ namespace AriGesDB
                         <div class='panel-heading'>
                             <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
                                 <div class='container'>
-                                    <div class='row'>
+                                   <div class='row'>
                                         <div class='col-md-8'>
                                             <h4>{1}</h4>
                                         </div>
@@ -1308,7 +1326,8 @@ namespace AriGesDB
                     codfamia AS CODFAMIA,
                     codmarca AS CODMARCA
                     FROM sartic
-                    WHERE codartic = '{0}'";
+                    WHERE codartic = '{0}'
+                    AND  codstatu <> 1";
                 sql = String.Format(sql, codArtic);
                 cmd.CommandText = sql;
                 MySqlDataReader rdr = cmd.ExecuteReader();
@@ -1338,6 +1357,7 @@ namespace AriGesDB
                     codmarca AS CODMARCA
                     FROM sartic
                     WHERE nomartic LIKE '%{0}%'
+                    AND  codstatu <> 1
                     ORDER BY nomartic";
                 sql = String.Format(sql, parNom);
                 cmd.CommandText = sql;
@@ -1497,6 +1517,18 @@ namespace AriGesDB
                                 <td class='text-right'>{4:###,###,##0.00 €}</td>
                             </tr>
                         </table>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th class='text-center info'>Situación</th>
+                                <th class='text-center info'>Límite credito</th>
+                                <th class='text-center info'>Tipo credito</th>
+                            </tr>
+                            <tr>
+                                <td class='text-center'>{5}</td>
+                                <td class='text-center'>{6:###,###,##0.00 €}</td>
+                                <td class='text-center'>{7}</td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             ";
@@ -1517,7 +1549,7 @@ namespace AriGesDB
                 saldoPendiente += c.Total;
                 if (c.FechaVenci < DateTime.Now) saldoVencido += c.Total;
             }
-            html = String.Format(plantilla, numOfertas, numPedidos, numAlbaranes, saldoPendiente, saldoVencido);
+            html = String.Format(plantilla, numOfertas, numPedidos, numAlbaranes, saldoPendiente, saldoVencido, cliente.Situacion, cliente.LimiteCredito, cliente.TipoCredito);
             return html;
         }
         #endregion
