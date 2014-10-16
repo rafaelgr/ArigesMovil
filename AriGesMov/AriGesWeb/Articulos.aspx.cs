@@ -12,8 +12,10 @@ using System.Web.UI.HtmlControls;
 using Telerik.Web.UI;
 using AriGesDB;
 using AriUsDB;
+using System.Web.Services;
+using System.Web.Script.Services;
 
-public partial class Clientes : System.Web.UI.Page 
+public partial class Articulos : System.Web.UI.Page 
 {
     protected void Page_Load(object sender, EventArgs e)
     {
@@ -50,4 +52,23 @@ public partial class Clientes : System.Web.UI.Page
         var vHtml = CntAriGes.GetClientesHtml(clientes);
         divBusqueda.InnerHtml = vHtml;
     }
+    #region WebMethods
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static IList<Familia> GetNombresFamilias(string pre)
+    {
+        IList<Familia> lf = new List<Familia>();
+        lf = CntAriGes.GetFamilias(pre);
+        return lf;
+    }
+    [WebMethod]
+    [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    public static IList<Proveedor> GetNombresProveedores(string pre)
+    {
+        IList<Proveedor> lp = new List<Proveedor>();
+        lp = CntAriGes.GetProveedores(pre);
+        return lp;
+    }
+    #endregion
+
 }

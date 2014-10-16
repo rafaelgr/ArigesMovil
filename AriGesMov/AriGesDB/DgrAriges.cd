@@ -17,7 +17,7 @@
       <FileName>Agente.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.Cliente">
+  <Class Name="AriGesDB.Cliente" Collapsed="true">
     <Position X="13" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IQAScAAKmBCQQAAQEUAAEACIqBGggKNBAAIJAAAAADE=</HashCode>
@@ -77,6 +77,20 @@
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAQAJAAEAAAAAAAAAAAALABAAAgAQAAA=</HashCode>
       <FileName>Precio.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AriGesDB.Familia" Collapsed="true">
+    <Position X="6" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAgAAAAIAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Familia.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AriGesDB.Proveedor">
+    <Position X="8.5" Y="3" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAgAAAAIAAAAQAAAA=</HashCode>
+      <FileName>Proveedor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

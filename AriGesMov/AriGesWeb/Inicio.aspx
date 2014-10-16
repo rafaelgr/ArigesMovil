@@ -52,6 +52,7 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
                             </button>
                         </div>
                         <div class="collapse navbar-collapse">
@@ -61,6 +62,9 @@
                                 </li>
                                 <li>
                                     <a href="Clientes.aspx">Clientes</a>
+                                </li>
+                                <li>
+                                    <a href="Articulos.aspx">Artículos</a>
                                 </li>
                                 <li>
                                     <a href="Default.aspx">Salir</a>

@@ -51,6 +51,7 @@
     <Compile Include="CntAriGes.cs" />
     <Compile Include="Albaran.cs" />
     <Compile Include="Cobro.cs" />
+    <Compile Include="Familia.cs" />
     <Compile Include="LinFactura.cs" />
     <Compile Include="Factura.cs" />
     <Compile Include="LinAlbaran.cs" />
@@ -60,6 +61,7 @@
     <Compile Include="Pedido.cs" />
     <Compile Include="Precio.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Proveedor.cs" />
     <Compile Include="Trabajador.cs" />
   </ItemGroup>
   <ItemGroup>

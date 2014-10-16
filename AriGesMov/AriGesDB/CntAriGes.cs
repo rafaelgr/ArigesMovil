@@ -1444,6 +1444,144 @@ namespace AriGesDB
 
         #endregion 
 
+        #region Familias
+        public static Familia GetFamilia(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODFAMIA"))) return null;
+            Familia f = new Familia();
+            f.CodFamia = rdr.GetInt32("CODFAMIA");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("NOMFAMIA")))
+                f.NomFamia = rdr.GetString("NOMFAMIA");
+            return f;
+        }
+
+        public static Familia GetFamilia(int codFamia)
+        {
+            Familia f = null;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT
+                    f.codfamia AS CODFAMIA,
+                    f.nomfamia AS NOMFAMIA
+                    FROM sfamia AS f
+                    WHERE f.codfamia = '{0}'";
+                sql = String.Format(sql, codFamia);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    f = GetFamilia(rdr);
+                }
+                conn.Close();
+            }
+            return f;
+        }
+
+        public static IList<Familia> GetFamilias(string parNom)
+        {
+            IList<Familia> lf = new List<Familia>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT
+                    f.codfamia AS CODFAMIA,
+                    f.nomfamia AS NOMFAMIA
+                    FROM sfamia AS f
+                    WHERE nomfamia LIKE '%{0}%'
+                    ORDER BY nomfamia";
+                sql = String.Format(sql, parNom);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        Familia f = new Familia();
+                        f = GetFamilia(rdr);
+                        if (f != null) lf.Add(f);
+                    }
+                }
+                conn.Close();
+            }
+            return lf;
+        }
+
+
+        #endregion
+
+        #region Proveedores
+        public static Proveedor GetProveedor(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODPROVE"))) return null;
+            Proveedor p = new Proveedor();
+            p.CodProve = rdr.GetInt32("CODPROVE");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("NOMPROVE")))
+                p.NomProve = rdr.GetString("NOMPROVE");
+            return p;
+        }
+
+        public static Proveedor GetProveedor(int codProve)
+        {
+            Proveedor p = null;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT
+                    p.codprove AS CODPROVE,
+                    p.nomprove AS NOMPROVE
+                    FROM sprove AS p
+                    WHERE p.codprove = '{0}'";
+                sql = String.Format(sql, codProve);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    p = GetProveedor(rdr);
+                }
+                conn.Close();
+            }
+            return p;
+        }
+
+        public static IList<Proveedor> GetProveedores(string parNom)
+        {
+            IList<Proveedor> lp = new List<Proveedor>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT
+                    p.codprove AS CODPROVE,
+                    p.nomprove AS NOMPROVE
+                    FROM sprove AS p
+                    WHERE nomprove LIKE '%{0}%'
+                    ORDER BY nomprove";
+                sql = String.Format(sql, parNom);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        Proveedor p = new Proveedor();
+                        p = GetProveedor(rdr);
+                        if (p != null) lp.Add(p);
+                    }
+                }
+                conn.Close();
+            }
+            return lp;
+        }
+
+
+        #endregion
+
         #region Estadísticas
         public static string GetJSONFacturacionAnual(int codClien)
         {

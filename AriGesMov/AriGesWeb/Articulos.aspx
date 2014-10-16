@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Articulos.aspx.cs" Inherits="Clientes" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Articulos.aspx.cs" Inherits="Articulos" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -11,6 +11,7 @@
         <title>AriGesMov (C) Ariadna Software S.L. 902 888 878</title>
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet"/>
+        <link rel="stylesheet" href="http://code.jquery.com/ui/1.10.3/themes/smoothness/jquery-ui.css"/>
 
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
@@ -52,15 +53,19 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
                             </button>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav">
-                                <li >
+                                <li>
                                     <a href="Inicio.aspx">Inicio</a>
                                 </li>
-                                <li class="active">
+                                <li>
                                     <a href="Clientes.aspx">Clientes</a>
+                                </li>
+                                <li class="active">
+                                    <a href="Articulos.aspx">Artículos</a>
                                 </li>
                                 <li>
                                     <a href="Default.aspx">Salir</a>
@@ -79,17 +84,40 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <h2>Clientes</h2>
-                            <p>Para buscar el cliente a consultar introduzca su nombre o parte de él y pulse 'BUSCAR'</p>
+                            <h2>Artículos</h2>
+                            <p>Para buscar artículos seleccione los criterios que desee y pulse 'BUSCAR'</p>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-md-8">
+                            <h3>Nombre</h3>
                             <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control input-lg"></asp:TextBox>
                         </div>
-                        <div class="col-md-2">
-                            &nbsp;
+                        <div class="col-md-4">
+                            <h3>Código</h3>
+                            <asp:TextBox ID="txtCodigo" runat="server" CssClass="form-control input-lg"></asp:TextBox>
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4">
+                            <h3>Famila</h3>
+                            <asp:TextBox ID="txtFamilia" runat="server" CssClass="form-control input-lg"></asp:TextBox>
+                        </div>
+                        <div class="col-md-4">
+                            <h3>Proveedor</h3>
+                            <asp:TextBox ID="txtProveedor" runat="server" CssClass="form-control input-lg"></asp:TextBox>
+                        </div>
+                        <div class="col-md-1">
+                            <br />
+                            <asp:CheckBox ID="chkObsoletos" runat="server" CssClass="form-control input-lg" />
+                        </div>
+                        <div class="col-md-3">
+                            <br />
+                            <h3>Incluir obsoletos</h3>
+                        </div>
+                    </div>
+                    <div class="row" style="padding-top:10px;">
+                        <div class="col-md-10"></div>
                         <div class="col-md-2">
                             <asp:Button ID="btnBuscar" runat="server" CssClass="btn btn-primary btn-block btn-lg" Text="Buscar" OnClick="btnBuscar_Click" />
                         </div>
@@ -107,5 +135,52 @@
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Bootbox.js para mostrar mensajes -->
         <script type="text/javascript" src="js/bootbox.js"></script>
+        <script src="http://code.jquery.com/ui/1.10.3/jquery-ui.js"></script>
+        <script language="javascript" type="text/javascript">
+            $(function () {
+                $('#<%=txtFamilia.ClientID%>').autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "Articulos.aspx/GetNombresFamilias",
+                            data: "{ 'pre':'" + request.term + "'}",
+                            dataType: "json",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                response($.map(data.d, function (item) {
+                                    return { value: item.NomFamia }
+                                }))
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert(textStatus);
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
+        <script language="javascript" type="text/javascript">
+            $(function () {
+                $('#<%=txtProveedor.ClientID%>').autocomplete({
+                    source: function (request, response) {
+                        $.ajax({
+                            url: "Articulos.aspx/GetNombresProveedores",
+                            data: "{ 'pre':'" + request.term + "'}",
+                            dataType: "json",
+                            type: "POST",
+                            contentType: "application/json; charset=utf-8",
+                            success: function (data) {
+                                response($.map(data.d, function (item) {
+                                    return { value: item.NomProve }
+                                }))
+                            },
+                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                alert(textStatus);
+                            }
+                        });
+                    }
+                });
+            });
+        </script>
     </body>
 </html>
