@@ -62,15 +62,19 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
                             </button>
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav">
-                                <li class="active">
+                                <li>
                                     <a href="Inicio.aspx">Inicio</a>
                                 </li>
-                                <li>
+                                <li class="active">
                                     <a href="Clientes.aspx">Clientes</a>
+                                </li>
+                                <li>
+                                    <a href="Articulos.aspx">Artículos</a>
                                 </li>
                                 <li>
                                     <a href="Default.aspx">Salir</a>

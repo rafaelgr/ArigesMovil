@@ -112,6 +112,7 @@
     <Content Include="ClientesFacturas.aspx" />
     <Content Include="ClientesPrecios.aspx" />
     <Content Include="Articulos.aspx" />
+    <Content Include="ArticulosDetalle.aspx" />
     <Content Include="css\arimov.css" />
     <Content Include="css\bootstrap-theme.css" />
     <Content Include="css\bootstrap-theme.min.css" />
@@ -197,6 +198,13 @@
     <Compile Include="Articulos.aspx.designer.cs">
       <DependentUpon>Articulos.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ArticulosDetalle.aspx.cs">
+      <DependentUpon>ArticulosDetalle.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ArticulosDetalle.aspx.designer.cs">
+      <DependentUpon>ArticulosDetalle.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -270,7 +278,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -52,6 +52,8 @@
     <Compile Include="Albaran.cs" />
     <Compile Include="Cobro.cs" />
     <Compile Include="Familia.cs" />
+    <Compile Include="LineaComponente.cs" />
+    <Compile Include="LineaStock.cs" />
     <Compile Include="LinFactura.cs" />
     <Compile Include="Factura.cs" />
     <Compile Include="LinAlbaran.cs" />

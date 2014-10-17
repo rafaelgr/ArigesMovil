@@ -31,25 +31,30 @@ public partial class Articulos : System.Web.UI.Page
 
     protected void btnBuscar_Click(object sender, EventArgs e)
     {
-        if (txtBuscar.Text == "")
+        if (txtBuscar.Text == "" && txtProveedor.Text == "" && txtFamilia.Text == "" && txtCodigo.Text == "")
         {
-            // buscar en vacio equivale a borrar.
-            divBusqueda.InnerHtml = "";
-            return;
-        }
-        string parNom = txtBuscar.Text;
-        Agente agente = null;
-        if (Session["Agente"] != null) agente = (Agente)Session["Agente"];
-        IList<Cliente> clientes = CntAriGes.GetClientes(parNom, agente);
-        if (clientes.Count == 0)
-        {
-            string cjs = "bootbox.alert('<h3>No hay clientes asignados que coincidan con los criterios</h3>');";
+            string cjs = "bootbox.alert('<h3>No se ha seleccionado ningún criterio de búsqueda</h3>');";
             txtBuscar.Text = "";
             divBusqueda.InnerHtml = "";
             RadAjaxManager1.ResponseScripts.Add(cjs);
             return;
         }
-        var vHtml = CntAriGes.GetClientesHtml(clientes);
+        string parNom = txtBuscar.Text;
+        string codigo = txtCodigo.Text;
+        string parProve = txtProveedor.Text;
+        string parFam = txtFamilia.Text;
+        bool obsoletos = chkObsoletos.Checked;
+        Agente agente = null;
+        IList<Articulo> articulos = CntAriGes.GetArticulosExt(parNom,parProve,parFam,codigo,obsoletos);
+        if (articulos.Count == 0)
+        {
+            string cjs = "bootbox.alert('<h3>No hay artículos que coincidan con los criterios</h3>');";
+            txtBuscar.Text = "";
+            divBusqueda.InnerHtml = "";
+            RadAjaxManager1.ResponseScripts.Add(cjs);
+            return;
+        }
+        var vHtml = CntAriGes.GetArticulosHtmlExt(articulos);
         divBusqueda.InnerHtml = vHtml;
     }
     #region WebMethods

@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientesPrecios.aspx.cs" Inherits="ClientesPrecios" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ArticulosDetalle.aspx.cs" Inherits="ArticulosDetalle" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,10 +8,10 @@
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>AriGesMov TEST</title>
+        <title>AriGesMov</title>
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet"/>
-
+        <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css"/>
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -19,6 +19,16 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         <telerik:RadStyleSheetManager id="RadStyleSheetManager1" runat="server" />
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <!-- Bootbox.js para mostrar mensajes -->
+        <script type="text/javascript" src="js/bootbox.js"></script>
+        <!-- Para gráficas -->
+        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
+        <script type="text/javascript" src="js/morris.js"></script>
+
     </head>
     <body>
         <form id="form1" runat="server">
@@ -60,10 +70,10 @@
                                 <li>
                                     <a href="Inicio.aspx">Inicio</a>
                                 </li>
-                                <li class="active">
+                                <li>
                                     <a href="Clientes.aspx">Clientes</a>
                                 </li>
-                                <li>
+                                <li class="active">
                                     <a href="Articulos.aspx">Artículos</a>
                                 </li>
                                 <li>
@@ -84,49 +94,19 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h2 class="text-primary">
-                                <asp:Label ID="lblNomClien" runat="server"></asp:Label>
+                                <asp:Label ID="lblNomArtic" runat="server"></asp:Label>
                             </h2>
                         </div>
                     </div>
                 </div>
-                <div id="TabCliente" runat="server">
+                <div id="Stocks" runat="server">
 
                 </div>
                 <br />
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-12">
-                            <h3>Precios de artículos</h3>
-                            <p>Para buscar el artículo a consultar introduzca su nombre o parte de él y pulse 'BUSCAR'</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-8">
-                            <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control input-lg"></asp:TextBox>
-                        </div>
-                        <div class="col-md-2">
-                            &nbsp;
-                        </div>
-                        <div class="col-md-2">
-                            <asp:Button ID="btnBuscar" runat="server" CssClass="btn btn-primary btn-block btn-lg" Text="Buscar" OnClick="btnBuscar_Click" />
-                        </div>
-                    </div>
-                </div>
-                <br />
-                <div id="Loader" runat="server" class="text-center">
-                    <img src="img/ajax-loader.gif" alt="Cargando..." />
-                </div>
-                <div id="BodyPrecios" runat="server">
-                        
+                <div id="Componentes" runat="server">
 
                 </div>
             </div>
         </form>
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
-        <!-- Bootbox.js para mostrar mensajes -->
-        <script type="text/javascript" src="js/bootbox.js"></script>
     </body>
 </html>

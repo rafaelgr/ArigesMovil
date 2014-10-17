@@ -1342,6 +1342,44 @@ namespace AriGesDB
             return a;
         }
 
+        public static Articulo GetArticuloExt(string codArtic)
+        {
+            Articulo a = null;
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT
+                                a.codartic AS CODARTIC,
+                                a.nomartic AS NOMARTIC,
+                                p.codprove AS CODPROVE,
+                                p.nomprove AS NOMPROVE,
+                                f.codfamia AS CODFAMIA,
+                                f.nomfamia AS NOMFAMIA,
+                                a.preciove AS PRECIOVE,
+                                a.rotacion AS ROTACION,
+                                stk.stock AS STOCK,
+                                COALESCE(a.referprov,'') AS REFERPROV,
+                                COALESCE(slp.reservas,0) AS RESERVAS
+                                FROM sartic AS a 
+                                LEFT JOIN sprove AS p ON p.codprove = a.codprove
+                                LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
+                                LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
+                                LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
+                                WHERE a.codartic='{0}'";
+                sql = String.Format(sql, codArtic);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    rdr.Read();
+                    a = GetArticuloExt(rdr);
+                }
+                conn.Close();
+            }
+            return a;
+        }
+
         public static IList<Articulo> GetArticulos(string parNom, Cliente cliente)
         {
             IList<Articulo> la = new List<Articulo>();
@@ -1372,6 +1410,72 @@ namespace AriGesDB
                         {
                             a.Precio = GetPrecio(a, cliente);
                             a.Stock = GetStock(a.CodArtic);
+                            la.Add(a);
+                        }
+                    }
+                }
+                conn.Close();
+            }
+            return la;
+        }
+
+        public static Articulo GetArticuloExt(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODARTIC"))) return null;
+            Articulo a = new Articulo();
+            a.CodArtic = rdr.GetString("CODARTIC");
+            a.NomArtic = rdr.GetString("NOMARTIC");
+            a.Preciove = rdr.GetDecimal("PRECIOVE");
+            a.Familia = GetFamilia(rdr);
+            a.Proveedor = GetProveedor(rdr);
+            a.Stock = rdr.GetDecimal("STOCK");
+            if (rdr.GetInt32("ROTACION") == 1) a.Rotacion = true;
+            a.Reservas = rdr.GetDecimal("RESERVAS");
+            a.Referprov = rdr.GetString("REFERPROV");
+            return a;
+        }
+
+        public static IList<Articulo> GetArticulosExt(string parNom, string parProve, string parFam, string codigo, bool obsoletos)
+        {
+            IList<Articulo> la = new List<Articulo>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"SELECT
+                                a.codartic AS CODARTIC,
+                                a.nomartic AS NOMARTIC,
+                                p.codprove AS CODPROVE,
+                                p.nomprove AS NOMPROVE,
+                                f.codfamia AS CODFAMIA,
+                                f.nomfamia AS NOMFAMIA,
+                                a.preciove AS PRECIOVE,
+                                a.rotacion AS ROTACION,
+                                stk.stock AS STOCK,
+                                COALESCE(a.referprov,'') AS REFERPROV,
+                                COALESCE(slp.reservas,0) AS RESERVAS
+                                FROM sartic AS a 
+                                LEFT JOIN sprove AS p ON p.codprove = a.codprove
+                                LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
+                                LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
+                                LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
+                                WHERE TRUE";
+                if (parNom != "") sql += String.Format(" AND a.nomartic LIKE '%{0}%'", parNom);
+                if (parProve != "") sql += String.Format(" AND p.nomprove LIKE '%{0}%'", parProve);
+                if (parFam != "") sql += String.Format(" AND f.nomfamia LIKE '%{0}%'", parFam);
+                if (codigo != "") sql += String.Format(" AND a.codartic='{0}'", codigo);
+                if (!obsoletos) sql += " AND a.codstatu <> 1";
+                sql += " ORDER BY a.nomartic";
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        Articulo a = new Articulo();
+                        a = GetArticuloExt(rdr);
+                        if (a != null)
+                        {
                             la.Add(a);
                         }
                     }
@@ -1442,7 +1546,277 @@ namespace AriGesDB
             return html;
         }
 
+        public static string GetArticuloHtmlExt(Articulo a)
+        {
+            string html = "";
+            string plantilla = @"
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse{8}'>
+                        <h4>{0} C:{1}</h4>
+                    </a>
+                </div>
+                <div id='collapse{8}' class='panel-collapse collapse'>
+                    <div class='panel-body'>
+                        <div class='container'>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <table class='table table-bordered'>
+                                        <tr class='info'>
+                                            <th>Familia</th>
+                                            <th>Proveedor</th>
+                                            <th class='text-center'>Referencia.</th>
+                                        </tr>
+                                        <tr>
+                                            <td>{5}</td>
+                                            <td>{6}</td>
+                                            <th class='text-center'>{4}</th>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-12'>
+                                    <table class='table table-bordered'>
+                                        <tr class='info'>
+                                            <th class='text-right'>PVP</th>
+                                            <th class='text-right'>Stock</th>
+                                            <th class='text-right'>Reservas</th>
+                                            <th class='text-center'>Rotacion</th>
+                                        </tr>
+                                        <tr>
+                                            <td class='text-right'>{7:#,###,##0.00}</td>
+                                            <td class='text-right'>{2:0.00}</td>
+                                            <td class='text-right'>{3:0.00}</td>
+                                            <td class='text-center'>{9}</td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class='row'>
+                                <div class='col-sm-10'></div>
+                                <div class='col-sm-2'>
+                                    <a class='btn btn-primary btn-lg text-center' href='ArticulosDetalle.aspx?CodArtic={1}'>Ver detalles</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>             
+            ";
+            string pattern = "[^0-9a-zA-z_\\-:]";
+            Regex rgx = new Regex(pattern);
+            string cod = rgx.Replace(a.CodArtic, "");
+            string rotacion = "NO";
+            if (a.Rotacion) rotacion = "SI";
+            html = String.Format(plantilla, a.NomArtic, a.CodArtic, a.Stock, a.Reservas, a.Referprov, a.Familia.NomFamia, a.Proveedor.NomProve, a.Preciove, cod, rotacion);
+            return html;
+        }
+
+        public static string GetArticulosHtmlExt(IList<Articulo> articulos)
+        {
+            string html = "";
+            if (articulos.Count == 0)
+            {
+                html = "<h4>No se han encontrado artículos</h4>";
+                return html;
+            }
+            string plantilla = @"
+            <div class='panel-group' id='accordion'>
+                {0}
+            </div>
+            ";
+            string detArticulos = "";
+            foreach (Articulo a in articulos)
+            {
+                detArticulos += GetArticuloHtmlExt(a);
+            }
+            html = String.Format(plantilla, detArticulos);
+            return html;
+        }
+
         #endregion 
+
+        #region Componentes
+
+        public static LineaComponente GetLineaComponente(MySqlDataReader rdr)
+        {
+            LineaComponente lc = new LineaComponente();
+            lc.NumLinea = rdr.GetInt32("NUMLINEA");
+            lc.Articulo = rdr.GetString("NOMARTIC");
+            lc.Cantidad = rdr.GetDecimal("CANTIDAD");
+            return lc;
+        }
+
+        public static IList<LineaComponente> GetLineasComponente(Articulo articulo)
+        {
+            IList<LineaComponente> llc = new List<LineaComponente>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT 
+                    s1.numlinea AS NUMLINEA,
+                    s2.nomartic AS NOMARTIC,
+                    s1.cantidad AS CANTIDAD
+                    FROM sarti1 AS s1
+                    LEFT JOIN sartic AS s2 ON s2.codartic = s1.codarti1
+                    WHERE s1.codartic = '{0}';
+                ";
+                sql = String.Format(sql, articulo.CodArtic );
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        llc.Add(GetLineaComponente(rdr));
+                    }
+                }
+                conn.Close();
+            }
+            return llc;
+        }
+
+        public static string GetComponentesHtml(IList<LineaComponente> componentes)
+        {
+            string html = "";
+            string plantilla = @"
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>Componentes</div>
+                    <div class='panel-body'>
+                        {0}
+                    </div>
+                </div>
+            ";
+            if (componentes.Count == 0)
+            {
+                html = String.Format(plantilla, "<h4>No hay componentes para este artículo</h4>");
+            }
+            else
+            {
+                string plantillaTabla = @"
+                    <div class='table-responsive'>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th>Linea</th>
+                                <th>Artículo</th>
+                                <th class='text-right'>Cantidad</th>
+                            </tr>
+                            {0}
+                        </table>
+                    </div>
+                ";
+                string plantillaComponente = @"
+                    <tr>
+                        <td>{0}</td>
+                        <td>{1}</td>
+                        <td class='text-right'>{2:###,###,##0.00}</td>
+                    </tr>
+                ";
+                string detComponente = "";
+                foreach (LineaComponente lc in componentes)
+                {
+                    detComponente += String.Format(plantillaComponente, lc.NumLinea, lc.Articulo, lc.Cantidad);
+                }
+                string tabla = String.Format(plantillaTabla, detComponente);
+                html = String.Format(plantilla, tabla);
+            }
+            return html;
+        }
+        #endregion
+
+        #region Stocks
+
+        public static LineaStock GetLineaStock(MySqlDataReader rdr)
+        {
+            LineaStock ls = new LineaStock();
+            ls.NumLinea = rdr.GetInt32("CODALMAC");
+            ls.Almacen = rdr.GetString("NOMALMAC");
+            ls.Stock = rdr.GetDecimal("CANSTOCK");
+            return ls;
+        }
+
+        public static IList<LineaStock> GetLineasStock(Articulo articulo)
+        {
+            IList<LineaStock> lls = new List<LineaStock>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    s1.codartic AS CODARTIC,
+                    s1.codalmac AS CODALMAC,
+                    s2.nomalmac AS NOMALMAC,
+                    s1.canstock AS CANSTOCK
+                    FROM salmac AS s1
+                    LEFT JOIN salmpr AS s2 ON s2.codalmac = s1.codalmac
+                    WHERE s1.codartic = '{0}'
+                ";
+                sql = String.Format(sql, articulo.CodArtic);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    while (rdr.Read())
+                    {
+                        lls.Add(GetLineaStock(rdr));
+                    }
+                }
+                conn.Close();
+            }
+            return lls;
+        }
+
+        public static string GetStocksHtml(IList<LineaStock> stocks)
+        {
+            string html = "";
+            string plantilla = @"
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>Stocks por almacen</div>
+                    <div class='panel-body'>
+                        {0}
+                    </div>
+                </div>
+            ";
+            if (stocks.Count == 0)
+            {
+                html = String.Format(plantilla, "<h4>No hay stocks para este artículo</h4>");
+            }
+            else
+            {
+                string plantillaTabla = @"
+                    <div class='table-responsive'>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th>COD</th>
+                                <th>Almacen</th>
+                                <th class='text-right'>Cantidad</th>
+                            </tr>
+                            {0}
+                        </table>
+                    </div>
+                ";
+                string plantillaStock = @"
+                    <tr>
+                        <td>{0}</td>
+                        <td>{1}</td>
+                        <td class='text-right'>{2:###,###,##0.00}</td>
+                    </tr>
+                ";
+                string detStock = "";
+                foreach (LineaStock ls in stocks)
+                {
+                    detStock += String.Format(plantillaStock, ls.NumLinea, ls.Almacen, ls.Stock);
+                }
+                string tabla = String.Format(plantillaTabla, detStock);
+                html = String.Format(plantilla, tabla);
+            }
+            return html;
+        }
+        #endregion
 
         #region Familias
         public static Familia GetFamilia(MySqlDataReader rdr)
