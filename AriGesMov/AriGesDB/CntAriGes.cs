@@ -292,6 +292,7 @@ namespace AriGesDB
                     FROM sclien AS c
                     LEFT JOIN ssitua AS s ON s.codsitua = c.codsitua
                     WHERE nomclien LIKE '%{0}%'
+                    AND s.ocultarbus = 0
                     ORDER BY nomclien";
                 sql = String.Format(sql, parNom);
                 cmd.CommandText = sql;
@@ -349,6 +350,7 @@ namespace AriGesDB
                     FROM sclien AS c
                     LEFT JOIN ssitua AS s ON s.codsitua = c.codsitua
                     WHERE codagent = {0} 
+                    AND s.ocultarbus = 0
                     AND nomclien LIKE '%{1}%'";
                 sql = String.Format(sql, agente.CodAgent, parNom);
                 cmd.CommandText = sql;

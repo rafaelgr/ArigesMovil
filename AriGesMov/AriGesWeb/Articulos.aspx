@@ -100,7 +100,7 @@
                     </div>
                     <div class="row">
                         <div class="col-md-4">
-                            <h3>Famila</h3>
+                            <h3>Familia</h3>
                             <asp:TextBox ID="txtFamilia" runat="server" CssClass="form-control input-lg"></asp:TextBox>
                         </div>
                         <div class="col-md-4">
