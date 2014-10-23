@@ -2087,16 +2087,16 @@ namespace AriGesDB
             else
             {
                 Precio pAux = new Precio();
-                pAux.Pvp = 9999999;
+                pAux.Importe = 9999999;
                 pAux.Origen = "ERROR";
                 precio = GetPrecioPromocion(a, c);
-                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
                 precio = GetPrecioEspeciales(a, c);
-                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
                 precio = GetPrecioTarifas(a, c);
-                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
                 precio = GetPrecioArticulo(a, c);
-                if (precio.Pvp != 0 && precio.Pvp < pAux.Pvp) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
                 precio = pAux;
             }
             return precio;
@@ -2217,7 +2217,7 @@ namespace AriGesDB
                 MySqlCommand cmd = conn.CreateCommand();
                 string sql = @"SELECT 
                     dtopermi AS DTOPERMI,
-                    precioa1 AS PRECIOAC,
+                    precioac AS PRECIOAC,
                     dtoespec AS DTOESPEC
                     FROM sprees
                     WHERE codclien = {0}
