@@ -62,10 +62,10 @@
       <FileName>Cobro.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.Articulo" Collapsed="true">
-    <Position X="10" Y="2.5" Width="1.5" />
+  <Class Name="AriGesDB.Articulo">
+    <Position X="10" Y="1" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAIgACIDIAQiAQARgABAEYgAUEQIABBAAAA=</HashCode>
+      <HashCode>AAAAAAAAAQIgACMDIAQiAQARgABAEYgAUEQIABBAAAA=</HashCode>
       <FileName>Articulo.cs</FileName>
     </TypeIdentifier>
     <ShowAsAssociation>

@@ -134,5 +134,13 @@ namespace AriGesDB
             set { stocks = value; }
         }
 
+        private decimal pedido;
+
+        public decimal Pedido
+        {
+            get { return pedido; }
+            set { pedido = value; }
+        }
+
     }
 }

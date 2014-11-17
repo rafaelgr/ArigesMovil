@@ -920,6 +920,7 @@ namespace AriGesDB
             return lp;
 
         }
+
         public static IList<Albaran> GetAlbarans(int codClien)
         {
             IList<Albaran> lp = new List<Albaran>();
@@ -962,7 +963,7 @@ namespace AriGesDB
                     {
                         // eliminamos Albarans sin líneas
                         if (rdr.IsDBNull(rdr.GetOrdinal("TOTALALB"))) continue;
-                        if (rdr.GetString("CODTIPOM") != codTipom && rdr.GetInt32("NUMALBAR") != numAlbar)
+                        if (rdr.GetInt32("NUMALBAR") != numAlbar)
                         {
                             a = GetAlbaran(rdr);
                             codTipom = a.CodTipom;
@@ -1204,6 +1205,7 @@ namespace AriGesDB
                     INNER JOIN sforpa ON scobro.codforpa=sforpa.codforpa  
                     WHERE scobro.codmacta = '{0}'
                     AND impvenci+IF(gastos IS NULL,0,gastos)-IF(impcobro IS NULL,0,impcobro) <> 0
+                    ORDER BY fecvenci
                 ";
                 sql = String.Format(sql, cliente.Codmacta);
                 cmd.CommandText = sql;
@@ -1434,6 +1436,7 @@ namespace AriGesDB
             if (rdr.GetInt32("ROTACION") == 1) a.Rotacion = true;
             a.Reservas = rdr.GetDecimal("RESERVAS");
             a.Referprov = rdr.GetString("REFERPROV");
+            a.Pedido = rdr.GetDecimal("PEDIDO");
             return a;
         }
 
@@ -1454,6 +1457,7 @@ namespace AriGesDB
                                 a.preciove AS PRECIOVE,
                                 a.rotacion AS ROTACION,
                                 stk.stock AS STOCK,
+                                COALESCE(slpr.pedido,0) AS PEDIDO,
                                 COALESCE(a.referprov,'') AS REFERPROV,
                                 COALESCE(slp.reservas,0) AS RESERVAS
                                 FROM sartic AS a 
@@ -1461,6 +1465,7 @@ namespace AriGesDB
                                 LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
                                 LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
                                 LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
+                                LEFT JOIN (SELECT SUM(cantidad) AS pedido, codartic FROM slippr GROUP BY codartic) AS slpr ON slpr.codartic = a.codartic
                                 WHERE TRUE";
                 if (parNom != "") sql += String.Format(" AND a.nomartic LIKE '%{0}%'", parNom);
                 if (parProve != "") sql += String.Format(" AND p.nomprove LIKE '%{0}%'", parProve);
@@ -1584,12 +1589,14 @@ namespace AriGesDB
                                             <th class='text-right'>PVP</th>
                                             <th class='text-right'>Stock</th>
                                             <th class='text-right'>Reservas</th>
+                                            <th class='text-right'>Pedidos</th>
                                             <th class='text-center'>Rotacion</th>
                                         </tr>
                                         <tr>
                                             <td class='text-right'>{7:#,###,##0.00}</td>
                                             <td class='text-right'>{2:0.00}</td>
                                             <td class='text-right'>{3:0.00}</td>
+                                            <td class='text-right'>{10:0.00}</td>
                                             <td class='text-center'>{9}</td>
                                         </tr>
                                     </table>
@@ -1611,7 +1618,7 @@ namespace AriGesDB
             string cod = rgx.Replace(a.CodArtic, "");
             string rotacion = "NO";
             if (a.Rotacion) rotacion = "SI";
-            html = String.Format(plantilla, a.NomArtic, a.CodArtic, a.Stock, a.Reservas, a.Referprov, a.Familia.NomFamia, a.Proveedor.NomProve, a.Preciove, cod, rotacion);
+            html = String.Format(plantilla, a.NomArtic, a.CodArtic, a.Stock, a.Reservas, a.Referprov, a.Familia.NomFamia, a.Proveedor.NomProve, a.Preciove, cod, rotacion, a.Pedido);
             return html;
         }
 
