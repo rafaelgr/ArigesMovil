@@ -142,7 +142,7 @@
                     source: function (request, response) {
                         $.ajax({
                             url: "Articulos.aspx/GetNombresFamilias",
-                            data: "{ 'pre':'" + request.term + "'}",
+                            data: "{ 'pre':'" + request.term + "', 'aux':{'name':'AUXILIAR','num':'22'} }",
                             dataType: "json",
                             type: "POST",
                             contentType: "application/json; charset=utf-8",

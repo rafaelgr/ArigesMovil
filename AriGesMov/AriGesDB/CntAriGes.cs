@@ -1353,6 +1353,24 @@ namespace AriGesDB
             {
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
+//                string sql = @"SELECT
+//                                a.codartic AS CODARTIC,
+//                                a.nomartic AS NOMARTIC,
+//                                p.codprove AS CODPROVE,
+//                                p.nomprove AS NOMPROVE,
+//                                f.codfamia AS CODFAMIA,
+//                                f.nomfamia AS NOMFAMIA,
+//                                a.preciove AS PRECIOVE,
+//                                a.rotacion AS ROTACION,
+//                                stk.stock AS STOCK,
+//                                COALESCE(a.referprov,'') AS REFERPROV,
+//                                COALESCE(slp.reservas,0) AS RESERVAS
+//                                FROM sartic AS a 
+//                                LEFT JOIN sprove AS p ON p.codprove = a.codprove
+//                                LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
+//                                LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
+//                                LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
+//                                WHERE a.codartic='{0}'";
                 string sql = @"SELECT
                                 a.codartic AS CODARTIC,
                                 a.nomartic AS NOMARTIC,
@@ -1363,6 +1381,7 @@ namespace AriGesDB
                                 a.preciove AS PRECIOVE,
                                 a.rotacion AS ROTACION,
                                 stk.stock AS STOCK,
+                                COALESCE(slpr.pedido,0) AS PEDIDO,
                                 COALESCE(a.referprov,'') AS REFERPROV,
                                 COALESCE(slp.reservas,0) AS RESERVAS
                                 FROM sartic AS a 
@@ -1370,7 +1389,8 @@ namespace AriGesDB
                                 LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
                                 LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
                                 LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
-                                WHERE a.codartic='{0}'";
+                                LEFT JOIN (SELECT SUM(cantidad) AS pedido, codartic FROM slippr GROUP BY codartic) AS slpr ON slpr.codartic = a.codartic
+                                WHERE  a.codartic='{0}'";
                 sql = String.Format(sql, codArtic);
                 cmd.CommandText = sql;
                 MySqlDataReader rdr = cmd.ExecuteReader();

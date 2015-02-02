@@ -60,12 +60,23 @@ public partial class Articulos : System.Web.UI.Page
     #region WebMethods
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
-    public static IList<Familia> GetNombresFamilias(string pre)
+    public static IList<Familia> GetNombresFamilias(string pre, Aux aux)
     {
         IList<Familia> lf = new List<Familia>();
         lf = CntAriGes.GetFamilias(pre);
         return lf;
     }
+
+    //[WebMethod]
+    //[ScriptMethod(ResponseFormat = ResponseFormat.Json)]
+    //public static IList<Familia> GetNombresFamilias(string pre)
+    //{
+    //    IList<Familia> lf = new List<Familia>();
+    //    lf = CntAriGes.GetFamilias(pre);
+    //    return lf;
+    //}
+
+
     [WebMethod]
     [ScriptMethod(ResponseFormat = ResponseFormat.Json)]
     public static IList<Proveedor> GetNombresProveedores(string pre)
@@ -73,6 +84,26 @@ public partial class Articulos : System.Web.UI.Page
         IList<Proveedor> lp = new List<Proveedor>();
         lp = CntAriGes.GetProveedores(pre);
         return lp;
+    }
+    #endregion
+    #region Clases auxiliares
+    public class Aux
+    {
+        private string name;
+
+        public string Name
+        {
+            get { return name; }
+            set { name = value; }
+        }
+
+        private int num;
+
+        public int Num
+        {
+            get { return num; }
+            set { num = value; }
+        }
     }
     #endregion
 
