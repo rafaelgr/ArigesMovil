@@ -48,5 +48,20 @@ namespace AriGesDB
         {
             lineasPedido = new List<LinPedido>();
         }
+
+        private string cliente;
+
+        public string Cliente
+        {
+            get { return cliente; }
+            set { cliente = value; }
+        }
+        private string agente;
+
+        public string Agente
+        {
+            get { return agente; }
+            set { agente = value; }
+        }
     }
 }

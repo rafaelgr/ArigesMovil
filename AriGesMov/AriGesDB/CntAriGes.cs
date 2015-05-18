@@ -151,7 +151,7 @@ namespace AriGesDB
                     a.codagent AS CODAGENT,
                     a.nomagent AS NOMAGENT
                     FROM straba AS t 
-                    LEFT JOIN sagent AS a ON a.codagent = t.codagent
+                    LEFT JOIN sagent AS a ON a.codagent = t.codagent1
                     WHERE t.login = '{0}'";
                 sql = String.Format(sql, login);
                 cmd.CommandText = sql;
@@ -508,6 +508,8 @@ namespace AriGesDB
             p.FecPedcl = rdr.GetDateTime("FECPEDCL");
             p.FecEntre = rdr.GetDateTime("FECENTRE");
             p.TotalPed = rdr.GetDecimal("TOTALPED");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("CLIENTE"))) p.Cliente = rdr.GetString("CLIENTE");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("AGENTE"))) p.Agente = rdr.GetString("AGENTE");
             return p;
         }
 
@@ -560,6 +562,57 @@ namespace AriGesDB
             return html;
         }
 
+        public static string GetPedidoHtmlAgente(Pedido p)
+        {
+            string html = "";
+            string plantilla = @"
+            <div class='panel panel-default'>
+                <div class='panel-heading'>
+                    <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
+                        <h4>{5} Cliente: {6} Pedido {0:0000000}  de fecha {1:dd/MM/yyyy} # {3:#,###,##0.00 €}</h4>
+                    </a>
+                </div>
+                <div id='collapse{0}' class='panel-collapse collapse'>
+                    <div class='panel-body'>
+                        <table class='table table-bordered'>
+                            <tr class='info'>
+                                <th>Linea</th>
+                                <th>Artículo</th>
+                                <th class='text-right'>Cantidad</th>
+                                <th class='text-right'>Precio</th>
+                                <th class='text-right'>Dto1 (%)</th>
+                                <th class='text-right'>Dto2 (%)</th>
+                                <th class='text-right'>Importe</th>
+                            </tr>
+                            {4}
+                        </table>
+                    </div>
+                </div>
+            </div>             
+            ";
+            string plantillaLinea = @"
+            <tr>
+                <td>{0}</td>
+                <td>{1}</td>
+                <td class='text-right'>{3:##0.00}</td>
+                <td class='text-right'>{2:###,##0.00}</td>
+                <td class='text-right'>{4:0.00}</td>
+                <td class='text-right'>{5:0.00}</td>
+                <td class='text-right'>{6:##,###,##0.00}</td>
+            </tr>
+            ";
+            // Cargar las líneas
+            string lineas = "";
+            foreach (LinPedido lp in p.LineasPedido)
+            {
+                lineas += String.Format(plantillaLinea, lp.NumLinea, lp.NomArtic, lp.PrecioAr, lp.Cantidad, lp.DtoLine1, lp.DtoLine2, lp.Importel);
+            }
+            string pAgente = "";
+            if (p.Agente != null) pAgente = "Agente: " + p.Agente;
+            html = String.Format(plantilla, p.NumPedcl, p.FecPedcl, p.FecEntre, p.TotalPed, lineas, pAgente, p.Cliente);
+            return html;
+        }
+
         public static string GetPedidosHtml(IList<Pedido> pedidos)
         {
             string html = "";
@@ -582,6 +635,28 @@ namespace AriGesDB
             return html;
         }
 
+        public static string GetPedidosHtmlAgente(IList<Pedido> pedidos)
+        {
+            string html = "";
+            if (pedidos.Count == 0)
+            {
+                html = "<h3>No hay pedidos pendientes para este agente</h3>";
+                return html;
+            }
+            string plantilla = @"
+            <div class='panel-group' id='accordion'>
+                {0}
+            </div>
+            ";
+            string detPedidos = "";
+            foreach (Pedido p in pedidos)
+            {
+                detPedidos += GetPedidoHtmlAgente(p);
+            }
+            html = String.Format(plantilla, detPedidos);
+            return html;
+        }
+
         public static LinPedido GetLinPedido(MySqlDataReader rdr)
         {
             if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA"))) return null;
@@ -597,6 +672,7 @@ namespace AriGesDB
             return lp;
 
         }
+
         public static IList<Pedido> GetPedidos(int codClien)
         {
             IList<Pedido> lp = new List<Pedido>();
@@ -651,6 +727,104 @@ namespace AriGesDB
                             p.LineasPedido.Add(GetLinPedido(rdr));
                         }
                        
+                    }
+                }
+            }
+            return lp;
+        }
+
+        public static IList<Pedido> GetPedidos(Agente agente)
+        {
+            IList<Pedido> lp = new List<Pedido>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = "";
+                if (agente != null)
+                {
+                    sql = @"
+                    SELECT
+                    c.nomclien AS CLIENTE,
+                    null AS AGENTE,
+                    sc.numpedcl AS NUMPEDCL,
+                    sc.codclien AS CODCLIEN,
+                    sc.fecpedcl AS FECPEDCL,
+                    sc.fecentre AS FECENTRE,
+                    sl2.total AS TOTALPED,
+                    sl.numlinea AS NUMLINEA,
+                    sl.codartic AS CODARTIC,
+                    sl.nomartic AS NOMARTIC,
+                    sl.precioar AS PRECIOAR,
+                    sl.cantidad AS CANTIDAD,
+                    sl.servidas AS SERVIDAS,
+                    sl.dtoline1 AS DTOLINE1,
+                    sl.dtoline2 AS DTOLINE2,
+                    sl.importel AS IMPORTEL
+                    FROM scaped AS sc
+                    LEFT JOIN sclien AS c ON c.codclien = sc.codclien
+                    LEFT JOIN sagent AS ag ON ag.codagent = c.codagent
+                    LEFT JOIN sliped AS sl ON sl.numpedcl = sc.numpedcl
+                    LEFT JOIN (SELECT numpedcl, SUM(importel) AS total
+                    FROM sliped
+                    GROUP BY numpedcl) AS sl2 ON sl2.numpedcl = sc.numpedcl
+                    WHERE c.codagent = {0}
+                    ORDER BY ag.nomagent, c.nomclien, sc.fecpedcl DESC,sc.numpedcl,sl.numlinea;
+                    ";
+                    sql = String.Format(sql, agente.CodAgent);
+                }
+                else
+                {
+                    sql = @"
+                    SELECT
+                    c.nomclien AS CLIENTE,
+                    ag.nomagent AS AGENTE,
+                    sc.numpedcl AS NUMPEDCL,
+                    sc.codclien AS CODCLIEN,
+                    sc.fecpedcl AS FECPEDCL,
+                    sc.fecentre AS FECENTRE,
+                    sl2.total AS TOTALPED,
+                    sl.numlinea AS NUMLINEA,
+                    sl.codartic AS CODARTIC,
+                    sl.nomartic AS NOMARTIC,
+                    sl.precioar AS PRECIOAR,
+                    sl.cantidad AS CANTIDAD,
+                    sl.servidas AS SERVIDAS,
+                    sl.dtoline1 AS DTOLINE1,
+                    sl.dtoline2 AS DTOLINE2,
+                    sl.importel AS IMPORTEL
+                    FROM scaped AS sc
+                    LEFT JOIN sclien AS c ON c.codclien = sc.codclien
+                    LEFT JOIN sagent AS ag ON ag.codagent = c.codagent
+                    LEFT JOIN sliped AS sl ON sl.numpedcl = sc.numpedcl
+                    LEFT JOIN (SELECT numpedcl, SUM(importel) AS total
+                    FROM sliped
+                    GROUP BY numpedcl) AS sl2 ON sl2.numpedcl = sc.numpedcl
+                    ORDER BY ag.nomagent, c.nomclien, sc.fecpedcl DESC,sc.numpedcl,sl.numlinea;
+                    ";
+                }
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    int numPedCl = 0;
+                    Pedido p = null;
+                    while (rdr.Read())
+                    {
+                        // eliminamos pedidos sin líneas
+                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALPED"))) continue;
+                        if (rdr.GetInt32("NUMPEDCL") != numPedCl)
+                        {
+                            p = GetPedido(rdr);
+                            numPedCl = p.NumPedcl;
+                            p.LineasPedido.Add(GetLinPedido(rdr));
+                            lp.Add(p);
+                        }
+                        else
+                        {
+                            p.LineasPedido.Add(GetLinPedido(rdr));
+                        }
+
                     }
                 }
             }

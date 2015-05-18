@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Inicio.aspx.cs" Inherits="Inicio" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Pedidos.aspx.cs" Inherits="Pedidos" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +8,7 @@
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>AriGesMov (C) Ariadna Software S.L. 902 888 878</title>
+        <title>AriGesMov TEST</title>
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet"/>
 
@@ -57,8 +57,8 @@
                         </div>
                         <div class="collapse navbar-collapse">
                             <ul class="nav navbar-nav">
-                                <li class="active">
-                                    <a href="#">Inicio</a>
+                                <li>
+                                    <a href="Inicio.aspx">Inicio</a>
                                 </li>
                                 <li>
                                     <a href="Clientes.aspx">Clientes</a>
@@ -66,7 +66,7 @@
                                 <li>
                                     <a href="Articulos.aspx">Artículos</a>
                                 </li>
-                                <li>
+                                <li  class="active">
                                     <a href="Pedidos.aspx">Pedidos</a>
                                 </li>
                                 <li>
@@ -83,14 +83,10 @@
                         </div><!--/.nav-collapse -->
                     </div>
                 </div>
-                <div class="container">
-                    <div class="text-center">
-                        <h1>Bienvenido a Ariges móvil</h1>
-                        <p class="lead">Haga uso de las opciones del menú superior. Si el menú se encuentra oculto haga clic en el icono de barras horizontales para desplegarlo.</p>
-                    </div>
+                <div id="BodyPedidos" runat="server">
 
-                </div><!-- /.container -->
-            </div>
+                </div>
+             </div>
         </form>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>

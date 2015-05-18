@@ -67,6 +67,9 @@
                                     <a href="Articulos.aspx">Artículos</a>
                                 </li>
                                 <li>
+                                    <a href="Pedidos.aspx">Pedidos</a>
+                                </li>
+                                <li>
                                     <a href="Default.aspx">Salir</a>
                                 </li>
                             </ul>

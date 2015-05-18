@@ -68,6 +68,9 @@
                                     <a href="Articulos.aspx">Artículos</a>
                                 </li>
                                 <li>
+                                    <a href="Pedidos.aspx">Pedidos</a>
+                                </li>
+                                <li>
                                     <a href="Default.aspx">Salir</a>
                                 </li>
                             </ul>
@@ -139,47 +142,47 @@
         <script language="javascript" type="text/javascript">
             $(function () {
                 $('#<%=txtFamilia.ClientID%>').autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: "Articulos.aspx/GetNombresFamilias",
-                            data: "{ 'pre':'" + request.term + "', 'aux':{'name':'AUXILIAR','num':'22'} }",
-                            dataType: "json",
-                            type: "POST",
-                            contentType: "application/json; charset=utf-8",
-                            success: function (data) {
-                                response($.map(data.d, function (item) {
-                                    return { value: item.NomFamia }
-                                }))
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert(textStatus);
-                            }
-                        });
-                    }
-                });
+                                                                source: function (request, response) {
+                                                                    $.ajax({
+                                                                               url: "Articulos.aspx/GetNombresFamilias",
+                                                                               data: "{ 'pre':'" + request.term + "', 'aux':{'name':'AUXILIAR','num':'22'} }",
+                                                                               dataType: "json",
+                                                                               type: "POST",
+                                                                               contentType: "application/json; charset=utf-8",
+                                                                               success: function (data) {
+                                                                                   response($.map(data.d, function (item) {
+                                                                                       return { value: item.NomFamia }
+                                                                                   }))
+                                                                               },
+                                                                               error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                                                   alert(textStatus);
+                                                                               }
+                                                                           });
+                                                                }
+                                                            });
             });
         </script>
         <script language="javascript" type="text/javascript">
             $(function () {
                 $('#<%=txtProveedor.ClientID%>').autocomplete({
-                    source: function (request, response) {
-                        $.ajax({
-                            url: "Articulos.aspx/GetNombresProveedores",
-                            data: "{ 'pre':'" + request.term + "'}",
-                            dataType: "json",
-                            type: "POST",
-                            contentType: "application/json; charset=utf-8",
-                            success: function (data) {
-                                response($.map(data.d, function (item) {
-                                    return { value: item.NomProve }
-                                }))
-                            },
-                            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                alert(textStatus);
-                            }
-                        });
-                    }
-                });
+                                                                  source: function (request, response) {
+                                                                      $.ajax({
+                                                                                 url: "Articulos.aspx/GetNombresProveedores",
+                                                                                 data: "{ 'pre':'" + request.term + "'}",
+                                                                                 dataType: "json",
+                                                                                 type: "POST",
+                                                                                 contentType: "application/json; charset=utf-8",
+                                                                                 success: function (data) {
+                                                                                     response($.map(data.d, function (item) {
+                                                                                         return { value: item.NomProve }
+                                                                                     }))
+                                                                                 },
+                                                                                 error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                                                     alert(textStatus);
+                                                                                 }
+                                                                             });
+                                                                  }
+                                                              });
             });
         </script>
     </body>
