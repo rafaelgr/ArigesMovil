@@ -23,5 +23,5 @@ ag.nomagent AS AGENTE,
                     FROM sliped
                     GROUP BY numpedcl) AS sl2 ON sl2.numpedcl = sc.numpedcl
                     WHERE c.codagent = 6
-                    ORDER BY sc.fecpedcl DESC,sc.numpedcl,sl.numlinea;
+                    ORDER BY ag.nomagent, c.nomclien, sc.fecpedcl DESC,sc.numpedcl,sl.numlinea;
 

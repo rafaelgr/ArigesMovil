@@ -14,6 +14,7 @@ using AriUsDB;
 
 public partial class ClientesMapas : System.Web.UI.Page 
 {
+    Usuario u = null;
     protected void Page_Load(object sender, EventArgs e)
     {
         int codClien;
@@ -23,7 +24,7 @@ public partial class ClientesMapas : System.Web.UI.Page
             Response.Redirect("Default.aspx");
         }
         // mostramos el nombre de usuario en el menú.
-        Usuario u = (Usuario)Session["Usuario"];
+        u = (Usuario)Session["Usuario"];
         lblUsuario.Text = u.NomUsu;
         // Tomamos el valor del cliente pasado
         if (Request["CodClien"] == null)
@@ -50,32 +51,7 @@ public partial class ClientesMapas : System.Web.UI.Page
 
     protected void CargarTabs(Cliente cliente)
     {
-        string tabs = @"
-        <ul class='nav nav-tabs'>
-            <li>
-                <a href='ClientesDetalle.aspx?CodClien={0}'><h4>Datos</h4></a>
-            </li>
-            <li>
-                <a href='ClientesOfertas.aspx?CodClien={0}'><h4>Ofertas</h4></a>
-            </li>
-            <li>
-                <a href='ClientesPedidos.aspx?CodClien={0}'><h4>Pedidos</h4></a>
-            </li>
-            <li>
-                <a href='ClientesAlbaranes.aspx?CodClien={0}'><h4>Albaranes</h4></a>
-            </li>
-            <li>
-                <a href='ClientesFacturas.aspx?CodClien={0}'><h4>Facturas</h4></a>
-            </li>
-            <li>
-                <a href='ClientesPrecios.aspx?CodClien={0}'><h4>Precios</h4></a>
-            </li>
-            <li class='active'>
-                <a href='ClientesMapas.aspx?CodClien={0}'><h4>Contacto</h4></a>
-            </li>
-        </ul>
-        ";
-        TabCliente.InnerHtml = String.Format(tabs, cliente.CodClien);
+        TabCliente.InnerHtml = CntAriGes.GetTabClientesHtml(cliente, u.NivelAriges);
     }
 
 }

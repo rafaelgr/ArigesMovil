@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientesDetalle.aspx.cs" Inherits="ClientesDetalle" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientesPreciosEspeciales.aspx.cs" Inherits="ClientesPreciosEspeciales" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -11,7 +11,7 @@
         <title>AriGesMov TEST</title>
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet"/>
-        <link rel="stylesheet" href="http://cdn.oesmith.co.uk/morris-0.4.3.min.css"/>
+
         <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
         <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
         <!--[if lt IE 9]>
@@ -19,16 +19,6 @@
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
         <![endif]-->
         <telerik:RadStyleSheetManager id="RadStyleSheetManager1" runat="server" />
-        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
-        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
-        <!-- Include all compiled plugins (below), or include individual files as needed -->
-        <script type="text/javascript" src="js/bootstrap.min.js"></script>
-        <!-- Bootbox.js para mostrar mensajes -->
-        <script type="text/javascript" src="js/bootbox.js"></script>
-        <!-- Para gráficas -->
-        <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.0/raphael-min.js"></script>
-        <script type="text/javascript" src="js/morris.js"></script>
-
     </head>
     <body>
         <form id="form1" runat="server">
@@ -106,27 +96,21 @@
 
                 </div>
                 <br />
-                <div id="Indicadores" runat="server">
+                <div id="BodyPedidos" runat="server">
 
                 </div>
-                <div id="CobrosPendientes" runat="server">
-
-                </div>
-                <div class="panel panel-default">
-                    <div class="panel-heading">Facturación anual</div>
-                    <div class="panel-body">
-                        <div id="grafico-facturas">
-
-                        </div>
-                    </div>
-                </div>
-
-            </div>
+             </div>
         </form>
+        <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+        <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+        <!-- Include all compiled plugins (below), or include individual files as needed -->
+        <script type="text/javascript" src="js/bootstrap.min.js"></script>
+        <!-- Bootbox.js para mostrar mensajes -->
+        <script type="text/javascript" src="js/bootbox.js"></script>
         <script type="text/javascript">
             (function ($) {
                 $(document).ready(function () {
-                    $('#Datos').addClass('active');
+                    $('#PreciosEspeciales').addClass('active');
                 });
             })(jQuery);
         </script>

@@ -61,15 +61,17 @@ namespace AriGesDB
         }
 
         #region Agente
+        
         public static Agente GetAgente(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("CODAGENT"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODAGENT")))
+                return null;
             Agente a = new Agente();
             a.CodAgent = rdr.GetInt32("CODAGENT");
             a.NomAgent = rdr.GetString("NOMAGENT");
             return a;
         }
-
+        
         public static Agente GetAgente(int codAgent)
         {
             Agente a = null;
@@ -94,19 +96,22 @@ namespace AriGesDB
             }
             return a;
         }
+        
         #endregion 
-
+        
         #region Trabajador
+        
         public static Trabajador GetTrabajador(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("CODTRABA"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODTRABA")))
+                return null;
             Trabajador t = new Trabajador();
             t.CodTraba = rdr.GetInt32("CODTRABA");
             t.NomTraba = rdr.GetString("NOMTRABA");
             t.Login = rdr.GetString("LOGIN");
             return t;
         }
-
+        
         public static Trabajador GetTrabajador(int codTraba)
         {
             Trabajador t = null;
@@ -136,7 +141,7 @@ namespace AriGesDB
             }
             return t;
         }
-
+        
         public static Trabajador GetTrabajador(string login)
         {
             Trabajador t = null;
@@ -166,12 +171,15 @@ namespace AriGesDB
             }
             return t;
         }
-        #endregion
 
+        #endregion
+        
         #region Cliente
+            
         public static Cliente GetCliente(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("CODCLIEN"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODCLIEN")))
+                return null;
             Cliente c = new Cliente();
             c.CodClien = rdr.GetInt32("CODCLIEN");
             c.NomClien = rdr.GetString("NOMCLIEN");
@@ -207,10 +215,11 @@ namespace AriGesDB
             if (!rdr.IsDBNull(rdr.GetOrdinal("LIMITE_CREDITO")))
                 c.LimiteCredito = rdr.GetDecimal("LIMITE_CREDITO");
             int tcred = rdr.GetInt32("CREDITO_PRIVADO");
-            if (tcred == 1) c.TipoCredito = "PRIVADO";
+            if (tcred == 1)
+                c.TipoCredito = "PRIVADO";
             return c;
         }
-
+            
         public static Cliente GetCliente(int codClien)
         {
             Cliente c = null;
@@ -257,7 +266,7 @@ namespace AriGesDB
             }
             return c;
         }
-
+            
         public static IList<Cliente> GetClientes(string parNom)
         {
             IList<Cliente> lc = new List<Cliente>();
@@ -303,14 +312,15 @@ namespace AriGesDB
                     {
                         Cliente c = new Cliente();
                         c = GetCliente(rdr);
-                        if (c != null) lc.Add(c);
+                        if (c != null)
+                            lc.Add(c);
                     }
                 }
                 conn.Close();
             }
             return lc;
         }
-
+            
         public static IList<Cliente> GetClientes(string parNom, Agente agente)
         {
             IList<Cliente> lc = new List<Cliente>();
@@ -361,14 +371,15 @@ namespace AriGesDB
                     {
                         Cliente c = new Cliente();
                         c = GetCliente(rdr);
-                        if (c != null) lc.Add(c);
+                        if (c != null)
+                            lc.Add(c);
                     }
                 }
                 conn.Close();
             }
             return lc;
         }
-
+            
         public static string GetClientesHtml(IList<Cliente> clientes)
         {
             string html = "";
@@ -441,8 +452,8 @@ namespace AriGesDB
                         </div>
                     </div>
                 ";
-                subpanel += String.Format(panel, c.CodClien, c.NomClien, 
-                    c.NifClien, c.NomComer, 
+                subpanel += String.Format(panel, c.CodClien, c.NomClien,
+                    c.NifClien, c.NomComer,
                     c.DomClien, c.CodPobla, c.PobClien, c.ProClien,
                     c.PerClie1, c.TelClie1, c.Maiclie1,
                     c.PerClie2, c.TelClie2, c.Maiclie2);
@@ -450,11 +461,12 @@ namespace AriGesDB
             html = String.Format(panelGroup, subpanel);
             return html;
         }
-
+            
         public static string GetClienteHtml(Cliente c)
         {
             string html = "";
-            if (c == null) return html;
+            if (c == null)
+                return html;
             string plantilla = @"
                     <div class='container'>
                         <div class='row'>
@@ -491,28 +503,115 @@ namespace AriGesDB
                     </div>
             ";
             html = String.Format(plantilla, c.CodClien, c.NomClien,
-                    c.NifClien, c.NomComer,
-                    c.DomClien, c.CodPobla, c.PobClien, c.ProClien,
-                    c.PerClie1, c.TelClie1, c.Maiclie1,
-                    c.PerClie2, c.TelClie2, c.Maiclie2);
+                c.NifClien, c.NomComer,
+                c.DomClien, c.CodPobla, c.PobClien, c.ProClien,
+                c.PerClie1, c.TelClie1, c.Maiclie1,
+                c.PerClie2, c.TelClie2, c.Maiclie2);
             return html;
         }
+            
+        public static string GetTabClientesHtml(Cliente c, int nivel)
+        {
+            string html = "";
+            string tabs = "";
+            if (nivel == 0)
+            {
+                tabs = @"
+                    <ul class='nav nav-tabs'>
+                        <li id='Datos'>
+                            <a href='ClientesDetalle.aspx?CodClien={0}'><h4>Datos</h4></a>
+                        </li>
+                        <li id='Ofertas'>
+                            <a href='ClientesOfertas.aspx?CodClien={0}'><h4>Ofertas</h4></a>
+                        </li>
+                        <li id='Pedidos'>
+                            <a href='ClientesPedidos.aspx?CodClien={0}'><h4>Pedidos</h4></a>
+                        </li>
+                        <li id='Albaranes'>
+                            <a href='ClientesAlbaranes.aspx?CodClien={0}'><h4>Albaranes</h4></a>
+                        </li>
+                        <li id='Facturas'>
+                            <a href='ClientesFacturas.aspx?CodClien={0}'><h4>Facturas</h4></a>
+                        </li>
+                        <li id='Precios'>
+                            <a href='ClientesPrecios.aspx?CodClien={0}'><h4>Precios</h4></a>
+                        </li>
+                        <li id='PreciosEspeciales'>
+                            <a href='ClientesPreciosEspeciales.aspx?CodClien={0}'><h4>Precios especiales</h4></a>
+                        </li>
+                        <li id='DescuentosEspeciales'>
+                            <a href='ClientesDescuentosEspeciales.aspx?CodClien={0}'><h4>Descuentos especiales</h4></a>
+                        </li>
+                        <li id='Contacto'>
+                            <a href='ClientesMapas.aspx?CodClien={0}'><h4>Contacto</h4></a>
+                        </li>
+                    </ul>
+                    ";
+            }
+            else
+            {
+                tabs = @"
+                    <ul class='nav nav-tabs'>
+                        <li id='Datos'>
+                            <a href='ClientesDetalle.aspx?CodClien={0}'><h4>Datos</h4></a>
+                        </li>
+                        <li id='Ofertas'>
+                            <a href='ClientesOfertas.aspx?CodClien={0}'><h4>Ofertas</h4></a>
+                        </li>
+                        <li id='Pedidos'>
+                            <a href='ClientesPedidos.aspx?CodClien={0}'><h4>Pedidos</h4></a>
+                        </li>
+                        <li id='Albaranes'>
+                            <a href='ClientesAlbaranes.aspx?CodClien={0}'><h4>Albaranes</h4></a>
+                        </li>
+                        <li id='Facturas'>
+                            <a href='ClientesFacturas.aspx?CodClien={0}'><h4>Facturas</h4></a>
+                        </li>
+                        <li id='Precios'>
+                            <a href='ClientesPrecios.aspx?CodClien={0}'><h4>Precios</h4></a>
+                        </li>
+                        <li id='Contacto'>
+                            <a href='ClientesMapas.aspx?CodClien={0}'><h4>Contacto</h4></a>
+                        </li>
+                    </ul>
+                    ";
+            }
+            html = String.Format(tabs, c.CodClien);
+            return html;
+        }
+        
         #endregion
-
+        
         #region Pedido
+                
         public static Pedido GetPedido(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMPEDCL"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMPEDCL")))
+                return null;
             Pedido p = new Pedido();
             p.NumPedcl = rdr.GetInt32("NUMPEDCL");
             p.FecPedcl = rdr.GetDateTime("FECPEDCL");
             p.FecEntre = rdr.GetDateTime("FECENTRE");
             p.TotalPed = rdr.GetDecimal("TOTALPED");
-            if (!rdr.IsDBNull(rdr.GetOrdinal("CLIENTE"))) p.Cliente = rdr.GetString("CLIENTE");
-            if (!rdr.IsDBNull(rdr.GetOrdinal("AGENTE"))) p.Agente = rdr.GetString("AGENTE");
             return p;
         }
-
+                
+        public static Pedido GetPedidoAgente(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMPEDCL")))
+                return null;
+            Pedido p = new Pedido();
+            p.NumPedcl = rdr.GetInt32("NUMPEDCL");
+            p.FecPedcl = rdr.GetDateTime("FECPEDCL");
+            p.FecEntre = rdr.GetDateTime("FECENTRE");
+            p.TotalPed = rdr.GetDecimal("TOTALPED");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("CLIENTE")))
+                p.Cliente = rdr.GetString("CLIENTE");
+            if (!rdr.IsDBNull(rdr.GetOrdinal("AGENTE")))
+                p.Agente = rdr.GetString("AGENTE");
+            return p;
+        }
+            
         public static string GetPedidoHtml(Pedido p)
         {
             string html = "";
@@ -561,7 +660,7 @@ namespace AriGesDB
             html = String.Format(plantilla, p.NumPedcl, p.FecPedcl, p.FecEntre, p.TotalPed, lineas);
             return html;
         }
-
+            
         public static string GetPedidoHtmlAgente(Pedido p)
         {
             string html = "";
@@ -608,11 +707,12 @@ namespace AriGesDB
                 lineas += String.Format(plantillaLinea, lp.NumLinea, lp.NomArtic, lp.PrecioAr, lp.Cantidad, lp.DtoLine1, lp.DtoLine2, lp.Importel);
             }
             string pAgente = "";
-            if (p.Agente != null) pAgente = "Agente: " + p.Agente;
+            if (p.Agente != null)
+                pAgente = "Agente: " + p.Agente;
             html = String.Format(plantilla, p.NumPedcl, p.FecPedcl, p.FecEntre, p.TotalPed, lineas, pAgente, p.Cliente);
             return html;
         }
-
+            
         public static string GetPedidosHtml(IList<Pedido> pedidos)
         {
             string html = "";
@@ -634,7 +734,7 @@ namespace AriGesDB
             html = String.Format(plantilla, detPedidos);
             return html;
         }
-
+            
         public static string GetPedidosHtmlAgente(IList<Pedido> pedidos)
         {
             string html = "";
@@ -656,10 +756,11 @@ namespace AriGesDB
             html = String.Format(plantilla, detPedidos);
             return html;
         }
-
+                
         public static LinPedido GetLinPedido(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA")))
+                return null;
             LinPedido lp = new LinPedido();
             lp.NumLinea = rdr.GetInt32("NUMLINEA");
             lp.CodArtic = rdr.GetString("CODARTIC");
@@ -670,9 +771,8 @@ namespace AriGesDB
             lp.DtoLine2 = rdr.GetDecimal("DTOLINE2");
             lp.Importel = rdr.GetDecimal("IMPORTEL");
             return lp;
-
         }
-
+            
         public static IList<Pedido> GetPedidos(int codClien)
         {
             IList<Pedido> lp = new List<Pedido>();
@@ -705,7 +805,7 @@ namespace AriGesDB
                     ORDER BY sc.fecpedcl DESC,sc.numpedcl,sl.numlinea;
                 ";
                 sql = String.Format(sql, codClien);
-                cmd.CommandText=sql;
+                cmd.CommandText = sql;
                 MySqlDataReader rdr = cmd.ExecuteReader();
                 if (rdr.HasRows)
                 {
@@ -714,7 +814,8 @@ namespace AriGesDB
                     while (rdr.Read())
                     {
                         // eliminamos pedidos sin líneas
-                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALPED"))) continue;
+                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALPED")))
+                            continue;
                         if (rdr.GetInt32("NUMPEDCL") != numPedCl)
                         {
                             p = GetPedido(rdr);
@@ -726,13 +827,12 @@ namespace AriGesDB
                         {
                             p.LineasPedido.Add(GetLinPedido(rdr));
                         }
-                       
                     }
                 }
             }
             return lp;
         }
-
+            
         public static IList<Pedido> GetPedidos(Agente agente)
         {
             IList<Pedido> lp = new List<Pedido>();
@@ -812,10 +912,11 @@ namespace AriGesDB
                     while (rdr.Read())
                     {
                         // eliminamos pedidos sin líneas
-                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALPED"))) continue;
+                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALPED")))
+                            continue;
                         if (rdr.GetInt32("NUMPEDCL") != numPedCl)
                         {
-                            p = GetPedido(rdr);
+                            p = GetPedidoAgente(rdr);
                             numPedCl = p.NumPedcl;
                             p.LineasPedido.Add(GetLinPedido(rdr));
                             lp.Add(p);
@@ -824,18 +925,20 @@ namespace AriGesDB
                         {
                             p.LineasPedido.Add(GetLinPedido(rdr));
                         }
-
                     }
                 }
             }
             return lp;
         }
+        
         #endregion
-
+            
         #region Oferta
+            
         public static Oferta GetOferta(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMOFERT"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMOFERT")))
+                return null;
             Oferta o = new Oferta();
             o.NumOfert = rdr.GetInt32("NUMOFERT");
             o.FecOfert = rdr.GetDateTime("FECOFERT");
@@ -891,11 +994,12 @@ namespace AriGesDB
                 lineas += String.Format(plantillaLinea, lp.NumLinea, lp.NomArtic, lp.PrecioAr, lp.Cantidad, lp.DtoLine1, lp.DtoLine2, lp.Importel);
             }
             string clase = "panel-default";
-            if (o.Aceptado) clase = "panel-success";
+            if (o.Aceptado)
+                clase = "panel-success";
             html = String.Format(plantilla, o.NumOfert, o.FecOfert, o.FecEntre, o.TotalOfe, lineas, clase);
             return html;
         }
-
+            
         public static string GetOfertasHtml(IList<Oferta> Ofertas)
         {
             string html = "";
@@ -917,10 +1021,11 @@ namespace AriGesDB
             html = String.Format(plantilla, detOfertas);
             return html;
         }
-
+            
         public static LinOferta GetLinOferta(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA")))
+                return null;
             LinOferta lp = new LinOferta();
             lp.NumLinea = rdr.GetInt32("NUMLINEA");
             lp.CodArtic = rdr.GetString("CODARTIC");
@@ -931,8 +1036,8 @@ namespace AriGesDB
             lp.DtoLine2 = rdr.GetDecimal("DTOLINE2");
             lp.Importel = rdr.GetDecimal("IMPORTEL");
             return lp;
-
         }
+            
         public static IList<Oferta> GetOfertas(int codClien)
         {
             IList<Oferta> lp = new List<Oferta>();
@@ -974,7 +1079,8 @@ namespace AriGesDB
                     while (rdr.Read())
                     {
                         // eliminamos Ofertas sin líneas
-                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALOFE"))) continue;
+                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALOFE")))
+                            continue;
                         if (rdr.GetInt32("NUMOFERT") != numOfert)
                         {
                             o = GetOferta(rdr);
@@ -986,18 +1092,20 @@ namespace AriGesDB
                         {
                             o.LineasOferta.Add(GetLinOferta(rdr));
                         }
-
                     }
                 }
             }
             return lp;
         }
+        
         #endregion
-
+                
         #region Albaran
+            
         public static Albaran GetAlbaran(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMALBAR"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMALBAR")))
+                return null;
             Albaran a = new Albaran();
             a.CodTipom = rdr.GetString("CODTIPOM");
             a.NumAlbar = rdr.GetInt32("NUMALBAR");
@@ -1052,11 +1160,12 @@ namespace AriGesDB
                 lineas += String.Format(plantillaLinea, lp.NumLinea, lp.NomArtic, lp.PrecioAr, lp.Cantidad, lp.DtoLine1, lp.DtoLine2, lp.Importel);
             }
             string codAlbar = String.Format("{0}-{1:0000000}", a.CodTipom, a.NumAlbar);
-            if (codAlbar == "-0000000") codAlbar = "";
-            html = String.Format(plantilla, a.NumAlbar, a.FechaAlb, a.CodTipom, a.TotalAlb, lineas,codAlbar);
+            if (codAlbar == "-0000000")
+                codAlbar = "";
+            html = String.Format(plantilla, a.NumAlbar, a.FechaAlb, a.CodTipom, a.TotalAlb, lineas, codAlbar);
             return html;
         }
-
+                
         public static string GetAlbaransHtml(IList<Albaran> Albarans)
         {
             string html = "";
@@ -1078,10 +1187,11 @@ namespace AriGesDB
             html = String.Format(plantilla, detAlbarans);
             return html;
         }
-
+            
         public static LinAlbaran GetLinAlbaran(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA")))
+                return null;
             LinAlbaran lp = new LinAlbaran();
             lp.NumLinea = rdr.GetInt32("NUMLINEA");
             lp.CodArtic = rdr.GetString("CODARTIC");
@@ -1092,9 +1202,8 @@ namespace AriGesDB
             lp.DtoLine2 = rdr.GetDecimal("DTOLINE2");
             lp.Importel = rdr.GetDecimal("IMPORTEL");
             return lp;
-
         }
-
+                
         public static IList<Albaran> GetAlbarans(int codClien)
         {
             IList<Albaran> lp = new List<Albaran>();
@@ -1136,7 +1245,8 @@ namespace AriGesDB
                     while (rdr.Read())
                     {
                         // eliminamos Albarans sin líneas
-                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALALB"))) continue;
+                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALALB")))
+                            continue;
                         if (rdr.GetInt32("NUMALBAR") != numAlbar)
                         {
                             a = GetAlbaran(rdr);
@@ -1149,18 +1259,20 @@ namespace AriGesDB
                         {
                             a.LineasAlbaran.Add(GetLinAlbaran(rdr));
                         }
-
                     }
                 }
             }
             return lp;
         }
+            
         #endregion
-
+            
         #region Factura
+            
         public static Factura GetFactura(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMFACTU"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMFACTU")))
+                return null;
             Factura f = new Factura();
             f.CodTipom = rdr.GetString("CODTIPOM");
             f.NumFactu = rdr.GetInt32("NUMFACTU");
@@ -1230,7 +1342,8 @@ namespace AriGesDB
                 if (codAlbar != codAlbarOld)
                 {
                     showAlbar = codAlbar;
-                    if (codAlbar == "-0000000") showAlbar = "";
+                    if (codAlbar == "-0000000")
+                        showAlbar = "";
                     codAlbarOld = codAlbar;
                 }
                 else
@@ -1238,13 +1351,13 @@ namespace AriGesDB
                     showAlbar = "";
                 }
                 lineas += String.Format(plantillaLinea, lf.CodTipoa, lf.NumAlbar,
-                    lf.NumLinea, lf.NomArtic, lf.PrecioAr,lf.Cantidad, lf.DtoLine1, lf.DtoLine2,lf.Importel, codAlbar, showAlbar);
+                    lf.NumLinea, lf.NomArtic, lf.PrecioAr, lf.Cantidad, lf.DtoLine1, lf.DtoLine2, lf.Importel, codAlbar, showAlbar);
             }
             html = String.Format(plantilla, f.CodTipom, f.NumFactu,
-                f.FecFactu,f.Bases,f.Cuotas,f.TotalFac, lineas);
+                f.FecFactu, f.Bases, f.Cuotas, f.TotalFac, lineas);
             return html;
         }
-
+                
         public static string GetFacturasHtml(IList<Factura> facturas)
         {
             string html = "";
@@ -1266,10 +1379,11 @@ namespace AriGesDB
             html = String.Format(plantilla, detFacturas);
             return html;
         }
-
+            
         public static LinFactura GetLinFactura(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("NUMLINEA")))
+                return null;
             LinFactura lf = new LinFactura();
             lf.CodTipoa = rdr.GetString("CODTIPOA");
             lf.NumAlbar = rdr.GetInt32("NUMALBAR");
@@ -1282,9 +1396,8 @@ namespace AriGesDB
             lf.DtoLine2 = rdr.GetDecimal("DTOLINE2");
             lf.Importel = rdr.GetDecimal("IMPORTEL");
             return lf;
-
         }
-
+                
         public static IList<Factura> GetFacturas(int codClien)
         {
             IList<Factura> lf = new List<Factura>();
@@ -1327,7 +1440,8 @@ namespace AriGesDB
                     while (rdr.Read())
                     {
                         // eliminamos Albarans sin líneas
-                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALFAC"))) continue;
+                        if (rdr.IsDBNull(rdr.GetOrdinal("TOTALFAC")))
+                            continue;
                         if (rdr.GetString("CODTIPOM") != codTipom || rdr.GetInt32("NUMFACTU") != numFactu)
                         {
                             f = GetFactura(rdr);
@@ -1340,16 +1454,16 @@ namespace AriGesDB
                         {
                             f.LineasFactura.Add(GetLinFactura(rdr));
                         }
-
                     }
                 }
             }
             return lf;
         }
+            
         #endregion
-
+            
         #region Cobro
-
+            
         public static Cobro GetCobro(MySqlDataReader rdr)
         {
             Cobro c = new Cobro();
@@ -1360,7 +1474,7 @@ namespace AriGesDB
             c.Total = rdr.GetDecimal("TOTAL");
             return c;
         }
-
+                
         public static IList<Cobro> GetCobros(Cliente cliente)
         {
             IList<Cobro> lc = new List<Cobro>();
@@ -1440,7 +1554,8 @@ namespace AriGesDB
                 foreach (Cobro c in cobros)
                 {
                     string vencido = "";
-                    if (c.FechaVenci < DateTime.Now) vencido = "class='danger'";
+                    if (c.FechaVenci < DateTime.Now)
+                        vencido = "class='danger'";
                     detCobro += String.Format(plantillaCobro, vencido, c.FechaVenci, c.NomForpa, c.NumFact, c.FechaFact, c.Total);
                 }
                 string tabla = String.Format(plantillaTabla, detCobro);
@@ -1448,10 +1563,11 @@ namespace AriGesDB
             }
             return html;
         }
+            
         #endregion
-
+            
         #region Articulo
-
+                
         public static decimal GetStock(string codArtic)
         {
             decimal stock = 0;
@@ -1476,11 +1592,11 @@ namespace AriGesDB
             }
             return stock;
         }
-
-
+            
         public static Articulo GetArticulo(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("CODARTIC"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODARTIC")))
+                return null;
             Articulo a = new Articulo();
             a.CodArtic = rdr.GetString("CODARTIC");
             a.NomArtic = rdr.GetString("NOMARTIC");
@@ -1489,7 +1605,7 @@ namespace AriGesDB
             a.CodMarca = rdr.GetInt32("CODMARCA");
             return a;
         }
-
+                
         public static Articulo GetArticulo(string codArtic)
         {
             Articulo a = null;
@@ -1519,7 +1635,7 @@ namespace AriGesDB
             a.Stock = GetStock(a.CodArtic);
             return a;
         }
-
+                
         public static Articulo GetArticuloExt(string codArtic)
         {
             Articulo a = null;
@@ -1527,24 +1643,24 @@ namespace AriGesDB
             {
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
-//                string sql = @"SELECT
-//                                a.codartic AS CODARTIC,
-//                                a.nomartic AS NOMARTIC,
-//                                p.codprove AS CODPROVE,
-//                                p.nomprove AS NOMPROVE,
-//                                f.codfamia AS CODFAMIA,
-//                                f.nomfamia AS NOMFAMIA,
-//                                a.preciove AS PRECIOVE,
-//                                a.rotacion AS ROTACION,
-//                                stk.stock AS STOCK,
-//                                COALESCE(a.referprov,'') AS REFERPROV,
-//                                COALESCE(slp.reservas,0) AS RESERVAS
-//                                FROM sartic AS a 
-//                                LEFT JOIN sprove AS p ON p.codprove = a.codprove
-//                                LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
-//                                LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
-//                                LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
-//                                WHERE a.codartic='{0}'";
+                //                string sql = @"SELECT
+                //                                a.codartic AS CODARTIC,
+                //                                a.nomartic AS NOMARTIC,
+                //                                p.codprove AS CODPROVE,
+                //                                p.nomprove AS NOMPROVE,
+                //                                f.codfamia AS CODFAMIA,
+                //                                f.nomfamia AS NOMFAMIA,
+                //                                a.preciove AS PRECIOVE,
+                //                                a.rotacion AS ROTACION,
+                //                                stk.stock AS STOCK,
+                //                                COALESCE(a.referprov,'') AS REFERPROV,
+                //                                COALESCE(slp.reservas,0) AS RESERVAS
+                //                                FROM sartic AS a 
+                //                                LEFT JOIN sprove AS p ON p.codprove = a.codprove
+                //                                LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
+                //                                LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
+                //                                LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
+                //                                WHERE a.codartic='{0}'";
                 string sql = @"SELECT
                                 a.codartic AS CODARTIC,
                                 a.nomartic AS NOMARTIC,
@@ -1577,7 +1693,7 @@ namespace AriGesDB
             }
             return a;
         }
-
+                
         public static IList<Articulo> GetArticulos(string parNom, Cliente cliente)
         {
             IList<Articulo> la = new List<Articulo>();
@@ -1616,10 +1732,11 @@ namespace AriGesDB
             }
             return la;
         }
-
+            
         public static Articulo GetArticuloExt(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("CODARTIC"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODARTIC")))
+                return null;
             Articulo a = new Articulo();
             a.CodArtic = rdr.GetString("CODARTIC");
             a.NomArtic = rdr.GetString("NOMARTIC");
@@ -1627,13 +1744,14 @@ namespace AriGesDB
             a.Familia = GetFamilia(rdr);
             a.Proveedor = GetProveedor(rdr);
             a.Stock = rdr.GetDecimal("STOCK");
-            if (rdr.GetInt32("ROTACION") == 1) a.Rotacion = true;
+            if (rdr.GetInt32("ROTACION") == 1)
+                a.Rotacion = true;
             a.Reservas = rdr.GetDecimal("RESERVAS");
             a.Referprov = rdr.GetString("REFERPROV");
             a.Pedido = rdr.GetDecimal("PEDIDO");
             return a;
         }
-
+                
         public static IList<Articulo> GetArticulosExt(string parNom, string parProve, string parFam, string codigo, bool obsoletos)
         {
             IList<Articulo> la = new List<Articulo>();
@@ -1661,11 +1779,16 @@ namespace AriGesDB
                                 LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
                                 LEFT JOIN (SELECT SUM(cantidad) AS pedido, codartic FROM slippr GROUP BY codartic) AS slpr ON slpr.codartic = a.codartic
                                 WHERE TRUE";
-                if (parNom != "") sql += String.Format(" AND a.nomartic LIKE '%{0}%'", parNom);
-                if (parProve != "") sql += String.Format(" AND p.nomprove LIKE '%{0}%'", parProve);
-                if (parFam != "") sql += String.Format(" AND f.nomfamia LIKE '%{0}%'", parFam);
-                if (codigo != "") sql += String.Format(" AND a.codartic='{0}'", codigo);
-                if (!obsoletos) sql += " AND a.codstatu <> 1";
+                if (parNom != "")
+                    sql += String.Format(" AND a.nomartic LIKE '%{0}%'", parNom);
+                if (parProve != "")
+                    sql += String.Format(" AND p.nomprove LIKE '%{0}%'", parProve);
+                if (parFam != "")
+                    sql += String.Format(" AND f.nomfamia LIKE '%{0}%'", parFam);
+                if (codigo != "")
+                    sql += String.Format(" AND a.codartic='{0}'", codigo);
+                if (!obsoletos)
+                    sql += " AND a.codstatu <> 1";
                 sql += " ORDER BY a.nomartic";
                 cmd.CommandText = sql;
                 MySqlDataReader rdr = cmd.ExecuteReader();
@@ -1724,7 +1847,7 @@ namespace AriGesDB
             html = String.Format(plantilla, a.CodArtic, a.NomArtic, a.Precio.Pvp, a.Precio.Dto1, a.Precio.Dto2, a.Precio.Importe, a.Precio.Origen, a.Stock, cod);
             return html;
         }
-
+                
         public static string GetArticulosHtml(IList<Articulo> articulos)
         {
             string html = "";
@@ -1811,11 +1934,12 @@ namespace AriGesDB
             Regex rgx = new Regex(pattern);
             string cod = rgx.Replace(a.CodArtic, "");
             string rotacion = "NO";
-            if (a.Rotacion) rotacion = "SI";
+            if (a.Rotacion)
+                rotacion = "SI";
             html = String.Format(plantilla, a.NomArtic, a.CodArtic, a.Stock, a.Reservas, a.Referprov, a.Familia.NomFamia, a.Proveedor.NomProve, a.Preciove, cod, rotacion, a.Pedido);
             return html;
         }
-
+                
         public static string GetArticulosHtmlExt(IList<Articulo> articulos)
         {
             string html = "";
@@ -1837,11 +1961,11 @@ namespace AriGesDB
             html = String.Format(plantilla, detArticulos);
             return html;
         }
-
+            
         #endregion 
-
+            
         #region Componentes
-
+            
         public static LineaComponente GetLineaComponente(MySqlDataReader rdr)
         {
             LineaComponente lc = new LineaComponente();
@@ -1850,7 +1974,7 @@ namespace AriGesDB
             lc.Cantidad = rdr.GetDecimal("CANTIDAD");
             return lc;
         }
-
+                
         public static IList<LineaComponente> GetLineasComponente(Articulo articulo)
         {
             IList<LineaComponente> llc = new List<LineaComponente>();
@@ -1867,7 +1991,7 @@ namespace AriGesDB
                     LEFT JOIN sartic AS s2 ON s2.codartic = s1.codarti1
                     WHERE s1.codartic = '{0}';
                 ";
-                sql = String.Format(sql, articulo.CodArtic );
+                sql = String.Format(sql, articulo.CodArtic);
                 cmd.CommandText = sql;
                 MySqlDataReader rdr = cmd.ExecuteReader();
                 if (rdr.HasRows)
@@ -1928,10 +2052,11 @@ namespace AriGesDB
             }
             return html;
         }
+            
         #endregion
-
+            
         #region Stocks
-
+            
         public static LineaStock GetLineaStock(MySqlDataReader rdr)
         {
             LineaStock ls = new LineaStock();
@@ -1940,7 +2065,7 @@ namespace AriGesDB
             ls.Stock = rdr.GetDecimal("CANSTOCK");
             return ls;
         }
-
+                
         public static IList<LineaStock> GetLineasStock(Articulo articulo)
         {
             IList<LineaStock> lls = new List<LineaStock>();
@@ -2019,19 +2144,22 @@ namespace AriGesDB
             }
             return html;
         }
+                
         #endregion
-
+            
         #region Familias
+                
         public static Familia GetFamilia(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("CODFAMIA"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODFAMIA")))
+                return null;
             Familia f = new Familia();
             f.CodFamia = rdr.GetInt32("CODFAMIA");
             if (!rdr.IsDBNull(rdr.GetOrdinal("NOMFAMIA")))
                 f.NomFamia = rdr.GetString("NOMFAMIA");
             return f;
         }
-
+                
         public static Familia GetFamilia(int codFamia)
         {
             Familia f = null;
@@ -2056,7 +2184,7 @@ namespace AriGesDB
             }
             return f;
         }
-
+                
         public static IList<Familia> GetFamilias(string parNom)
         {
             IList<Familia> lf = new List<Familia>();
@@ -2079,21 +2207,23 @@ namespace AriGesDB
                     {
                         Familia f = new Familia();
                         f = GetFamilia(rdr);
-                        if (f != null) lf.Add(f);
+                        if (f != null)
+                            lf.Add(f);
                     }
                 }
                 conn.Close();
             }
             return lf;
         }
-
-
+            
         #endregion
-
+            
         #region Proveedores
+            
         public static Proveedor GetProveedor(MySqlDataReader rdr)
         {
-            if (rdr.IsDBNull(rdr.GetOrdinal("CODPROVE"))) return null;
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODPROVE")))
+                return null;
             Proveedor p = new Proveedor();
             p.CodProve = rdr.GetInt32("CODPROVE");
             if (!rdr.IsDBNull(rdr.GetOrdinal("NOMPROVE")))
@@ -2148,18 +2278,19 @@ namespace AriGesDB
                     {
                         Proveedor p = new Proveedor();
                         p = GetProveedor(rdr);
-                        if (p != null) lp.Add(p);
+                        if (p != null)
+                            lp.Add(p);
                     }
                 }
                 conn.Close();
             }
             return lp;
         }
-
-
+            
         #endregion
-
+                
         #region Estadísticas
+
         public static string GetJSONFacturacionAnual(int codClien)
         {
             string plantilla = "y: '{0}', a: {1}, b:{2}";
@@ -2197,8 +2328,8 @@ namespace AriGesDB
                         if (rdr2.HasRows)
                         {
                             rdr2.Read();
-                            string total = Math.Round(rdr2.GetDecimal("TOTAL"),2).ToString().Replace(",",".");
-                            string venta = Math.Round(rdr.GetDecimal("VENTA"),2).ToString().Replace(",",".");
+                            string total = Math.Round(rdr2.GetDecimal("TOTAL"), 2).ToString().Replace(",", ".");
+                            string venta = Math.Round(rdr.GetDecimal("VENTA"), 2).ToString().Replace(",", ".");
                             JSON += "{" + String.Format(plantilla, rdr.GetInt32("ANO"), total, venta) + "},";
                         }
                         conn2.Close();
@@ -2262,15 +2393,17 @@ namespace AriGesDB
             foreach (Cobro c in cobros)
             {
                 saldoPendiente += c.Total;
-                if (c.FechaVenci < DateTime.Now) saldoVencido += c.Total;
+                if (c.FechaVenci < DateTime.Now)
+                    saldoVencido += c.Total;
             }
             html = String.Format(plantilla, numOfertas, numPedidos, numAlbaranes, saldoPendiente, saldoVencido, cliente.Situacion, cliente.LimiteCredito, cliente.TipoCredito);
             return html;
         }
+            
         #endregion
-
+                
         #region Cálculo de precios
-
+                
         public static Precio GetPrecio(Articulo a, Cliente c)
         {
             Precio precio = new Precio();
@@ -2278,11 +2411,14 @@ namespace AriGesDB
             if (!precioMinimo)
             {
                 precio = GetPrecioPromocion(a, c);
-                if (precio.Pvp != 0) return precio;
+                if (precio.Pvp != 0)
+                    return precio;
                 precio = GetPrecioEspeciales(a, c);
-                if (precio.Pvp != 0) return precio;
+                if (precio.Pvp != 0)
+                    return precio;
                 precio = GetPrecioTarifas(a, c);
-                if (precio.Pvp != 0) return precio;
+                if (precio.Pvp != 0)
+                    return precio;
                 precio = GetPrecioArticulo(a, c);
             }
             else
@@ -2291,13 +2427,17 @@ namespace AriGesDB
                 pAux.Importe = 9999999;
                 pAux.Origen = "ERROR";
                 precio = GetPrecioPromocion(a, c);
-                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe)
+                    pAux = precio;
                 precio = GetPrecioEspeciales(a, c);
-                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe)
+                    pAux = precio;
                 precio = GetPrecioTarifas(a, c);
-                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe)
+                    pAux = precio;
                 precio = GetPrecioArticulo(a, c);
-                if (precio.Importe != 0 && precio.Importe < pAux.Importe) pAux = precio;
+                if (precio.Importe != 0 && precio.Importe < pAux.Importe)
+                    pAux = precio;
                 precio = pAux;
             }
             return precio;
@@ -2346,7 +2486,7 @@ namespace AriGesDB
             }
             return sobreResto;
         }
-
+                
         public static Precio GetPrecioPromocion(Articulo a, Cliente c)
         {
             Precio precio = new Precio();
@@ -2406,7 +2546,7 @@ namespace AriGesDB
             precio = CalcularDescuento(precio);
             return precio;
         }
-
+                
         public static Precio GetPrecioEspeciales(Articulo a, Cliente c)
         {
             Precio precio = new Precio();
@@ -2471,7 +2611,7 @@ namespace AriGesDB
             precio = CalcularDescuento(precio);
             return precio;
         }
-
+                
         public static Precio GetPrecioTarifas(Articulo a, Cliente c)
         {
             Precio precio = new Precio();
@@ -2540,8 +2680,7 @@ namespace AriGesDB
             precio = CalcularDescuento(precio);
             return precio;
         }
-
-
+            
         public static Precio CalcularDescuento(Precio p)
         {
             bool sobreResto = GetSobreResto();
@@ -2552,27 +2691,33 @@ namespace AriGesDB
             }
             else
             {
-                p.Importe = p.Pvp - ((p.Pvp * (p.Dto1+ p.Dto2)) / 100M);
+                p.Importe = p.Pvp - ((p.Pvp * (p.Dto1 + p.Dto2)) / 100M);
             }
             return p;
         }
-
+            
         public static Precio GetDescuento(Articulo a, Cliente c, Precio p)
         {
             // segun cliente
             p = GetDescuentoCFM(a, c, p);
-            if (p.Dto1 > 0) return p;
+            if (p.Dto1 > 0)
+                return p;
             p = GetDescuentoCF(a, c, p);
-            if (p.Dto1 > 0) return p;
+            if (p.Dto1 > 0)
+                return p;
             p = GetDescuentoCM(a, c, p);
-            if (p.Dto1 > 0) return p;
+            if (p.Dto1 > 0)
+                return p;
             // segun actividad
             p = GetDescuentoAFM(a, c, p);
-            if (p.Dto1 > 0) return p;
+            if (p.Dto1 > 0)
+                return p;
             p = GetDescuentoAF(a, c, p);
-            if (p.Dto1 > 0) return p;
+            if (p.Dto1 > 0)
+                return p;
             p = GetDescuentoAM(a, c, p);
-            if (p.Dto1 > 0) return p;
+            if (p.Dto1 > 0)
+                return p;
             return p;
         }
 
@@ -2753,7 +2898,5 @@ namespace AriGesDB
         }
 
         #endregion 
-
     }
-}  
-
+}

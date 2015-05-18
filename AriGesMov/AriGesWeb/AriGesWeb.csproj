@@ -113,6 +113,8 @@
     <Content Include="ClientesPrecios.aspx" />
     <Content Include="Articulos.aspx" />
     <Content Include="ArticulosDetalle.aspx" />
+    <Content Include="ClientesPreciosEspeciales.aspx" />
+    <Content Include="ClientesDescuentosEspeciales.aspx" />
     <Content Include="Pedidos.aspx" />
     <Content Include="css\arimov.css" />
     <Content Include="css\bootstrap-theme.css" />
@@ -205,6 +207,20 @@
     </Compile>
     <Compile Include="ArticulosDetalle.aspx.designer.cs">
       <DependentUpon>ArticulosDetalle.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesPreciosEspeciales.aspx.cs">
+      <DependentUpon>ClientesPreciosEspeciales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesPreciosEspeciales.aspx.designer.cs">
+      <DependentUpon>ClientesPreciosEspeciales.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ClientesDescuentosEspeciales.aspx.cs">
+      <DependentUpon>ClientesDescuentosEspeciales.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ClientesDescuentosEspeciales.aspx.designer.cs">
+      <DependentUpon>ClientesDescuentosEspeciales.aspx</DependentUpon>
     </Compile>
     <Compile Include="Pedidos.aspx.cs">
       <DependentUpon>Pedidos.aspx</DependentUpon>

@@ -35,5 +35,13 @@ namespace AriUsDB
             get { return login; }
             set { login = value; }
         }
+
+        private int nivelAriges;
+
+        public int NivelAriges
+        {
+            get { return nivelAriges; }
+            set { nivelAriges = value; }
+        }
     }
 }

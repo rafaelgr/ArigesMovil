@@ -13,7 +13,7 @@ using Telerik.Web.UI;
 using AriGesDB;
 using AriUsDB;
 
-public partial class ClientesDetalle : System.Web.UI.Page 
+public partial class ClientesPreciosEspeciales : System.Web.UI.Page 
 {
     Usuario u = null;
     protected void Page_Load(object sender, EventArgs e)
@@ -51,23 +51,7 @@ public partial class ClientesDetalle : System.Web.UI.Page
 
     protected void CargarCuerpo(Cliente cliente)
     {
-        // Estadísticas de facturación anual
-        string jsCmd = @"
-              element: 'grafico-facturas',
-              data: [
-                {0}
-              ],
-              xkey: 'y',
-              ykeys: ['a', 'b'],
-              labels: ['Este cliente', 'Media clientes']
-        ";
-        jsCmd = "{" + String.Format(jsCmd, CntAriGes.GetJSONFacturacionAnual(cliente.CodClien)) + "}";
-        RadAjaxManager1.ResponseScripts.Add(String.Format("Morris.Line({0})", jsCmd));
-        
-        // Cargar cobros pendientes
-        IList<Cobro> cobros = CntAriGes.GetCobros(cliente);
-        CobrosPendientes.InnerHtml = CntAriGes.GetCobrosHtml(cobros);
-        // Indicadores
-        Indicadores.InnerHtml = CntAriGes.GetIndicadoresHtml(cliente);
+        IList<Pedido> pedidos = CntAriGes.GetPedidos(cliente.CodClien);
+        BodyPedidos.InnerHtml = CntAriGes.GetPedidosHtml(pedidos);
     }
 }

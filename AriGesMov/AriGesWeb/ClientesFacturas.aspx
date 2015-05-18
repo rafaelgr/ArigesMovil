@@ -107,5 +107,12 @@
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Bootbox.js para mostrar mensajes -->
         <script type="text/javascript" src="js/bootbox.js"></script>
+        <script type="text/javascript">
+            (function ($) {
+                $(document).ready(function () {
+                    $('#Facturas').addClass('active');
+                });
+            })(jQuery);
+        </script>
     </body>
 </html>

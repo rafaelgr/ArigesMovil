@@ -28,6 +28,7 @@ namespace AriUsDB
             u.NomUsu = rdr.GetString("NOMUSU");
             u.Login = rdr.GetString("LOGIN");
             u.PasswordPropio = rdr.GetString("PASSWORD_PROPIO");
+            u.NivelAriges = rdr.GetInt32("NIVEL_ARIGES");
             return u;
         }
 
@@ -42,7 +43,8 @@ namespace AriUsDB
                     codusu AS CODUSU, 
                     nomusu AS NOMUSU, 
                     login AS LOGIN, 
-                    passwordpropio AS PASSWORD_PROPIO
+                    passwordpropio AS PASSWORD_PROPIO,
+                    nivelariges AS NIVEL_ARIGES
                     FROM usuarios
                     WHERE login = '{0}'
                     AND passwordpropio = '{1}'";
