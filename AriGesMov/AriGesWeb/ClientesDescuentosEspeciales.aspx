@@ -96,7 +96,7 @@
 
                 </div>
                 <br />
-                <div id="BodyPedidos" runat="server">
+                <div id="BodyDescuentosEspeciales" runat="server">
 
                 </div>
              </div>

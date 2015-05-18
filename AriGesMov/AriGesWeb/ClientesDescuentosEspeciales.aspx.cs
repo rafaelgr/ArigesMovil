@@ -51,7 +51,7 @@ public partial class ClientesDescuentosEspeciales : System.Web.UI.Page
 
     protected void CargarCuerpo(Cliente cliente)
     {
-        IList<Pedido> pedidos = CntAriGes.GetPedidos(cliente.CodClien);
-        BodyPedidos.InnerHtml = CntAriGes.GetPedidosHtml(pedidos);
+        IList<DescuentoEspecial> lde = CntAriGes.GetDescuentosEspeciales(cliente.CodClien);
+        BodyDescuentosEspeciales.InnerHtml = CntAriGes.GetDescuentosEspecialesHtml(lde);
     }
 }

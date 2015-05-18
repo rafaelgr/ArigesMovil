@@ -75,11 +75,11 @@ public partial class ClientesPreciosEspeciales {
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl TabCliente;
     
     /// <summary>
-    /// Control BodyPedidos.
+    /// Control BodyPreciosEspeciales.
     /// </summary>
     /// <remarks>
     /// Campo generado automáticamente.
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlGenericControl BodyPedidos;
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl BodyPreciosEspeciales;
 }

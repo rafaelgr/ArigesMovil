@@ -116,5 +116,12 @@
       <FileName>PrecioEspecial.cs</FileName>
     </TypeIdentifier>
   </Class>
+  <Class Name="AriGesDB.DescuentoEspecial">
+    <Position X="1" Y="2.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAAgBAAIIAQACEAAAABAAAAAAAAAAAAAIAA=</HashCode>
+      <FileName>DescuentoEspecial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

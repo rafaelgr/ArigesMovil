@@ -932,9 +932,207 @@ namespace AriGesDB
         }
         
         #endregion
-            
+
+        #region Precios especiales
+
+        public static PrecioEspecial GetPrecioEspecial(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODARTIC")))
+                return null;
+            PrecioEspecial pe = new PrecioEspecial();
+            pe.Codartic = rdr.GetInt32("CODARTIC");
+            pe.Nomartic = rdr.GetString("NOMARTIC");
+            pe.Precioac = rdr.GetDecimal("PRECIOAC");
+            pe.Dtoespe = rdr.GetDecimal("DTOESPE");
+            return pe;
+        }
+
+        public static IList<PrecioEspecial> GetPreciosEspeciales(int codClien)
+        {
+            IList<PrecioEspecial> lpe = new List<PrecioEspecial>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    sp.codartic AS CODARTIC,
+                    sa.nomartic AS NOMARTIC,
+                    COALESCE(sp.precioac,0) AS PRECIOAC,
+                    COALESCE(sp.dtoespec,0) AS DTOESPE
+                    FROM sprees AS sp
+                    LEFT JOIN sartic AS sa ON sa.codartic = sp.codartic
+                    WHERE sp.codclien = {0}
+                ";
+                sql = String.Format(sql, codClien);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    PrecioEspecial pe = null;
+                    while (rdr.Read())
+                    {
+                        pe = GetPrecioEspecial(rdr);
+                        lpe.Add(pe);
+                    }
+                }
+            }
+            return lpe;
+        }
+
+        public static string GetPreciosEspecialesHtml(IList<PrecioEspecial> lpe)
+        {
+            string html = "";
+            if (lpe.Count == 0)
+            {
+                html = "<h3>No hay precios especiales en la base de datos</h3>";
+                return html;
+            }
+            string plantilla = @"
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>Precios especiales</div>
+                    <div class='panel-body'>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Artículo</th>
+                                <th class='text-right success'>Precio</th>
+                                <th class='text-right success'>Descuento</th>
+                            </tr>
+                            {0}
+                        </table>
+                    </div>
+                </div>
+            ";
+            string detPreciosEspeciales = "";
+            foreach (PrecioEspecial pe in lpe)
+            {
+                detPreciosEspeciales += GetPrecioEspecialHtml(pe);
+            }
+            html = String.Format(plantilla, detPreciosEspeciales);
+            return html;
+        }
+
+        public static string GetPrecioEspecialHtml(PrecioEspecial pe)
+        {
+            string html = "";
+            string plantillaLinea = @"
+            <tr>
+                <td>{0}</td>
+                <td>{1}</td>
+                <td class='text-right'>{2:###,##0.00}</td>
+                <td class='text-right'>{3:###,##0.00}</td>
+            </tr>
+            ";
+            html = String.Format(plantillaLinea, pe.Codartic, pe.Nomartic, pe.Precioac, pe.Dtoespe);
+            return html;
+        }
+
+        #endregion
+
+        #region Descuentos especiales
+
+        public static DescuentoEspecial GetDescuentoEspecial(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODFAMIA")))
+                return null;
+            DescuentoEspecial de = new DescuentoEspecial();
+            de.Codfamia = rdr.GetInt32("CODFAMIA");
+            de.Nomfamia = rdr.GetString("NOMFAMIA");
+            de.Fechadto = rdr.GetDateTime("FECHADTO");
+            de.Dtoline1 = rdr.GetDecimal("DTOLINE1");
+            de.Dtoline2 = rdr.GetDecimal("DTOLINE2");
+            return de;
+        }
+
+        public static IList<DescuentoEspecial> GetDescuentosEspeciales(int codClien)
+        {
+            IList<DescuentoEspecial> lde = new List<DescuentoEspecial>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT 
+                    d.codfamia AS CODFAMIA,
+                    f.nomfamia AS NOMFAMIA,
+                    d.fechadto AS FECHADTO,
+                    COALESCE(d.dtoline1,0) AS DTOLINE1,
+                    COALESCE(d.dtoline2,0) AS DTOLINE2
+                    FROM sdtofm AS d 
+                    LEFT JOIN sfamia AS f ON f.codfamia = d.codfamia
+                    WHERE d.codclien = {0}
+                ";
+                sql = String.Format(sql, codClien);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    DescuentoEspecial de = null;
+                    while (rdr.Read())
+                    {
+                        de = GetDescuentoEspecial(rdr);
+                        lde.Add(de);
+                    }
+                }
+            }
+            return lde;
+        }
+
+        public static string GetDescuentosEspecialesHtml(IList<DescuentoEspecial> lde)
+        {
+            string html = "";
+            if (lde.Count == 0)
+            {
+                html = "<h3>No hay descuentos especiales en la base de datos para este cliente</h3>";
+                return html;
+            }
+            string plantilla = @"
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>Descuentos especiales</div>
+                    <div class='panel-body'>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th>Codigo</th>
+                                <th>Famila</th>
+                                <th>Fecha</th>
+                                <th class='text-right success'>Descuento 1</th>
+                                <th class='text-right success'>Descuento 2</th>
+                            </tr>
+                            {0}
+                        </table>
+                    </div>
+                </div>
+            ";
+            string detDescuentosEspeciales = "";
+            foreach (DescuentoEspecial de in lde)
+            {
+                detDescuentosEspeciales += GetDescuentoEspecialHtml(de);
+            }
+            html = String.Format(plantilla, detDescuentosEspeciales);
+            return html;
+        }
+
+        public static string GetDescuentoEspecialHtml(DescuentoEspecial de)
+        {
+            string html = "";
+            string plantillaLinea = @"
+            <tr>
+                <td>{0}</td>
+                <td>{1}</td>
+                <td>{2:dd/MM/yyyy}</td>
+                <td class='text-right'>{3:###,##0.00}</td>
+                <td class='text-right'>{4:###,##0.00}</td>
+            </tr>
+            ";
+            html = String.Format(plantillaLinea, de.Codfamia, de.Nomfamia, de.Fechadto, de.Dtoline1, de.Dtoline2);
+            return html;
+        }
+
+        #endregion
+
         #region Oferta
-            
+
         public static Oferta GetOferta(MySqlDataReader rdr)
         {
             if (rdr.IsDBNull(rdr.GetOrdinal("NUMOFERT")))
