@@ -13,8 +13,9 @@ using Telerik.Web.UI;
 using AriGesDB;
 using AriUsDB;
 
-public partial class Clientes : System.Web.UI.Page 
+public partial class Proveedores : System.Web.UI.Page 
 {
+    Usuario u = null;
     protected void Page_Load(object sender, EventArgs e)
     {
         // controlamos que nadie entre sin hacer login
@@ -23,7 +24,7 @@ public partial class Clientes : System.Web.UI.Page
             Response.Redirect("Default.aspx");
         }
         // mostramos el nombre de usuario en el menú.
-        Usuario u = (Usuario)Session["Usuario"];
+        u = (Usuario)Session["Usuario"];
         menuSuperior.InnerHtml = CntAriGes.GetTabGeneralHtml(u.NomUsu, u.NivelAriges);
     }
 
@@ -38,16 +39,16 @@ public partial class Clientes : System.Web.UI.Page
         string parNom = txtBuscar.Text;
         Agente agente = null;
         if (Session["Agente"] != null) agente = (Agente)Session["Agente"];
-        IList<Cliente> clientes = CntAriGes.GetClientes(parNom, agente);
-        if (clientes.Count == 0)
+        IList<Proveedor> proveedores = CntAriGes.GetProveedores(parNom);
+        if (proveedores.Count == 0)
         {
-            string cjs = "bootbox.alert('<h3>No hay clientes asignados que coincidan con los criterios</h3>');";
+            string cjs = "bootbox.alert('<h3>No hay proveedores que coincidan con los criterios</h3>');";
             txtBuscar.Text = "";
             divBusqueda.InnerHtml = "";
             RadAjaxManager1.ResponseScripts.Add(cjs);
             return;
         }
-        var vHtml = CntAriGes.GetClientesHtml(clientes);
+        var vHtml = CntAriGes.GetProveedoresHtml(proveedores);
         divBusqueda.InnerHtml = vHtml;
     }
 }

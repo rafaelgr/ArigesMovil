@@ -48,13 +48,13 @@ public partial class ClientesPrecios {
     protected global::Telerik.Web.UI.RadAjaxManager RadAjaxManager1;
     
     /// <summary>
-    /// Control lblUsuario.
+    /// Control menuSuperior.
     /// </summary>
     /// <remarks>
     /// Campo generado automáticamente.
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblUsuario;
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuSuperior;
     
     /// <summary>
     /// Control lblNomClien.

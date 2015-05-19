@@ -17,7 +17,7 @@
       <FileName>Agente.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.Cliente" Collapsed="true">
+  <Class Name="AriGesDB.Cliente">
     <Position X="13" Y="1.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>IQAScAAKmBCQQAAQEUAAEACIqBGggKNBAAIJAAAAADE=</HashCode>
@@ -32,7 +32,7 @@
     </TypeIdentifier>
   </Class>
   <Class Name="AriGesDB.LinPedido" Collapsed="true">
-    <Position X="7" Y="1.5" Width="1.5" />
+    <Position X="7.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQAYBAEAMQAAACEAQAwgAAAAAAAAAAgEQAwgAAAAAAA=</HashCode>
       <FileName>LinPedido.cs</FileName>
@@ -62,7 +62,7 @@
       <FileName>Cobro.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.Articulo">
+  <Class Name="AriGesDB.Articulo" Collapsed="true">
     <Position X="10" Y="1" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAQIgACMDIAQiAQARgABAEYgAUEQIABBAAAA=</HashCode>
@@ -82,45 +82,52 @@
     </TypeIdentifier>
   </Class>
   <Class Name="AriGesDB.Familia" Collapsed="true">
-    <Position X="6.75" Y="2.5" Width="1.5" />
+    <Position X="8" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAEAAAgAAAAIAAAAAAEAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>Familia.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.Proveedor" Collapsed="true">
-    <Position X="6.75" Y="3.75" Width="1.5" />
+  <Class Name="AriGesDB.Proveedor">
+    <Position X="5.75" Y="0.75" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAAAAAAAAAAAAAAAQAAAAAgAAAAIAAAAQAAAA=</HashCode>
+      <HashCode>AAAQAAUAAAAFQAIAAEACAAQAiBAAgYgQRIEIAEQAGAA=</HashCode>
       <FileName>Proveedor.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AriGesDB.LineaStock" Collapsed="true">
-    <Position X="12.25" Y="3.5" Width="1.5" />
+    <Position X="11" Y="3" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAABAAAAAAAAAAAAAAAAAAAgAAAAIAECAAAAAgAAAA=</HashCode>
       <FileName>LineaStock.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="AriGesDB.LineaComponente" Collapsed="true">
-    <Position X="12.25" Y="4.25" Width="1.5" />
+    <Position X="11" Y="3.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AQEABAEAAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAABAAA=</HashCode>
       <FileName>LineaComponente.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.PrecioEspecial">
+  <Class Name="AriGesDB.PrecioEspecial" Collapsed="true">
     <Position X="3.5" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAACABAAAgAQAEAAAADAAAAAgAAAAAAAA=</HashCode>
       <FileName>PrecioEspecial.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="AriGesDB.DescuentoEspecial">
+  <Class Name="AriGesDB.DescuentoEspecial" Collapsed="true">
     <Position X="1" Y="2.75" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAgAAAAAAAgBAAIIAQACEAAAABAAAAAAAAAAAAAIAA=</HashCode>
       <FileName>DescuentoEspecial.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AriGesDB.DescuentoRapel" Collapsed="true">
+    <Position X="2" Y="3.75" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAgAAAAAAYgBAAIIAQACEAAACBAAAAgQAAABgAAIAA=</HashCode>
+      <FileName>DescuentoRapel.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Font Name="Segoe UI" Size="9" />

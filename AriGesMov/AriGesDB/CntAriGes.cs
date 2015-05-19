@@ -1131,6 +1131,124 @@ namespace AriGesDB
 
         #endregion
 
+        #region Descuentos y rappeles de proveedor
+
+        public static DescuentoRapel GetDescuentoRapel(MySqlDataReader rdr)
+        {
+            if (rdr.IsDBNull(rdr.GetOrdinal("CODFAMIA")))
+                return null;
+            DescuentoRapel dr = new DescuentoRapel();
+            dr.Codfamia = rdr.GetInt32("CODFAMIA");
+            dr.Nomfamia = rdr.GetString("NOMFAMIA");
+            dr.Codmarca = rdr.GetInt32("CODMARCA");
+            dr.Nomarca = rdr.GetString("NOMMARCA");
+            dr.Fechadto = rdr.GetDateTime("FECHADTO");
+            dr.Dtoline1 = rdr.GetDecimal("DTOLINE1");
+            dr.Dtoline2 = rdr.GetDecimal("DTOLINE2");
+            dr.Rap1 = rdr.GetDecimal("RAP1");
+            dr.Rap2 = rdr.GetDecimal("RAP2");
+            return dr;
+        }
+
+        public static IList<DescuentoRapel> GetDescuentosRapeles(int codProve)
+        {
+            IList<DescuentoRapel> ldr = new List<DescuentoRapel>();
+            using (MySqlConnection conn = GetConnection())
+            {
+                conn.Open();
+                MySqlCommand cmd = conn.CreateCommand();
+                string sql = @"
+                    SELECT
+                    dr.codfamia AS CODFAMIA,
+                    COALESCE(f.nomfamia,'') AS NOMFAMIA,
+                    COALESCE(dr.codmarca,0) AS CODMARCA,
+                    COALESCE(m.nommarca,'') AS NOMMARCA,
+                    dr.fechadto AS FECHADTO,
+                    dr.dtoline1 AS DTOLINE1,
+                    dr.dtoline2 AS DTOLINE2,
+                    COALESCE(dr.rap1,0) AS RAP1,
+                    COALESCE(dr.rap2,0) AS RAP2
+                    FROM sdtomp AS dr
+                    LEFT JOIN sfamia AS f ON f.codfamia = dr.codfamia
+                    LEFT JOIN smarca AS m ON m.codmarca = dr.codmarca
+                    WHERE dr.codprove = {0}
+                ";
+                sql = String.Format(sql, codProve);
+                cmd.CommandText = sql;
+                MySqlDataReader rdr = cmd.ExecuteReader();
+                if (rdr.HasRows)
+                {
+                    DescuentoRapel dr = null;
+                    while (rdr.Read())
+                    {
+                        dr = GetDescuentoRapel(rdr);
+                        ldr.Add(dr);
+                    }
+                }
+            }
+            return ldr;
+        }
+
+        public static string GetDescuentosRapelesHtml(IList<DescuentoRapel> ldr)
+        {
+            string html = "";
+            if (ldr.Count == 0)
+            {
+                html = "<h3>No hay descuentos / rapeles para este proveedor</h3>";
+                return html;
+            }
+            string plantilla = @"
+                <div class='panel panel-default'>
+                    <div class='panel-heading'>Descuentos / Rappeles</div>
+                    <div class='panel-body'>
+                        <table class='table table-bordered'>
+                            <tr>
+                                <th>C.Familia</th>
+                                <th>Familia</th>
+                                <th>C.Marca</th>    
+                                <th>Marca</th>
+                                <th class='success'>Fecha</th>
+                                <th class='text-right success'>Descuento (1)</th>
+                                <th class='text-right success'>Descuento (2)</th>
+                                <th class='text-right success'>Rappel (1)</th>
+                                <th class='text-right success'>Rappel (2)</th>
+                            </tr>
+                            {0}
+                        </table>
+                    </div>
+                </div>
+            ";
+            string detDescuentosRapeles = "";
+            foreach (DescuentoRapel dr in ldr)
+            {
+                detDescuentosRapeles += GetDescuentoRapelHtml(dr);
+            }
+            html = String.Format(plantilla, detDescuentosRapeles);
+            return html;
+        }
+
+        public static string GetDescuentoRapelHtml(DescuentoRapel dr)
+        {
+            string html = "";
+            string plantillaLinea = @"
+            <tr>
+                <td>{0}</td>
+                <td>{1}</td>
+                <td>{2}</td>
+                <td>{3}</td>
+                <td>{4:dd/MM/yyyy}</td>
+                <td class='text-right'>{5:###,##0.00}</td>
+                <td class='text-right'>{6:###,##0.00}</td>
+                <td class='text-right'>{7:###,##0.00}</td>
+                <td class='text-right'>{8:###,##0.00}</td>
+            </tr>
+            ";
+            html = String.Format(plantillaLinea, dr.Codfamia, dr.Nomfamia, dr.Codmarca, dr.Nomarca, dr.Fechadto, dr.Dtoline1, dr.Dtoline2, dr.Rap1, dr.Rap2);
+            return html;
+        }
+
+        #endregion
+
         #region Oferta
 
         public static Oferta GetOferta(MySqlDataReader rdr)
@@ -2426,6 +2544,17 @@ namespace AriGesDB
             p.CodProve = rdr.GetInt32("CODPROVE");
             if (!rdr.IsDBNull(rdr.GetOrdinal("NOMPROVE")))
                 p.NomProve = rdr.GetString("NOMPROVE");
+            p.Nomcomer = rdr.GetString("NOMCOMER");
+            p.Domprove = rdr.GetString("DOMPROVE");
+            p.Codpobla = rdr.GetString("CODPOBLA");
+            p.Pobprove = rdr.GetString("POBPROVE");
+            p.Proprove = rdr.GetString("PROPROVE");
+            p.Perprov1 = rdr.GetString("PERPROV1");
+            p.Perprov2 = rdr.GetString("PERPROV2");
+            p.Telprov1 = rdr.GetString("TELPROV1");
+            p.Telprov2 = rdr.GetString("TELPROV2");
+            p.Maiprov1 = rdr.GetString("MAIPROV1");
+            p.Maiprov2 = rdr.GetString("MAIPROV2");
             return p;
         }
 
@@ -2438,7 +2567,21 @@ namespace AriGesDB
                 MySqlCommand cmd = conn.CreateCommand();
                 string sql = @"SELECT
                     p.codprove AS CODPROVE,
-                    p.nomprove AS NOMPROVE
+                    p.nomprove AS NOMPROVE,
+                    COALESCE(p.nomcomer,'') AS NOMCOMER,
+                    COALESCE(p.domprove,'') AS DOMPROVE,
+                    COALESCE(p.codpobla,'')AS CODPOBLA,
+                    COALESCE(p.pobprove,'') AS POBPROVE,
+                    COALESCE(p.proprove,'') AS PROPROVE,
+                    COALESCE(p.nifPROVE,'') AS NIFPROVE,
+                    COALESCE(p.perprov1,'') AS PERPROV1,
+                    COALESCE(p.telprov1,'') AS TELPROV1,
+                    COALESCE(p.faxprov1,'') AS FAXPROV1,
+                    COALESCE(p.perprov2,'') AS PERPROV2,
+                    COALESCE(p.telprov2,'') AS TELPROV2,
+                    COALESCE(p.faxprov2,'') AS FAXPROV2,
+                    COALESCE(p.maiprov1,'') AS MAIPROV1,
+                    COALESCE(p.maiprov2,'') AS MAIPROV2
                     FROM sprove AS p
                     WHERE p.codprove = '{0}'";
                 sql = String.Format(sql, codProve);
@@ -2463,7 +2606,21 @@ namespace AriGesDB
                 MySqlCommand cmd = conn.CreateCommand();
                 string sql = @"SELECT
                     p.codprove AS CODPROVE,
-                    p.nomprove AS NOMPROVE
+                    p.nomprove AS NOMPROVE,
+                    COALESCE(p.nomcomer,'') AS NOMCOMER,
+                    COALESCE(p.domprove,'') AS DOMPROVE,
+                    COALESCE(p.codpobla,'')AS CODPOBLA,
+                    COALESCE(p.pobprove,'') AS POBPROVE,
+                    COALESCE(p.proprove,'') AS PROPROVE,
+                    COALESCE(p.nifPROVE,'') AS NIFPROVE,
+                    COALESCE(p.perprov1,'') AS PERPROV1,
+                    COALESCE(p.telprov1,'') AS TELPROV1,
+                    COALESCE(p.faxprov1,'') AS FAXPROV1,
+                    COALESCE(p.perprov2,'') AS PERPROV2,
+                    COALESCE(p.telprov2,'') AS TELPROV2,
+                    COALESCE(p.faxprov2,'') AS FAXPROV2,
+                    COALESCE(p.maiprov1,'') AS MAIPROV1,
+                    COALESCE(p.maiprov2,'') AS MAIPROV2
                     FROM sprove AS p
                     WHERE nomprove LIKE '%{0}%'
                     ORDER BY nomprove";
@@ -2484,7 +2641,152 @@ namespace AriGesDB
             }
             return lp;
         }
-            
+
+        public static string GetProveedoresHtml(IList<Proveedor> proveedores)
+        {
+            string html = "";
+            string panelGroup = @"
+                <div class='panel-group' id='accordion'>
+                    {0}
+                </div>
+            ";
+            string subpanel = "";
+            foreach (Proveedor p in proveedores)
+            {
+                string panel = @"
+                    <div class='panel panel-default'>
+                        <div class='panel-heading'>
+                            <a data-toggle='collapse' data-parent='#accordion' href='#collapse{0}'>
+                                <div class='container'>
+                                   <div class='row'>
+                                        <div class='col-md-8'>
+                                            <h4>{1}</h4>
+                                        </div>
+                                        <div class='col-md-1'>
+                                            <h4>C:{0}</h4>
+                                        </div>
+                                        <div class='col-md-3'>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div id='collapse{0}' class='panel-collapse collapse'>
+                            <div class='panel-body'>
+                                <div class='container'>
+                                    <div class='row'>
+                                        <div class='col-sm-8'>
+                                            <blockquote>
+                                                <strong>{2} {3}</strong><br />
+                                                {4}<br />
+                                                {5} {6} {7}
+                                            </blockquote>
+                                        </div>
+                                        <div class='col-sm-4'>
+                                            <a class='btn btn-primary btn-lg text-center' href='ProveedoresDescuentosRapeles.aspx?CodProve={0}'>Ver detalles</a>
+                                        </div>
+                                    </div>
+                                    <div class='row'>
+                                        <div class='col-sm-6'>
+                                            <blockquote>
+                                                <strong>Administración</strong><br/>
+                                                <em>{8}</em><br />
+                                                Teléfono:
+                                                <a href='tel:{9}'>{9}</a><br />
+                                                Email:
+                                                <a href='mailto:{10}'>{10}</a>
+                                            </blockquote>
+                                        </div>
+                                        <div class='col-sm-6'>
+                                            <blockquote>
+                                                <strong>Comercial</strong><br/>
+                                                <em>{11}</em><br />
+                                                Teléfono:
+                                                <a href='tel:{12}'>{12}</a><br />
+                                                EMail:
+                                                <a href='mailto:{13}'>{13}</a>
+                                            </blockquote>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                ";
+                subpanel += String.Format(panel, p.CodProve, p.NomProve,
+                    p.Nifprove, p.Nomcomer,
+                    p.Domprove, p.Codpobla, p.Pobprove, p.Proprove,
+                    p.Perprov1, p.Telprov1, p.Maiprov1,
+                    p.Perprov2, p.Telprov2, p.Maiprov2);
+            }
+            html = String.Format(panelGroup, subpanel);
+            return html;
+        }
+
+        public static string GetProveedorHtml(Proveedor p)
+        {
+            string html = "";
+            if (p == null)
+                return html;
+            string plantilla = @"
+                    <div class='container'>
+                        <div class='row'>
+                            <div class='col-sm-12'>
+                                <blockquote>
+                                    <strong>{2} {3}</strong><br />
+                                    {4}<br />
+                                    {5} {6} {7}
+                                </blockquote>
+                            </div>
+                        </div>
+                        <div class='row'>
+                            <div class='col-sm-6'>
+                                <blockquote>
+                                    <strong>Administración</strong><br/>
+                                    <em>{8}</em><br />
+                                    Teléfono:
+                                    <a href='tel:{9}'>{9}</a><br />
+                                    Email:
+                                    <a href='mailto:{10}'>{10}</a>
+                                </blockquote>
+                            </div>
+                            <div class='col-sm-6'>
+                                <blockquote>
+                                    <strong>Comercial</strong><br/>
+                                    <em>{11}</em><br />
+                                    Teléfono:
+                                    <a href='tel:{12}'>{12}</a><br />
+                                    EMail:
+                                    <a href='mailto:{13}'>{13}</a>
+                                </blockquote>
+                            </div>
+                        </div>
+                    </div>
+            ";
+            html = String.Format(plantilla, p.CodProve, p.NomProve,
+                    p.Nifprove, p.Nomcomer,
+                    p.Domprove, p.Codpobla, p.Pobprove, p.Proprove,
+                    p.Perprov1, p.Telprov1, p.Maiprov1,
+                    p.Perprov2, p.Telprov2, p.Maiprov2);
+            return html;
+        }
+
+        public static string GetTabProveedoresHtml(Proveedor p)
+        {
+            string html = "";
+            string tabs = "";
+            tabs = @"
+                    <ul class='nav nav-tabs'>
+                        <li id='DescuentosRapeles'>
+                            <a href='ProveedoresDescuentosRapeles.aspx?CodClien={0}'><h4>Descuentos / Rappels</h4></a>
+                        </li>
+                    </ul>
+                    ";
+            html = String.Format(tabs, p.CodProve);
+            return html;
+        }
+
         #endregion
                 
         #region Estadísticas
@@ -3096,5 +3398,76 @@ namespace AriGesDB
         }
 
         #endregion 
+
+        #region Utilidades
+        public static string GetTabGeneralHtml(string usuario, int nivel)
+        {
+            string html = "";
+            string tabs = "";
+            if (nivel == 0)
+            {
+                tabs = @"
+                        <ul class='nav navbar-nav'>
+                            <li id='Inicio'>
+                                <a href='#'>Inicio</a>
+                            </li>
+                            <li id='Clientes'>
+                                <a href='Clientes.aspx'>Clientes</a>
+                            </li>
+                            <li id='Proveedores'>
+                                <a href='Proveedores.aspx'>Proveedores</a>
+                            </li>
+                            <li id='Articulos'>
+                                <a href='Articulos.aspx'>Artículos</a>
+                            </li>
+                            <li id='Pedidos'>
+                                <a href='Pedidos.aspx'>Pedidos</a>
+                            </li>
+                            <li>
+                                <a href='Default.aspx'>Salir</a>
+                            </li>
+                        </ul>
+                        <ul class='nav navbar-nav pull-right'>
+                            <li>
+                                <a href='#'>
+                                    <asp:Label runat='server' ID='lblUsuario' Text='USUARIO'>{0}</asp:Label>
+                                </a>
+                            </li>
+                        </ul>
+                    ";
+            }
+            else
+            {
+                tabs = @"
+                        <ul class='nav navbar-nav'>
+                            <li id='Inicio'>
+                                <a href='#'>Inicio</a>
+                            </li>
+                            <li id='Clientes'>
+                                <a href='Clientes.aspx'>Clientes</a>
+                            </li>
+                            <li id='Articulos'>
+                                <a href='Articulos.aspx'>Artículos</a>
+                            </li>
+                            <li id='Pedidos'>
+                                <a href='Pedidos.aspx'>Pedidos</a>
+                            </li>
+                            <li>
+                                <a href='Default.aspx'>Salir</a>
+                            </li>
+                        </ul>
+                        <ul class='nav navbar-nav pull-right'>
+                            <li>
+                                <a href='#'>
+                                    <asp:Label runat='server' ID='lblUsuario' Text='USUARIO'>{0}</asp:Label>
+                                </a>
+                            </li>
+                        </ul>
+                    ";
+            }
+            html = String.Format(tabs, usuario);
+            return html;
+        }
+        #endregion
     }
 }

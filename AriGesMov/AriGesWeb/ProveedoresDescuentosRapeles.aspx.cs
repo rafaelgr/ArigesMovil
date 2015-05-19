@@ -13,12 +13,12 @@ using Telerik.Web.UI;
 using AriGesDB;
 using AriUsDB;
 
-public partial class ClientesFacturas : System.Web.UI.Page 
+public partial class ProveedoresDescuentosRapeles : System.Web.UI.Page 
 {
     Usuario u = null;
     protected void Page_Load(object sender, EventArgs e)
     {
-        int codClien;
+        int codProve;
         // controlamos que nadie entre sin hacer login
         if (Session["Usuario"] == null)
         {
@@ -32,26 +32,26 @@ public partial class ClientesFacturas : System.Web.UI.Page
         {
             // que hacer si falla el código pasado
         }
-        codClien = int.Parse(Request["CodClien"].ToString());
-        Cliente cliente = CntAriGes.GetCliente(codClien);
-        if (cliente == null)
+        codProve = int.Parse(Request["CodProve"].ToString());
+        Proveedor proveedor = CntAriGes.GetProveedor(codProve);
+        if (proveedor == null)
         {
-            lblNomClien.Text = string.Format("Cliente con código {0} desconocido", codClien);
+            lblNomProve.Text = string.Format("Cliente con código {0} desconocido", codProve);
             return;
         }
-        lblNomClien.Text = cliente.NomClien;
-        CargarTabs(cliente);
-        CargarCuerpo(cliente);
+        lblNomProve.Text = proveedor.NomProve;
+        CargarTabs(proveedor);
+        CargarCuerpo(proveedor);
     }
 
-    protected void CargarTabs(Cliente cliente)
+    protected void CargarTabs(Proveedor proveedor)
     {
-        TabCliente.InnerHtml = CntAriGes.GetTabClientesHtml(cliente, u.NivelAriges);
+        TabProveedor.InnerHtml = CntAriGes.GetTabProveedoresHtml(proveedor);
     }
 
-    protected void CargarCuerpo(Cliente cliente)
+    protected void CargarCuerpo(Proveedor proveedor)
     {
-        IList<Factura> facturas = CntAriGes.GetFacturas(cliente.CodClien);
-        BodyPedidos.InnerHtml = CntAriGes.GetFacturasHtml(facturas);
+        IList<DescuentoRapel> ldr = CntAriGes.GetDescuentosRapeles(proveedor.CodProve);
+        BodyDescuentosRapeles.InnerHtml = CntAriGes.GetDescuentosRapelesHtml(ldr);
     }
 }

@@ -9,7 +9,7 @@
 
 
 
-public partial class ClientesPedidos {
+public partial class ProveedoresDescuentosRapeles {
     
     /// <summary>
     /// Control RadStyleSheetManager1.
@@ -57,29 +57,29 @@ public partial class ClientesPedidos {
     protected global::System.Web.UI.HtmlControls.HtmlGenericControl menuSuperior;
     
     /// <summary>
-    /// Control lblNomClien.
+    /// Control lblNomProve.
     /// </summary>
     /// <remarks>
     /// Campo generado automáticamente.
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
-    protected global::System.Web.UI.WebControls.Label lblNomClien;
+    protected global::System.Web.UI.WebControls.Label lblNomProve;
     
     /// <summary>
-    /// Control TabCliente.
+    /// Control TabProveedor.
     /// </summary>
     /// <remarks>
     /// Campo generado automáticamente.
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlGenericControl TabCliente;
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl TabProveedor;
     
     /// <summary>
-    /// Control BodyPedidos.
+    /// Control BodyDescuentosRapeles.
     /// </summary>
     /// <remarks>
     /// Campo generado automáticamente.
     /// Para modificarlo, mueva la declaración del campo del archivo del diseñador al archivo de código subyacente.
     /// </remarks>
-    protected global::System.Web.UI.HtmlControls.HtmlGenericControl BodyPedidos;
+    protected global::System.Web.UI.HtmlControls.HtmlGenericControl BodyDescuentosRapeles;
 }

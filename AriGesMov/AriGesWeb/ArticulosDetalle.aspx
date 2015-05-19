@@ -63,33 +63,10 @@
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
                                 <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
                             </button>
                         </div>
-                        <div class="collapse navbar-collapse">
-                            <ul class="nav navbar-nav">
-                                <li>
-                                    <a href="Inicio.aspx">Inicio</a>
-                                </li>
-                                <li>
-                                    <a href="Clientes.aspx">Clientes</a>
-                                </li>
-                                <li class="active">
-                                    <a href="Articulos.aspx">Artículos</a>
-                                </li>
-                                 <li>
-                                    <a href="Pedidos.aspx">Pedidos</a>
-                                </li>
-                                <li>
-                                    <a href="Default.aspx">Salir</a>
-                                </li>
-                            </ul>
-                            <ul class="nav navbar-nav pull-right">
-                                <li>
-                                    <a href="#">
-                                        <asp:Label runat="server" ID="lblUsuario" Text="USUARIO"></asp:Label>
-                                    </a>
-                                </li>
-                            </ul>
+                        <div id="menuSuperior" runat="server" class="collapse navbar-collapse">
                         </div><!--/.nav-collapse -->
                     </div>
                 </div>
@@ -111,5 +88,13 @@
                 </div>
             </div>
         </form>
+                <script type="text/javascript" src="js/bootbox.js"></script>
+                <script type="text/javascript">
+                    (function ($) {
+                        $(document).ready(function () {
+                            $('#Articulos').addClass('active');
+                        });
+                    })(jQuery);
+        </script>
     </body>
 </html>

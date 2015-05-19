@@ -115,6 +115,8 @@
     <Content Include="ArticulosDetalle.aspx" />
     <Content Include="ClientesPreciosEspeciales.aspx" />
     <Content Include="ClientesDescuentosEspeciales.aspx" />
+    <Content Include="ProveedoresDescuentosRapeles.aspx" />
+    <Content Include="Proveedores.aspx" />
     <Content Include="Pedidos.aspx" />
     <Content Include="css\arimov.css" />
     <Content Include="css\bootstrap-theme.css" />
@@ -222,6 +224,20 @@
     <Compile Include="ClientesDescuentosEspeciales.aspx.designer.cs">
       <DependentUpon>ClientesDescuentosEspeciales.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ProveedoresDescuentosRapeles.aspx.cs">
+      <DependentUpon>ProveedoresDescuentosRapeles.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ProveedoresDescuentosRapeles.aspx.designer.cs">
+      <DependentUpon>ProveedoresDescuentosRapeles.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Proveedores.aspx.cs">
+      <DependentUpon>Proveedores.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Proveedores.aspx.designer.cs">
+      <DependentUpon>Proveedores.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Pedidos.aspx.cs">
       <DependentUpon>Pedidos.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -305,7 +321,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

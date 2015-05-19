@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientesOfertas.aspx.cs" Inherits="ClientesOfertas" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ProveedoresDescuentosRapeles.aspx.cs" Inherits="ProveedoresDescuentosRapeles" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -57,6 +57,7 @@
                             </button>
                         </div>
                         <div id="menuSuperior" runat="server" class="collapse navbar-collapse">
+
                         </div><!--/.nav-collapse -->
                     </div>
                 </div>
@@ -64,16 +65,16 @@
                     <div class="row">
                         <div class="col-md-12">
                             <h2 class="text-primary">
-                                <asp:Label ID="lblNomClien" runat="server"></asp:Label>
+                                <asp:Label ID="lblNomProve" runat="server"></asp:Label>
                             </h2>
                         </div>
                     </div>
                 </div>
-                <div id="TabCliente" runat="server">
+                <div id="TabProveedor" runat="server">
 
                 </div>
                 <br />
-                <div id="BodyPedidos" runat="server">
+                <div id="BodyDescuentosRapeles" runat="server">
 
                 </div>
              </div>
@@ -87,8 +88,8 @@
         <script type="text/javascript">
             (function ($) {
                 $(document).ready(function () {
-                    $('#Ofertas').addClass('active');
-                    $('#Clientes').addClass('active');
+                    $('#DescuentosRapeles').addClass('active');
+                    $('#Proveedores').addClass('active');
                 });
             })(jQuery);
         </script>

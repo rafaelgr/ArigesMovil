@@ -23,6 +23,6 @@ public partial class Inicio : System.Web.UI.Page
         }
         // mostramos el nombre de usuario en el menú.
         Usuario u = (Usuario)Session["Usuario"];
-        lblUsuario.Text = u.NomUsu;
+        menuSuperior.InnerHtml = CntAriGes.GetTabGeneralHtml(u.NomUsu, u.NivelAriges);
     }
 }

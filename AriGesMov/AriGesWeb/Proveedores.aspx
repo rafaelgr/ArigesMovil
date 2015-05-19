@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="ClientesOfertas.aspx.cs" Inherits="ClientesOfertas" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="Proveedores.aspx.cs" Inherits="Proveedores" %>
 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 
@@ -8,7 +8,7 @@
         <meta charset="utf-8"/>
         <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
         <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <title>AriGesMov TEST</title>
+        <title>AriGesMov (C) Ariadna Software S.L. 902 888 878</title>
         <!-- Bootstrap -->
         <link href="css/bootstrap.min.css" rel="stylesheet"/>
 
@@ -57,26 +57,34 @@
                             </button>
                         </div>
                         <div id="menuSuperior" runat="server" class="collapse navbar-collapse">
+
                         </div><!--/.nav-collapse -->
                     </div>
                 </div>
                 <div class="container">
                     <div class="row">
                         <div class="col-md-12">
-                            <h2 class="text-primary">
-                                <asp:Label ID="lblNomClien" runat="server"></asp:Label>
-                            </h2>
+                            <h2>Proveedores</h2>
+                            <p>Para buscar el proveedor a consultar introduzca su nombre o parte de él y pulse 'BUSCAR'</p>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <asp:TextBox ID="txtBuscar" runat="server" CssClass="form-control input-lg"></asp:TextBox>
+                        </div>
+                        <div class="col-md-2">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-2">
+                            <asp:Button ID="btnBuscar" runat="server" CssClass="btn btn-primary btn-block btn-lg" Text="Buscar" OnClick="btnBuscar_Click" />
                         </div>
                     </div>
                 </div>
-                <div id="TabCliente" runat="server">
-
-                </div>
                 <br />
-                <div id="BodyPedidos" runat="server">
+                <div id="divBusqueda" runat="server">
 
                 </div>
-             </div>
+            </div>
         </form>
         <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
         <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
@@ -84,13 +92,13 @@
         <script type="text/javascript" src="js/bootstrap.min.js"></script>
         <!-- Bootbox.js para mostrar mensajes -->
         <script type="text/javascript" src="js/bootbox.js"></script>
-        <script type="text/javascript">
-            (function ($) {
-                $(document).ready(function () {
-                    $('#Ofertas').addClass('active');
-                    $('#Clientes').addClass('active');
-                });
-            })(jQuery);
+                <script type="text/javascript" src="js/bootbox.js"></script>
+                <script type="text/javascript">
+                    (function ($) {
+                        $(document).ready(function () {
+                            $('#Proveedores').addClass('active');
+                        });
+                    })(jQuery);
         </script>
     </body>
 </html>
