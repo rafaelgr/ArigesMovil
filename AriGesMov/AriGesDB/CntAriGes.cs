@@ -1959,29 +1959,25 @@ namespace AriGesDB
             {
                 conn.Open();
                 MySqlCommand cmd = conn.CreateCommand();
-                //                string sql = @"SELECT
-                //                                a.codartic AS CODARTIC,
-                //                                a.nomartic AS NOMARTIC,
-                //                                p.codprove AS CODPROVE,
-                //                                p.nomprove AS NOMPROVE,
-                //                                f.codfamia AS CODFAMIA,
-                //                                f.nomfamia AS NOMFAMIA,
-                //                                a.preciove AS PRECIOVE,
-                //                                a.rotacion AS ROTACION,
-                //                                stk.stock AS STOCK,
-                //                                COALESCE(a.referprov,'') AS REFERPROV,
-                //                                COALESCE(slp.reservas,0) AS RESERVAS
-                //                                FROM sartic AS a 
-                //                                LEFT JOIN sprove AS p ON p.codprove = a.codprove
-                //                                LEFT JOIN sfamia AS f ON f.codfamia = a.codfamia
-                //                                LEFT JOIN (SELECT SUM(canstock) AS stock, codartic FROM salmac GROUP BY codartic) AS stk ON stk.codartic = a.codartic
-                //                                LEFT JOIN (SELECT SUM(cantidad) AS reservas, codartic FROM sliped GROUP BY codartic) AS slp ON slp.codartic = a.codartic
-                //                                WHERE a.codartic='{0}'";
                 string sql = @"SELECT
                                 a.codartic AS CODARTIC,
                                 a.nomartic AS NOMARTIC,
                                 p.codprove AS CODPROVE,
                                 p.nomprove AS NOMPROVE,
+                                COALESCE(p.nomcomer,'') AS NOMCOMER,
+                                COALESCE(p.domprove,'') AS DOMPROVE,
+                                COALESCE(p.codpobla,'') AS CODPOBLA,
+                                COALESCE(p.pobprove,'') AS POBPROVE,
+                                COALESCE(p.proprove,'') AS PROPROVE,
+                                COALESCE(p.nifPROVE,'') AS NIFPROVE,
+                                COALESCE(p.perprov1,'') AS PERPROV1,
+                                COALESCE(p.telprov1,'') AS TELPROV1,
+                                COALESCE(p.faxprov1,'') AS FAXPROV1,
+                                COALESCE(p.perprov2,'') AS PERPROV2,
+                                COALESCE(p.telprov2,'') AS TELPROV2,
+                                COALESCE(p.faxprov2,'') AS FAXPROV2,
+                                COALESCE(p.maiprov1,'') AS MAIPROV1,
+                                COALESCE(p.maiprov2,'') AS MAIPROV2,
                                 f.codfamia AS CODFAMIA,
                                 f.nomfamia AS NOMFAMIA,
                                 a.preciove AS PRECIOVE,
